@@ -25,7 +25,7 @@ function get_prompt_text {
         rm "$TMP"
     }
 
-    local TEXT="\nmath2001@\033[1;35m${PWD/$HOME/"~"}${RESET}"
+    local TEXT="\n\033[1;35m${PWD/$HOME/"~"}${RESET}"
 
     local BRANCH="$(get_stds 'git rev-parse --abbrev-ref HEAD')"
     if [[ ( ! "$BRANCH" == *fatal:*) ]]; then
@@ -79,3 +79,8 @@ alias cls="echo -e '\\0033\\0143'"
 alias sbr="subl ~/dotfiles/.bashrc"
 alias sr.="source ~/.bashrc"
 alias ascii-colors='echo "\033[\${intensity};\${nb}m";for((i=30;i<=50;i+=1)); do echo -e "\033[0;${i}m ${i}\033[1m ${i} \033[0m"; done'
+
+shopt -s autocd dotglob
+
+# this makes the autocompletion propose changes, instead of stopping to the ambiguous characters
+[[ $- = *i* ]] && bind TAB:menu-complete
