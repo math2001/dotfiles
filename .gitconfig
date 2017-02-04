@@ -1,7 +1,18 @@
 [user]
-	email = australie.p@gmail.com
-	name = Mathieu Paturel
+    email = australie.p@gmail.com
+    name = Mathieu PATUREL
 [core]
-	editor = subl -n -w
+    editor = subl -n -w
+[alias]
+    nbcommit = rev-list --count HEAD
+    last = log -1
+    msg = !cat \".git/COMMIT_EDITMSG\"
+    hub = "!f() { [ -f .githubrepo ] && REPO=$(head -n 1 .githubrepo) || REPO=${PWD##*/}; URL=\"https://github.com/math2001/$REPO\"; if [ \"$1\" == i ]; then start \"$URL/issues\"; elif [ \"$1\" == p ]; then start \"$URL/pulls\"; elif [ \"$1\" == w ]; then start $URL/wiki; else start $URL/$1; fi; }; f"
+    ppl = !git populate
+    populate = !python $(git config --get init.populater) $(git config --get init.templateDir)/../root-content
+    last-tag = describe --abbrev=0 --tags
 [push]
-	default = current
+    default = current
+[init]
+    templateDir = C:/Users/math/git-template/content
+    populater = C:/Users/math/git-template/populatr.py
