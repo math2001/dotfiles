@@ -1,0 +1,7 @@
+[user]
+	email = australie.p@gmail.com
+	name = Mathieu Paturel
+[core]
+	editor = subl -n -w
+[push]
+	default = current
