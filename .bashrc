@@ -47,24 +47,24 @@ function set_prompt_text {
         rm "$TMP"
     }
 
-    local TEXT="\n\033[1;35m${PWD/$HOME/"~"}${RESET}"
+    PS1="\n\033[1;35m${PWD/$HOME/"~"}${RESET}"
 
     local BRANCH="$(get_stds 'git rev-parse --abbrev-ref HEAD')"
     if [[ ( ! "$BRANCH" == *fatal:*) ]]; then
-        TEXT="${TEXT} → "
+        PS1="${PS1} → "
         if [[ $(get_stds "git status -s") == "" ]]; then
-            TEXT="${TEXT}\033[1;32m" # green
+            PS1="${PS1}\033[1;32m" # green
         else
-            TEXT="${TEXT}\033[1;31m" # red
+            PS1="${PS1}\033[1;31m" # red
         fi
-        TEXT="${TEXT}${BRANCH}${RESET}"
+        PS1="${PS1}${BRANCH}${RESET}"
     fi
 
     if is_in_virtualenv; then
-        TEXT="$TEXT working on \033[1;1m${VIRTUAL_ENV_FOLDER_NAME}$RESET"
+        PS1="$PS1 working on \033[1;1m${VIRTUAL_ENV_FOLDER_NAME}$RESET"
     fi
 
-    PS1="$TEXT\n$ "
+    PS1="$PS1\n$ "
 }
 
 
