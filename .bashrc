@@ -20,6 +20,13 @@ function get_stds {
     rm "$TMP"
 }
 
+function is_active_virtualenv {
+    if [[ "$VIRTUAL_ENV" == "" ]]; then
+        return 0
+    fi
+    echo $VIRTUAL_ENV
+}
+
 function is_in_virtualenv {
     # check if the folder $VIRTUAL_ENV_FOLDER_NAME exists for every folder above
     # don't use the dirname command for perf reason
@@ -36,6 +43,29 @@ function is_in_virtualenv {
     return 1
 
 }
+
+function lower_case_drive {
+    if [[ "${1:0:1}" != '/' || ( "${1:2:1}" != '/' && ${#1} != 2 ) ]]; then
+        echo $1
+        return 0
+    fi
+    CHAR="${1:1:1}"
+    echo "${1:0:1}${CHAR,}${1:2}"
+}
+
+function is_active_virtualenv {
+    if [[ -z ${VIRTUAL_ENV+x} ]]; then
+        return 1
+    fi
+    if [[ $(lower_case_drive $VIRTUAL_ENV) != "$PWD/$VIRTUAL_ENV_FOLDER_NAME" ]]; then
+        return 1
+    fi
+
+    if [[ ! -d "$PWD/$VIRTUAL_ENV_FOLDER_NAME" ]]; then
+        return 1
+    fi
+}
+
 
 function set_prompt_text {
 
@@ -61,7 +91,13 @@ function set_prompt_text {
     fi
 
     if is_in_virtualenv; then
-        PS1="$PS1 working on \033[1;1m${VIRTUAL_ENV_FOLDER_NAME}$RESET"
+        PS1="$PS1 working on "
+        if is_active_virtualenv; then
+            PS1="$PS1\033[1;1m"
+        else
+            PS1="$PS1\033[1;31m"
+        fi
+        PS1="$PS1${VIRTUAL_ENV_FOLDER_NAME}$RESET"
     fi
 
     PS1="$PS1\n$ "
@@ -108,6 +144,7 @@ alias cls="echo -e '\\0033\\0143'"
 alias sbr="subl ~/dotfiles/.bashrc"
 alias sr.="source ~/.bashrc"
 alias ascii-colors='echo "\033[\${intensity};\${nb}m";for((i=30;i<=50;i+=1)); do echo -e "\033[0;${i}m ${i}\033[1m ${i} \033[0m"; done'
+alias venv-activate="source venv/Scripts/activate"
 
 shopt -s autocd dotglob
 
