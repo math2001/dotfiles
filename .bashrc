@@ -2,20 +2,42 @@
 
 RESET="\033[0m"
 
+source ~/dotfiles/bashfunctions.sh
+
 # Functions
+
+VIRTUAL_ENV_FOLDER_NAME='venv' # this is a convention I've took, nothing more
 
 function add_path {
     PATH="$PATH:$1"
 }
 
 function get_stds {
+    # get both stdout and stderr to a single string
     TMP=$(mktemp)
     $1 >>"$TMP" 2>&1
     cat "$TMP"
     rm "$TMP"
 }
 
-function get_prompt_text {
+function is_in_virtualenv {
+    # check if the folder $VIRTUAL_ENV_FOLDER_NAME exists for every folder above
+    # don't use the dirname command for perf reason
+    local FOLDERS
+    IFS="/" read -r -a FOLDERS <<< "$PWD"
+    CURRENT="$PWD"
+    for FOLDER in "${FOLDERS[@]}"
+    do
+        if [[ -d "$CURRENT/$VIRTUAL_ENV_FOLDER_NAME" ]]; then
+            return 0
+        fi
+        CURRENT="$CURRENT/.."
+    done
+    return 1
+
+}
+
+function set_prompt_text {
 
     function get_branch_name {
         # captures the stderr and the stdout
@@ -31,14 +53,21 @@ function get_prompt_text {
     if [[ ( ! "$BRANCH" == *fatal:*) ]]; then
         TEXT="${TEXT} → "
         if [[ $(get_stds "git status -s") == "" ]]; then
-            TEXT="${TEXT}\033[1;32m"
+            TEXT="${TEXT}\033[1;32m" # green
         else
-            TEXT="${TEXT}\033[1;31m"
+            TEXT="${TEXT}\033[1;31m" # red
         fi
         TEXT="${TEXT}${BRANCH}${RESET}"
     fi
+
+    if is_in_virtualenv; then
+        TEXT="$TEXT working on \033[1;1m${VIRTUAL_ENV_FOLDER_NAME}$RESET"
+    fi
+
     PS1="$TEXT\n$ "
 }
+
+
 
 # set window's title
 echo -ne "\033]0;Terminal\007"
@@ -46,7 +75,7 @@ echo -ne "\033]0;Terminal\007"
 # Prompt text
 
 PS1='\n$ '
-PROMPT_COMMAND=get_prompt_text
+PROMPT_COMMAND=set_prompt_text
 
 # Add paths to $PATH
 
@@ -62,7 +91,7 @@ export HISTIGNORE="clear"
 
 ## Unix commands
 
-alias ls="ls -A -X -F --color --ignore='NTUSER.DAT{*'"
+alias ls="ls -A -X -F --color=auto --ignore='NTUSER.DAT{*'"
 alias find="/usr/bin/find $*"
 
 ## Git
