@@ -14,5 +14,5 @@
 [push]
     default = current
 [init]
-    templateDir = C:/Users/math/git-template/content
-    populater = C:/Users/math/git-template/populatr.py
+    templateDir = ~/git-template/content
+    populater = ~/git-template/populatr.py
