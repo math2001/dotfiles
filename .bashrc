@@ -133,8 +133,12 @@ alias find="/usr/bin/find $*"
 ## Git
 
 alias gs="git status --short"
-alias gl="git log --oneline --all --graph --decorate -10 $*"
-alias gll="git log --oneline --all --graph --decorate $*"
+# git log
+alias gl="git log --oneline --graph --decorate -10 $*"
+# git long log
+alias gll="git log --oneline --graph --decorate $*"
+# git multi log
+alias gml="git log --oneline --graph --all --decorate -10 $*"
 
 ## Others
 
