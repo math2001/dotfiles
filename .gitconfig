@@ -9,8 +9,10 @@
     msg = !cat \".git/COMMIT_EDITMSG\"
     hub = "!f() { [ -f .githubrepo ] && REPO=$(head -n 1 .githubrepo) || REPO=${PWD##*/}; URL=\"https://github.com/math2001/$REPO\"; if [ \"$1\" == i ]; then start \"$URL/issues\"; elif [ \"$1\" == p ]; then start \"$URL/pulls\"; elif [ \"$1\" == w ]; then start $URL/wiki; else start $URL/$1; fi; }; f"
     ppl = !git populate
-    populate = !python $(git config --get init.populater) $(git config --get init.templateDir)/../root-content
+    hello = !python ~/git-template/populatr.py
+    populate = !python "~/git-template/populatr.py" ~/git-template/content/../root-content
     last-tag = describe --abbrev=0 --tags
+    aliases = config --get-regexp alias.
 [push]
     default = current
 [init]

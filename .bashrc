@@ -3,12 +3,16 @@
 RESET="\033[0m"
 
 source ~/dotfiles/bashfunctions.sh
+source ~/dotfiles/gitmoji
 
 # Functions
 
 VIRTUAL_ENV_FOLDER_NAME='venv' # this is a convention I've took, nothing more
 
 function add_path {
+    if [[ $PATH == *$1* ]]; then
+        return
+    fi
     PATH="$PATH:$1"
 }
 
@@ -91,7 +95,7 @@ function set_prompt_text {
     fi
 
     if is_in_virtualenv; then
-        PS1="$PS1 working on "
+        PS1="$PS1 @ "
         if is_active_virtualenv; then
             PS1="$PS1\033[1;1m"
         else
@@ -100,16 +104,27 @@ function set_prompt_text {
         PS1="$PS1${VIRTUAL_ENV_FOLDER_NAME}$RESET"
     fi
 
-    PS1="$PS1\n$ "
+    PS1="$PS1 $(gitmoji) \n$ "
 }
 
 
+function repo {
+    # create a directory if it doesn't already exists and cd into it
+    if [[ -z $1 ]]; then
+        echo -e '\033[1;31mNo folder has been specified. \033[0;41mAborting.'
+        return 1
+    fi
+    if ! [[ -d $1 ]]; then
+        mkdir $1
+    fi
+    cd $1
+}
 
 # set window's title
 echo -ne "\033]0;Terminal\007"
 
 # Prompt text
-
+export PS1
 PS1='\n$ '
 PROMPT_COMMAND=set_prompt_text
 
@@ -118,12 +133,16 @@ PROMPT_COMMAND=set_prompt_text
 add_path "/c/Program Files/Git/bin"
 add_path "/c/Python34/Scripts"
 add_path "/c/Program Files/Sublime Text 3/"
+add_path "/c/Program Files/Git/mingw64/bin"
+add_path "~/AppData/Local/hyper/app-1.2.1"
 
 export PATH
 
 export HISTIGNORE="clear"
 
 # Aliases
+
+alias path="echo $PATH"
 
 ## Unix commands
 
@@ -143,14 +162,15 @@ alias gml="git log --oneline --graph --all --decorate -10 $*"
 ## Others
 
 alias st="cd '$APPDATA/Sublime Text 3/Packages'"
-alias stu="cd $APPDATA/Sublime Text 3/Packages/User"
+alias stu="cd '$APPDATA/Sublime Text 3/Packages/User'"
+alias cdhyper="cd '$APPDATA/../local/hyper/app-1.2.1'"
 alias cls="echo -e '\\0033\\0143'"
 alias sbr="subl ~/dotfiles/.bashrc"
 alias sr.="source ~/.bashrc"
 alias ascii-colors='echo "\033[\${intensity};\${nb}m";for((i=30;i<=50;i+=1)); do echo -e "\033[0;${i}m ${i}\033[1m ${i} \033[0m"; done'
 alias venv-activate="source venv/Scripts/activate"
 
-shopt -s autocd dotglob
+shopt -s autocd dotglob globstar
 
 # this makes the autocompletion propose changes, instead of stopping to the ambiguous characters
 [[ $- = *i* ]] && bind TAB:menu-complete
