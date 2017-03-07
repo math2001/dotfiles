@@ -104,21 +104,13 @@ function set_prompt_text {
         PS1="$PS1${VIRTUAL_ENV_FOLDER_NAME}$RESET"
     fi
 
-    PS1="$PS1 $(gitmoji) \n$ "
+    if [[ $GITMOJI_PS1 != false ]]; then
+        PS1="$PS1 $(gitmoji)"
+    fi
+    PS1="$PS1\n$ "
+
 }
 
-
-function repo {
-    # create a directory if it doesn't already exists and cd into it
-    if [[ -z $1 ]]; then
-        echo -e '\033[1;31mNo folder has been specified. \033[0;41mAborting.'
-        return 1
-    fi
-    if ! [[ -d $1 ]]; then
-        mkdir $1
-    fi
-    cd $1
-}
 
 # set window's title
 echo -ne "\033]0;Terminal\007"
@@ -141,6 +133,18 @@ export PATH
 export HISTIGNORE="clear"
 
 # Aliases
+
+function mkcd {
+    # create a directory if it doesn't already exists and cd into it
+    if [[ -z $1 ]]; then
+        echo -e '\033[1;31mNo folder has been specified. \033[0;41mAborting.'
+        return 1
+    fi
+    if ! [[ -d $1 ]]; then
+        mkdir $1
+    fi
+    cd $1
+}
 
 alias path="echo $PATH"
 
