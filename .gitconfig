@@ -13,6 +13,7 @@
     populate = !python "~/git-template/populatr.py" ~/git-template/content/../root-content
     last-tag = describe --abbrev=0 --tags
     aliases = config --get-regexp alias.
+    amend = commit --amend
 [push]
     default = current
 [init]

@@ -82,6 +82,7 @@ function set_prompt_text {
     }
 
     PS1="\n\033[1;35m${PWD/$HOME/"~"}${RESET}"
+    title "Bash @" ${PWD/$HOME/"~"} 😄
 
     local BRANCH="$(get_stds 'git rev-parse --abbrev-ref HEAD')"
     if [[ ( ! "$BRANCH" == *fatal:*) ]]; then
@@ -113,11 +114,13 @@ function set_prompt_text {
 
 
 # set window's title
-echo -ne "\033]0;Terminal\007"
+function title {
+    echo -ne "\033]0;$@\007"
+}
 
 # Prompt text
 export PS1
-PS1='\n$ '
+PS1='$ '
 PROMPT_COMMAND=set_prompt_text
 
 # Add paths to $PATH
@@ -156,12 +159,13 @@ alias find="/usr/bin/find $*"
 ## Git
 
 alias gs="git status --short"
+alias glc="git log --color=always"
 # git log
-alias gl="git log --oneline --graph --decorate -10 $*"
+alias gl="glc --oneline --graph --decorate -10 $* | goemoji"
 # git long log
-alias gll="git log --oneline --graph --decorate $*"
+alias gll="glc --oneline --graph --decorate $* | goemoji"
 # git multi log
-alias gml="git log --oneline --graph --all --decorate -10 $*"
+alias gml="glc --oneline --graph --all --decorate -10 $* | goemoji"
 
 ## Others
 
@@ -173,6 +177,10 @@ alias sbr="subl ~/dotfiles/.bashrc"
 alias sr.="source ~/.bashrc"
 alias ascii-colors='echo "\033[\${intensity};\${nb}m";for((i=30;i<=50;i+=1)); do echo -e "\033[0;${i}m ${i}\033[1m ${i} \033[0m"; done'
 alias venv-activate="source venv/Scripts/activate"
+alias findhere="find . -name $*"
+
+alias mit='license mit > LICENSE'
+# alias serve='python -m http.server 8765'
 
 shopt -s autocd dotglob globstar
 
