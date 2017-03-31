@@ -16,14 +16,6 @@ function add_path {
     PATH="$PATH:$1"
 }
 
-function get_stds {
-    # get both stdout and stderr to a single string
-    TMP=$(mktemp)
-    $1 >>"$TMP" 2>&1
-    cat "$TMP"
-    rm "$TMP"
-}
-
 function is_active_virtualenv {
     if [[ "$VIRTUAL_ENV" == "" ]]; then
         return 0
