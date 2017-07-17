@@ -4,10 +4,24 @@ RESET="\033[0m"
 
 source ~/dotfiles/bashfunctions.sh
 source ~/dotfiles/gitmoji
+source ~/git-completions.bash
+
+if [[ -z ${USER+x} ]]; then
+    USER=$(id -u -n)
+fi
+
+__git_complete gco _git_checkout
 
 # Functions
 
 VIRTUAL_ENV_FOLDER_NAME='venv' # this is a convention I've took, nothing more
+
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+PURPLE="\033[0;35m"
+BLUE="\033[0;34m"
+
+HOSTNAME=$(hostname)
 
 function add_path {
     if [[ $PATH == *$1* ]]; then
@@ -65,6 +79,8 @@ function is_active_virtualenv {
 
 function set_prompt_text {
 
+    LAST_COMMAND_CODE=$?
+
     function get_branch_name {
         # captures the stderr and the stdout
         TMP=$(mktemp)
@@ -73,8 +89,8 @@ function set_prompt_text {
         rm "$TMP"
     }
 
-    PS1="\n\033[1;35m${PWD/$HOME/"~"}${RESET}"
-    title "Bash @" ${PWD/$HOME/"~"} 😄
+    PS1="\n$BLUE$USER@$HOSTNAME$RESET \033[1;35m${PWD/$HOME/"~"}${RESET}"
+    title "Bash " ${PWD/$HOME/"~"}
 
     local BRANCH="$(get_stds 'git rev-parse --abbrev-ref HEAD')"
     if [[ ( ! "$BRANCH" == *fatal:*) ]]; then
@@ -100,7 +116,12 @@ function set_prompt_text {
     if [[ $GITMOJI_PS1 != false ]]; then
         PS1="$PS1 $(gitmoji)"
     fi
-    PS1="$PS1\n$ "
+    PS1="$PS1\n"
+    if [[ $LAST_COMMAND_CODE == "0" ]]; then
+        PS1="$PS1$GREEN➜$RESET  "
+    else
+        PS1="$PS1$RED➜$RESET  "
+    fi
 
 }
 
@@ -171,10 +192,43 @@ alias ascii-colors='echo "\033[\${intensity};\${nb}m";for((i=30;i<=50;i+=1)); do
 alias venv-activate="source venv/Scripts/activate"
 alias findhere="find . -name $*"
 
+function add-shadow {
+    convert "$1" -trim \( +clone -background grey25 -shadow 80x40+5+30 \) +swap -background transparent -layers merge +repage "$1-shadow.png"
+}
+
 alias mit='license mit > LICENSE'
 # alias serve='python -m http.server 8765'
+
+alias live-serve='browser-sync start --server --files "**/*.html, **/*.css, **/*.js"'
 
 shopt -s autocd dotglob globstar
 
 # this makes the autocompletion propose changes, instead of stopping to the ambiguous characters
 [[ $- = *i* ]] && bind TAB:menu-complete
+
+
+#########################################
+# Auto launch ssh-agent (thanks GitHub) #
+#########################################
+
+env=~/.ssh/agent.env
+
+agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
+
+agent_start () {
+    (umask 077; ssh-agent >| "$env")
+    . "$env" >| /dev/null ; }
+
+agent_load_env
+
+# agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
+agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
+
+if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
+    agent_start
+    ssh-add -t 3600
+elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
+    ssh-add -t 3600
+fi
+
+unset env
