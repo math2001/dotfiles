@@ -1,121 +1,73 @@
-# Color variables
 
-RESET="\033[0m"
+alias grep="grep --color=auto"
 
-source ~/dotfiles/bashfunctions.sh
-source ~/dotfiles/gitmoji
-source ~/git-completions.bash
-
-if [[ -z ${USER+x} ]]; then
-    USER=$(id -u -n)
+if [[ $(uname) != "Linux" ]]; then
+    PATH="$PATH:/c/Program Files/Git/bin:C:\Program Files\Git\mingw64\bin"
+    alias ls='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
 fi
 
-__git_complete gco _git_checkout
-
-# Functions
-
-VIRTUAL_ENV_FOLDER_NAME='venv' # this is a convention I've took, nothing more
 
 RED="\033[0;31m"
 GREEN="\033[0;32m"
 PURPLE="\033[0;35m"
 BLUE="\033[0;34m"
+RESET="\033[0m"
 
 HOSTNAME=$(hostname)
+USER=$(id -u -n)
 
-function add_path {
-    if [[ $PATH == *$1* ]]; then
-        return
-    fi
-    PATH="$PATH:$1"
+function get_stds {
+    # get both stdout and stderr to a single string
+    TMP=$(mktemp)
+    $1 >>"$TMP" 2>&1
+    cat "$TMP"
+    rm "$TMP"
 }
 
-function is_active_virtualenv {
-    if [[ "$VIRTUAL_ENV" == "" ]]; then
-        return 0
-    fi
-    echo $VIRTUAL_ENV
-}
 
-function is_in_virtualenv {
-    # check if the folder $VIRTUAL_ENV_FOLDER_NAME exists for every folder above
-    # don't use the dirname command for perf reason
-    local FOLDERS
-    IFS="/" read -r -a FOLDERS <<< "$PWD"
-    CURRENT="$PWD"
-    for FOLDER in "${FOLDERS[@]}"
-    do
-        if [[ -d "$CURRENT/$VIRTUAL_ENV_FOLDER_NAME" ]]; then
-            return 0
-        fi
-        CURRENT="$CURRENT/.."
-    done
-    return 1
+function has_git_is_in_git_repo {
 
-}
-
-function lower_case_drive {
-    if [[ "${1:0:1}" != '/' || ( "${1:2:1}" != '/' && ${#1} != 2 ) ]]; then
-        echo $1
-        return 0
-    fi
-    CHAR="${1:1:1}"
-    echo "${1:0:1}${CHAR,}${1:2}"
-}
-
-function is_active_virtualenv {
-    if [[ -z ${VIRTUAL_ENV+x} ]]; then
+    local status=$(git status 2>/dev/null)
+    if [[ $? == 127 ]]; then
         return 1
     fi
-    if [[ $(lower_case_drive $VIRTUAL_ENV) != "$PWD/$VIRTUAL_ENV_FOLDER_NAME" ]]; then
+    if [[ -z $status ]]; then
         return 1
     fi
-
-    if [[ ! -d "$PWD/$VIRTUAL_ENV_FOLDER_NAME" ]]; then
+    if [[ $status == *fatal:* ]]; then
         return 1
     fi
+    return 0
 }
 
+function colored_git_branch {
 
-function set_prompt_text {
+    git_branch="$(git symbolic-ref HEAD 2>/dev/null)" ||
+    git_branch="(unnamed branch)"     # detached HEAD
+
+    git_branch=${git_branch##refs/heads/}
+
+    local result=$(git status --short)
+    if [[ -z $result ]]; then
+        git_branch="$GREEN$git_branch$RESET"
+    else
+        git_branch="$RED$git_branch$RESET"
+    fi
+
+}
+
+function set_prompt {
 
     LAST_COMMAND_CODE=$?
 
-    function get_branch_name {
-        # captures the stderr and the stdout
-        TMP=$(mktemp)
-        git rev-parse --abbrev-ref HEAD >>"$TMP" 2>&1
-        cat "$TMP"
-        rm "$TMP"
-    }
+    PS1="\n$BLUE$USER@$HOSTNAME$RESET $PURPLE${PWD/$HOME/"~"}$RESET"
 
-    PS1="\n$BLUE$USER@$HOSTNAME$RESET \033[1;35m${PWD/$HOME/"~"}${RESET}"
-    title "Bash " ${PWD/$HOME/"~"}
-
-    local BRANCH="$(get_stds 'git rev-parse --abbrev-ref HEAD')"
-    if [[ ( ! "$BRANCH" == *fatal:*) ]]; then
-        PS1="${PS1} → "
-        if [[ $(get_stds "git status -s") == "" ]]; then
-            PS1="${PS1}\033[1;32m" # green
-        else
-            PS1="${PS1}\033[1;31m" # red
-        fi
-        PS1="${PS1}${BRANCH}${RESET}"
+    if has_git_is_in_git_repo; then
+        colored_git_branch
+        PS1="$PS1 ($git_branch)"
     fi
 
-    if is_in_virtualenv; then
-        PS1="$PS1 @ "
-        if is_active_virtualenv; then
-            PS1="$PS1\033[1;1m"
-        else
-            PS1="$PS1\033[1;31m"
-        fi
-        PS1="$PS1${VIRTUAL_ENV_FOLDER_NAME}$RESET"
-    fi
 
-    if [[ $GITMOJI_PS1 != false ]]; then
-        PS1="$PS1 $(gitmoji)"
-    fi
     PS1="$PS1\n"
     if [[ $LAST_COMMAND_CODE == "0" ]]; then
         PS1="$PS1$GREEN➜$RESET  "
@@ -126,109 +78,14 @@ function set_prompt_text {
 }
 
 
-# set window's title
-function title {
-    echo -ne "\033]0;$@\007"
-}
+PS1="➜ "
+PROMPT_COMMAND=set_prompt
 
-# Prompt text
-export PS1
-PS1='$ '
-PROMPT_COMMAND=set_prompt_text
+alias s="source ~/.bashrc"
+alias ls="ls -F --color=auto -h"
+alias ll="ls -l"
 
-# Add paths to $PATH
-
-add_path "/c/Program Files/Git/bin"
-add_path "/c/Python34/Scripts"
-add_path "/c/Program Files/Sublime Text 3/"
-add_path "/c/Program Files/Git/mingw64/bin"
-add_path "~/AppData/Local/hyper/app-1.2.1"
-
-export PATH
-
-export HISTIGNORE="clear"
-
-# Aliases
-
-function mkcd {
-    # create a directory if it doesn't already exists and cd into it
-    if [[ -z $1 ]]; then
-        echo -e '\033[1;31mNo folder has been specified. \033[0;41mAborting.'
-        return 1
-    fi
-    if ! [[ -d $1 ]]; then
-        mkdir $1
-    fi
-    cd $1
-}
-
-alias path="echo $PATH"
-
-## Unix commands
-
-alias ls="ls -A -X -F --color=auto --ignore='NTUSER.DAT{*'"
-alias find="/usr/bin/find $*"
-
-## Git
+# git alias
 
 alias gs="git status --short"
-alias glc="git log --color=always"
-# git log
-alias gl="glc --oneline --graph --decorate -10 $* | goemoji"
-# git long log
-alias gll="glc --oneline --graph --decorate $* | goemoji"
-# git multi log
-alias gml="glc --oneline --graph --all --decorate -10 $* | goemoji"
-
-## Others
-
-alias st="cd '$APPDATA/Sublime Text 3/Packages'"
-alias stu="cd '$APPDATA/Sublime Text 3/Packages/User'"
-alias cdhyper="cd '$APPDATA/../local/hyper/app-1.2.1'"
-alias cls="echo -e '\\0033\\0143'"
-alias sbr="subl ~/dotfiles/.bashrc"
-alias sr.="source ~/.bashrc"
-alias ascii-colors='echo "\033[\${intensity};\${nb}m";for((i=30;i<=50;i+=1)); do echo -e "\033[0;${i}m ${i}\033[1m ${i} \033[0m"; done'
-alias venv-activate="source venv/Scripts/activate"
-alias findhere="find . -name $*"
-
-function add-shadow {
-    convert "$1" -trim \( +clone -background grey25 -shadow 80x40+5+30 \) +swap -background transparent -layers merge +repage "$1-shadow.png"
-}
-
-alias mit='license mit > LICENSE'
-# alias serve='python -m http.server 8765'
-
-alias live-serve='browser-sync start --server --files "**/*.html, **/*.css, **/*.js"'
-
-shopt -s autocd dotglob globstar
-
-# this makes the autocompletion propose changes, instead of stopping to the ambiguous characters
-[[ $- = *i* ]] && bind TAB:menu-complete
-
-
-#########################################
-# Auto launch ssh-agent (thanks GitHub) #
-#########################################
-
-env=~/.ssh/agent.env
-
-agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
-
-agent_start () {
-    (umask 077; ssh-agent >| "$env")
-    . "$env" >| /dev/null ; }
-
-agent_load_env
-
-# agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2= agent not running
-agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
-
-if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
-    agent_start
-    ssh-add -t 3600
-elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
-    ssh-add -t 3600
-fi
-
-unset env
+alias gl="git log -10 --oneline --decorate"
