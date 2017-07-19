@@ -1,4 +1,3 @@
-
 alias grep="grep --color=auto"
 
 if [[ $(uname) != "Linux" ]]; then

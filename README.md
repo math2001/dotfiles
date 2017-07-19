@@ -1,13 +1,18 @@
 # My Dotfiles
 
-This repo is just a repo to keep the same configuration everywhere, and have a backup.
+Cloning the files:
 
-I'm using the `bash` command, provided with `git`.
+**The files will be overwritten, watch out!**
 
-If you're wondering how I use it, I simply have `~/.bashrc` which `source ~/dotfiles/.bashrc`. Same
-for my `.vimrc`. For the `.gitconfig`, it's a bit different:
+## `.vimrc`
 
-```gitconfig
-[include]
-    path = ~/dotfiles/.gitconfig
+```bash
+curl https://raw.githubusercontent.com/math2001/dotfiles/master/.vimrc > ~/.vimrc
 ```
+
+## `.bashrc`
+
+```bash
+curl https://raw.githubusercontent.com/math2001/dotfiles/master/.bashrc > ~/.bashrc
+```
+
