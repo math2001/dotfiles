@@ -1,5 +1,3 @@
-alias grep="grep --color=auto"
-
 if [[ $(uname) != "Linux" ]]; then
     PATH="$PATH:/c/Program Files/Git/bin:C:\Program Files\Git\mingw64\bin"
     alias list='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
@@ -57,6 +55,15 @@ function colored_git_branch {
 
 }
 
+function is_ssh {
+
+    if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
+        return 0
+    fi
+    return 1
+
+}
+
 function set_prompt {
 
     LAST_COMMAND_CODE=$?
@@ -65,13 +72,17 @@ function set_prompt {
 
     set_window_title "$USER@$HOSTNAME $LOCATION"
 
-    PS1="\n$BLUE\u@\h$RESET $PURPLE$LOCATION$RESET"
+    PS1="\n"
+    PS1="$PS1$BLUE\u@\h$RESET $PURPLE$LOCATION$RESET"
 
     if has_git_is_in_git_repo; then
         colored_git_branch
         PS1="$PS1 ($git_branch)"
     fi
 
+    if is_ssh; then
+        PS1="$PS1 [ssh]"
+    fi
 
     PS1="$PS1\n"
     if [[ $LAST_COMMAND_CODE == "0" ]]; then
@@ -94,6 +105,22 @@ alias s="source ~/.bashrc"
 alias ls="list -A -F --color=auto"
 alias cls="echo -e '\\0033\\0143'"
 alias findhere="find . -name"
+alias grep="grep -i --color=auto"
+# alias showcolors="for escape in `seq 30 37`; do for em in `seq 0 1`; do echo -en '\033[${em};${escape}m033[${em};${escape}m$RESET'; done; done;"
+
+
+function showcolors {
+    for i in {0..1}; do
+        for x in {30..37}; do
+            echo -en "\033[$i;${x}m\\\\[$i;${x}m$RESET ";
+        done
+        echo    
+        for x in {40..47}; do
+            echo -en "\033[$i;${x}m\\\\[$i;${x}m$RESET ";
+        done
+        echo    
+    done
+}
 
 # git alias
 
@@ -103,3 +130,5 @@ alias gl="git log -10 --oneline --decorate"
 if [[ -f 'run-ssh-agent.sh' ]]; then
     source './run-ssh-agent.sh'
 fi
+
+showcolors
