@@ -2,7 +2,9 @@ alias grep="grep --color=auto"
 
 if [[ $(uname) != "Linux" ]]; then
     PATH="$PATH:/c/Program Files/Git/bin:C:\Program Files\Git\mingw64\bin"
-    alias ls='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
+    alias list='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
+else
+    alias list='ls'
 fi
 
 
@@ -12,9 +14,6 @@ PURPLE="\033[0;35m"
 BLUE="\033[0;34m"
 RESET="\033[0m"
 
-HOSTNAME=$(hostname)
-USER=$(id -u -n)
-
 function get_stds {
     # get both stdout and stderr to a single string
     TMP=$(mktemp)
@@ -23,6 +22,9 @@ function get_stds {
     rm "$TMP"
 }
 
+function set_window_title {
+    echo -ne "\033]0;$@\007"
+}
 
 function has_git_is_in_git_repo {
 
@@ -59,7 +61,11 @@ function set_prompt {
 
     LAST_COMMAND_CODE=$?
 
-    PS1="\n$BLUE$USER@$HOSTNAME$RESET $PURPLE${PWD/$HOME/"~"}$RESET"
+    local LOCATION=${PWD/$HOME/"~"}
+
+    set_window_title "$USER@$HOSTNAME $LOCATION"
+
+    PS1="\n$BLUE\u@\h$RESET $PURPLE$LOCATION$RESET"
 
     if has_git_is_in_git_repo; then
         colored_git_branch
@@ -76,13 +82,18 @@ function set_prompt {
 
 }
 
-
 PS1="➜ "
 PROMPT_COMMAND=set_prompt
 
+shopt -s autocd dotglob globstar
+
+# this makes the autocompletion propose changes, instead of stopping to the ambiguous characters
+[[ $- = *i* ]] && bind TAB:menu-complete
+
 alias s="source ~/.bashrc"
-alias ls="ls -F --color=auto -h"
-alias ll="ls -l"
+alias ls="list -A -F --color=auto"
+alias cls="echo -e '\\0033\\0143'"
+alias findhere="find . -name"
 
 # git alias
 
