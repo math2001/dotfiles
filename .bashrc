@@ -127,6 +127,6 @@ function showcolors {
 alias gs="git status --short"
 alias gl="git log -10 --oneline --decorate"
 
-if [[ -f 'run-ssh-agent.sh' ]]; then
-    source './run-ssh-agent.sh'
+if [[ -f ./run-ssh-agent.sh ]]; then
+    source ./run-ssh-agent.sh
 fi
