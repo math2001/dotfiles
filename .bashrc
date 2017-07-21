@@ -6,11 +6,12 @@ else
 fi
 
 
-RED="\033[0;31m"
-GREEN="\033[0;32m"
-PURPLE="\033[0;35m"
-BLUE="\033[0;34m"
-RESET="\033[0m"
+RED="\e[0;31m"
+GREEN="\e[0;32m"
+PURPLE="\e[0;35m"
+BLUE="\e[0;34m"
+GREY="\e[1;30m"
+RESET="\e[0m"
 
 function get_stds {
     # get both stdout and stderr to a single string
@@ -70,9 +71,12 @@ function set_prompt {
 
     local LOCATION=${PWD/$HOME/"~"}
 
-    set_window_title "$USER@$HOSTNAME $LOCATION"
+    set_window_title "$USERNAME@$HOSTNAME:$LOCATION"
 
     PS1="\n"
+    if is_ssh; then
+        PS1="$PS1$GREY[${RESET}ssh$GREY]$RESET "
+    fi
     PS1="$PS1$BLUE\u@\h$RESET $PURPLE$LOCATION$RESET"
 
     if has_git_is_in_git_repo; then
@@ -80,9 +84,6 @@ function set_prompt {
         PS1="$PS1 ($git_branch)"
     fi
 
-    if is_ssh; then
-        PS1="$PS1 [ssh]"
-    fi
 
     PS1="$PS1\n"
     if [[ $LAST_COMMAND_CODE == "0" ]]; then
@@ -106,24 +107,18 @@ alias ls="list -A -F --color=auto"
 alias cls="echo -e '\\0033\\0143'"
 alias findhere="find . -name"
 alias grep="grep -i --color=auto"
-# alias showcolors="for escape in `seq 30 37`; do for em in `seq 0 1`; do echo -en '\033[${em};${escape}m033[${em};${escape}m$RESET'; done; done;"
+# alias showcolors="for escape in `seq 30 37`; do for em in `seq 0 1`; do echo -en '\e[${em};${escape}m033[${em};${escape}m$RESET'; done; done;"
 
 
 function showcolors {
-    for i in `seq 30 37` `seq 40 47`; do
-        echo -en "\e[${i}mTest $i$RESET"
-    done
-
-    return
-    for i in {0..1}; do
-        for x in {30..37}; do
-            echo -en "\033[$i;${x}m\\\\[$i;${x}m$RESET ";
+    for i in `seq 0 1`; do
+        for e in `seq 30 37` `seq 40 47`; do
+            if [[ $e -eq 40 ]]; then
+                echo
+            fi
+            echo -en "\e[$i;${e}m\\\\e[$i;${e}m$RESET "
         done
-        echo
-        for x in {40..47}; do
-            echo -en "\033[$i;${x}m\\\\[$i;${x}m$RESET ";
-        done
-        echo
+        echo 
     done
 }
 
