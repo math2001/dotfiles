@@ -110,15 +110,20 @@ alias grep="grep -i --color=auto"
 
 
 function showcolors {
+    for i in `seq 30 37` `seq 40 47`; do
+        echo -en "\e[${i}mTest $i$RESET"
+    done
+
+    return
     for i in {0..1}; do
         for x in {30..37}; do
             echo -en "\033[$i;${x}m\\\\[$i;${x}m$RESET ";
         done
-        echo    
+        echo
         for x in {40..47}; do
             echo -en "\033[$i;${x}m\\\\[$i;${x}m$RESET ";
         done
-        echo    
+        echo
     done
 }
 
@@ -130,5 +135,3 @@ alias gl="git log -10 --oneline --decorate"
 if [[ -f 'run-ssh-agent.sh' ]]; then
     source './run-ssh-agent.sh'
 fi
-
-showcolors
