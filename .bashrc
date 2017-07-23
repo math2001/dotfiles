@@ -87,9 +87,9 @@ function set_prompt {
 
     PS1="$PS1\n"
     if [[ $LAST_COMMAND_CODE == "0" ]]; then
-        PS1="$PS1$GREEN➜$RESET  "
+        PS1="$PS1$GREEN➜$RESET "
     else
-        PS1="$PS1$RED➜$RESET  "
+        PS1="$PS1$RED➜$RESET "
     fi
 
 }
@@ -103,12 +103,13 @@ shopt -s autocd dotglob globstar
 [[ $- = *i* ]] && bind TAB:menu-complete
 
 alias s="source ~/.bashrc"
-alias ls="list -A -F --color=auto"
+alias ls="list -X -A -F --color=auto"
+alias ll="ls -lh"
 alias cls="echo -e '\\0033\\0143'"
 alias findhere="find . -name"
 alias grep="grep -i --color=auto"
-# alias showcolors="for escape in `seq 30 37`; do for em in `seq 0 1`; do echo -en '\e[${em};${escape}m033[${em};${escape}m$RESET'; done; done;"
-
+alias v="vim ~/.vimrc"
+alias b="vim ~/.bashrc"
 
 function showcolors {
     for i in `seq 0 1`; do
@@ -122,11 +123,27 @@ function showcolors {
     done
 }
 
+function license {
+    if [[ ! -d ~/.licenses ]] || [[ ! -f "$HOME/.licenses/$1" ]]; then
+        echo "The file '~/.licenses/$1' doesn't exists"
+        return 1
+    fi
+    cp "$HOME/.licenses/$1" LICENSE
+}
+
+alias mit='license MIT'
+
 # git alias
 
 alias gs="git status --short"
 alias gl="git log -10 --oneline --decorate"
 
+# exported variables
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
 if [[ -f ./run-ssh-agent.sh ]]; then
     source ./run-ssh-agent.sh
 fi
+
