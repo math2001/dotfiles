@@ -2,13 +2,14 @@ set nocompatible
 syntax enable
 
 " Tabulation
-set tabstop=4
+set tabstop=4 shiftwidth=4 shiftround
 set smarttab
-set shiftwidth=4
 set expandtab
 set copyindent
 set autoindent
 set showmatch matchtime=2
+
+
 set ignorecase
 set smartcase
 
@@ -46,14 +47,30 @@ set complete+=kspell
 
 call matchadd('ColorColumn', '\%81v', 100)
 
+cabbrev help tab help
+
+" abbreviations
+
+" filetypes
+
+augroup filetype_html
+    autocmd!
+    autocmd FileType html iabbrev <buffer> --- &mdash;
+augroup END
+
 " keybindings
+
 let mapleader=","
 
-imap jj <esc>
-map <F2> :mksession! ~/.vim_session<cr>
-map <F3> :source ~/.vim_session <cr>
-nmap <leader>c :so $VIMRUNTIME/syntax/hitest.vim<cr>
+inoremap jk <esc>
+nnoremap <leader>c :so $VIMRUNTIME/syntax/hitest.vim<cr>
 nnoremap <F4> :so $VIMRUNTIME/syntax/hitest.vim<cr>
+
+" quote the current word
+nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
+
+" quote the visual selection
+vnoremap <leader>" <esc>`<i"<esc>`>la"
 
 "" Remap ctrl+W for hyper
 nnoremap <C-e> <C-w>
@@ -66,7 +83,7 @@ nnoremap ; :
 vnoremap ; :
 vnoremap : ;
 
-nnoremap <C-e> <C-w>
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 
 " reload vimrc when saving
 augroup MyVimrcReloader
@@ -89,15 +106,14 @@ highlight NonText ctermfg=DarkGrey
 highlight SpecialKey ctermfg=DarkGrey
 highlight LineNr ctermfg=DarkGrey
 highlight CursorLineNr ctermfg=White
-highlight CursorLine ctermfg=Red ctermbg=DarkGrey
 
 highlight ColorColumn ctermbg=magenta
 
 "" Tabs
 
 highlight TabLineFill ctermfg=DarkGray ctermfg=DarkGrey
-highlight TabLine ctermfg=Red ctermbg=DarkGrey
-highlight TabLineSel ctermfg=White ctermbg=Black
+highlight TabLine cterm=None ctermfg=DarkGrey ctermbg=DarkGrey
+highlight TabLineSel ctermfg=White
 highlight Comment ctermfg=DarkGrey
 
 
