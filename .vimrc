@@ -1,17 +1,15 @@
+set encoding=utf-8 fileencoding=utf-8
 set nocompatible
 syntax enable
 
 " Tabulation
 set tabstop=4 shiftwidth=4 shiftround
-set smarttab
-set expandtab
-set copyindent
-set autoindent
+set smarttab expandtab
+set copyindent autoindent
 set showmatch matchtime=2
+set wrap
 
-
-set ignorecase
-set smartcase
+set ignorecase smartcase
 
 set scrolloff=2
 
@@ -23,25 +21,34 @@ set foldmethod=syntax
 
 set number relativenumber
 set incsearch
-set nowrap
 set showmode
 set showcmd
 
 set showtabline=2
 
-set colorcolumn=85
+" display warning line endings aren't unix
+set statusline=%#warningmsg#
+set statusline+=%{&ff!='unix'?'['.&ff.']':''}
+set statusline+=%*
 
-set statusline=%r
-set statusline=%y\ %f
+"read only flag
+set statusline+=%#identifier#
+set statusline+=%r
+set statusline+=%*
+
+" file type and full file type
+set statusline+=%y\ %F
+
 set statusline+=%=
 set statusline+=%l,\ %c
 set statusline+=\ \|\ %p\ %%\ %L
 
-set listchars=tab:»\ ,nbsp:.,trail:·,eol:¬
-set list
-
+" default window position when spliting
 set splitbelow
 set splitright
+
+set list listchars=tab:»\ ,nbsp:.,trail:·,eol:¬
+
 
 set complete+=kspell
 
@@ -115,5 +122,3 @@ highlight TabLineFill ctermfg=DarkGray ctermfg=DarkGrey
 highlight TabLine cterm=None ctermfg=DarkGrey ctermbg=DarkGrey
 highlight TabLineSel ctermfg=White
 highlight Comment ctermfg=DarkGrey
-
-
