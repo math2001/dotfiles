@@ -1,3 +1,4 @@
+set encoding=utf-8 fileencoding=utf-8
 set nocompatible
 set encoding=utf-8 fileencoding=utf-8
 syntax enable
@@ -10,6 +11,7 @@ set tabstop=4 shiftwidth=4 shiftround
 set smarttab expandtab
 set copyindent autoindent
 set showmatch matchtime=2
+set wrap
 
 set ignorecase smartcase
 
