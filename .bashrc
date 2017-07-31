@@ -131,12 +131,21 @@ function license {
     cp "$HOME/.licenses/$1" LICENSE
 }
 
+function mkcd() {
+    mkdir -p "$@" && cd "$@"
+}
+
 alias mit='license MIT'
+alias st='cd $APPDATA/Sublime\ Text\ 3/Packages'
 
 # git alias
 
 alias gs="git status --short"
 alias gl="git log -10 --oneline --decorate"
+
+# shortcut
+
+bind -x '"\C-f": "ls"'
 
 # exported variables
 
