@@ -135,13 +135,18 @@ function mkcd() {
     mkdir -p "$@" && cd "$@"
 }
 
+function bgrun {
+    "$@ > /dev/null 2>&1 &"
+}
+
 alias mit='license MIT'
 alias st='cd $APPDATA/Sublime\ Text\ 3/Packages'
+alias live-serve='browser-sync start --server --files "**/*.html, **/*.css, **/*.js"'
 
 # git alias
 
 alias gs="git status --short"
-alias gl="git log -10 --oneline --decorate"
+alias gl="git log -10 --color --oneline --decorate | goemoji"
 
 # shortcut
 
