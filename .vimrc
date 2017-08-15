@@ -1,27 +1,37 @@
 set encoding=utf-8 fileencoding=utf-8
 set nocompatible
-set encoding=utf-8 fileencoding=utf-8
 syntax enable
 
-" allows session to work both on windows and unix 'at the same time'
-set sessionoptions+=unix,slash
+if has('gui_running')
+    set runtimepath -=~/vimfiles
+    set runtimepath +=$HOME/.vim
+endif
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'jiangmiao/auto-pairs'
+Plug 'mattn/emmet-vim'
+Plug 'chrisbra/Colorizer'
+Plug 'scrooloose/nerdtree'
+
+call plug#end()
 
 " Tabulation
 set tabstop=4 shiftwidth=4 shiftround
-set smarttab expandtab
-set copyindent autoindent
-set showmatch matchtime=2
-set wrap
+set smarttab expandtab copyindent autoindent
+set showmatch matchtime=2 wrap
+set backspace=indent,eol,start
 
 set ignorecase smartcase
 
 set scrolloff=2
 
-set wrap
-set number relativenumber
-set incsearch
-set showmode
-set showcmd
+" Folding
+
+set foldenable foldcolumn=0 foldmethod=syntax
+
+set number relativenumber numberwidth=5
+set incsearch showmode showcmd
 
 set showtabline=2
 
@@ -35,23 +45,18 @@ set statusline+=%#identifier#
 set statusline+=%r
 set statusline+=%*
 
-" file type and full file type
 set statusline+=%y\ %F
 
 set statusline+=%=
 set statusline+=%l,\ %c
 set statusline+=\ \|\ %p\ %%\ %L
 
-" default window position when spliting
 set splitbelow splitright
-
-set list listchars=tab:»\ ,nbsp:.,trail:·,eol:¬
 
 set complete+=kspell
 
 call matchadd('ColorColumn', '\%81v', 100)
 
-" open help in a new tab, not in a new window
 cabbrev help tab help
 
 " abbreviations
@@ -69,7 +74,11 @@ let mapleader=","
 
 inoremap jk <esc>
 nnoremap <leader>c :so $VIMRUNTIME/syntax/hitest.vim<cr>
-nnoremap <F4> :so $VIMRUNTIME/syntax/hitest.vim<cr>
+
+" Clipboard
+
+vnoremap <leader>y "+y
+nnoremap <leader>p "+gP
 
 " quote the current word
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
@@ -77,12 +86,8 @@ nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
 " quote the visual selection
 vnoremap <leader>" <esc>`<i"<esc>`>la"
 
-"" Remap ctrl+W for hyper
-nnoremap <C-e> <C-w>
-
-" move cursor's line up and down
-noremap <C-j> :m .+1<CR>
-noremap <C-k> :m .-2<CR>
+noremap <A-k> :m .-2<CR>
+noremap <A-j> :m .+1<CR>
 
 nnoremap : ;
 nnoremap ; :
@@ -92,9 +97,12 @@ vnoremap : ;
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 
 " reload vimrc when saving
-augroup MyVimrcReloader
+augroup reloadgvimrc
     autocmd!
     autocmd BufWritePost .vimrc source ~/.vimrc
+    if filereadable("./.gvimrc")
+        source ~/.gvimrc
+    endif
 augroup END
 
 " save on focus lost
