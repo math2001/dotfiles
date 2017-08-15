@@ -2,7 +2,6 @@
     email = australie.p@gmail.com
     name = Mathieu PATUREL
 [core]
-    editor = subl -n -w
 [alias]
     nbcommit = rev-list --count HEAD
     last = log -1
