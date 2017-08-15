@@ -1,5 +1,6 @@
 set encoding=utf-8 fileencoding=utf-8
 set nocompatible
+set noswapfile
 syntax enable
 
 if has('gui_running')
@@ -19,7 +20,7 @@ call plug#end()
 " Tabulation
 set tabstop=4 shiftwidth=4 shiftround
 set smarttab expandtab copyindent autoindent
-set showmatch matchtime=2 wrap
+set wrap
 set backspace=indent,eol,start
 
 set ignorecase smartcase
@@ -100,7 +101,7 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 augroup reloadgvimrc
     autocmd!
     autocmd BufWritePost .vimrc source ~/.vimrc
-    if filereadable("./.gvimrc")
+    if !empty(glob("~/.gvimrc")) 
         source ~/.gvimrc
     endif
 augroup END
