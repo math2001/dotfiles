@@ -8,7 +8,7 @@ endif
 call plug#begin('~/.vim/plugged')
 
 Plug 'jiangmiao/auto-pairs'
-Plug 'honza/vim-snippets'
+Plug 'garbas/vim-snipmate'
 Plug 'mattn/emmet-vim'
 Plug 'chrisbra/Colorizer'
 Plug 'scrooloose/nerdtree'
@@ -19,42 +19,44 @@ call plug#end()
 syntax on
 filetype plugin indent on
 colorscheme apprentice
-highlight TabLine ctermfg=Grey
 
 " Plugins Options {{{
 
-let g:UltiSnipsSnippetsDir = "~/.vim/UltiSnippets"
-let g:UltiSnipsSnippetsDirectories = ["UltiSnippets"]
-let g:UltiSnipsUsePythonVersion = 2
-let g:UltiSnipsEditSplit = "vertical"
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " }}}
 
-" Tabulation
 set tabstop=4 shiftwidth=4 shiftround
-set wildmenu wrap cursorline
+" completion in command menu, wrap, highlight current line, and set terminal
+" title
+set wildmenu wrap cursorline title
+" Indentation stuff
 set smarttab expandtab copyindent autoindent
 set backspace=indent,eol,start
+set list listchars=tab:»\ ,nbsp:.,trail:·,eol:¬
 
+" Add backkup files in a common directory to not pollute current directory
 set nobackup nowritebackup noswapfile
 set backupdir=~/vimtmp,.
 set directory=~/vimtmp,.
 
-set formatoptions-=cro " prevent vim from auto inserting comment symbols
-
+ " prevent vim from auto inserting comment symbols
+set formatoptions-=cro
+" case insensitive if all lower case in search
 set ignorecase smartcase
 
+" keep the cursor away from the top/bottom with 2 lines when possible
 set scrolloff=2
 
 " Folding
 
 set foldenable foldcolumn=0 foldmethod=syntax
 
+" gutter options
 set number relativenumber numberwidth=5
-set incsearch nohlsearch showmode showcmd
+" highlight live when searching, don't highlight the searches when done
+set incsearch nohlsearch
+" show currently typed letters bellow the status bar
+set showcmd
 
 set showtabline=2
 set laststatus=2
@@ -75,17 +77,14 @@ set statusline+=%=
 set statusline+=%l,\ %c
 set statusline+=\ \|\ %p\ %%\ %L
 
+" default split position when :vsplit :split (feels more natural to me)
 set splitbelow splitright
 
+" Complete with the words in the dictionnary :D
 set complete+=kspell
 
-call matchadd('ColorColumn', '\%81v', 100)
-
-cabbrev help tab help
-
 " abbreviations
-
-" filetypes
+cabbrev help tab help
 
 augroup filetype_html
     autocmd!
@@ -96,7 +95,7 @@ augroup END
 
 let mapleader=","
 
-" that's how you learn
+" 'cause that's how you learn
 inoremap <esc> <Nop>
 inoremap jk <esc>
 
@@ -141,14 +140,8 @@ augroup END
 
 " Style
 
+highlight CursorLineNr ctermfg=White
+highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=236
 highlight NonText ctermfg=DarkGrey
 highlight SpecialKey ctermfg=DarkGrey
-highlight LineNr ctermfg=DarkGrey
-highlight CursorLineNr ctermfg=White
-highlight CursorLine cterm=NONE ctermbg=236
 
-highlight ColorColumn ctermbg=magenta
-
-"" Tabs
-
-" highlight Comment ctermfg=DarkGrey
