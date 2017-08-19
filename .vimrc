@@ -5,16 +5,21 @@ if has('gui_running')
     set runtimepath +=$HOME/.vim
 endif
 
+" Plugins {{{
 call plug#begin('~/.vim/plugged')
 
 Plug 'jiangmiao/auto-pairs'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
 Plug 'garbas/vim-snipmate'
 Plug 'mattn/emmet-vim'
 Plug 'chrisbra/Colorizer'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
+Plug 'dhruvasagar/vim-table-mode'
 
 call plug#end()
+" }}}
 
 syntax on
 filetype plugin indent on
@@ -22,9 +27,14 @@ colorscheme apprentice
 
 " Plugins Options {{{
 
+let g:snips_author = "Math2001"
 
 " }}}
 
+" add every file recursively to path to :find them quickly
+set path+=**
+" set line endings to be unix
+set ff=unix
 set tabstop=4 shiftwidth=4 shiftround
 " completion in command menu, wrap, highlight current line, and set terminal
 " title
@@ -35,9 +45,10 @@ set backspace=indent,eol,start
 set list listchars=tab:»\ ,nbsp:.,trail:·,eol:¬
 
 " Add backkup files in a common directory to not pollute current directory
-set nobackup nowritebackup noswapfile
-set backupdir=~/vimtmp,.
-set directory=~/vimtmp,.
+set nobackup nowritebackup noundofile
+set backupdir=$HOME/vimtmp
+set directory=$HOME/vimtmp
+set undodir=$HOME/vimtmp
 
  " prevent vim from auto inserting comment symbols
 set formatoptions-=cro
@@ -61,19 +72,18 @@ set showcmd
 set showtabline=2
 set laststatus=2
 
-" display warning line endings aren't unix
-set statusline=%#warningmsg#
-set statusline+=%{&ff!='unix'?'['.&ff.']':''}
-set statusline+=%*
+set statusline=
 
 "read only flag
 set statusline+=%#identifier#
 set statusline+=%r
 set statusline+=%*
 
+" display file type
+set statusline+=%{'\\\'.&ff}\ 
 set statusline+=%y\ %F
 
-set statusline+=%=
+set statusline+=%= " go to the right side of the status line
 set statusline+=%l,\ %c
 set statusline+=\ \|\ %p\ %%\ %L
 
@@ -86,9 +96,11 @@ set complete+=kspell
 " abbreviations
 cabbrev help tab help
 
-augroup filetype_html
+augroup autocmds
     autocmd!
     autocmd FileType html iabbrev <buffer> --- &mdash;
+    autocmd FileType gitcommit start
+
 augroup END
 
 " keybindings
@@ -124,7 +136,7 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 augroup reloadgvimrc
     autocmd!
     autocmd BufWritePost $MYVIMRC source ~/.vimrc
-    if !empty(glob("~/.gvimrc")) 
+    if has("gui_running") && !empty(glob("~/.gvimrc")) 
         source ~/.gvimrc
     endif
 augroup END
@@ -145,3 +157,6 @@ highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=236
 highlight NonText ctermfg=DarkGrey
 highlight SpecialKey ctermfg=DarkGrey
 
+" Commandsj
+
+command! RemoveWindowsLineEndings :%s/\r\(\n\)/\1/g
