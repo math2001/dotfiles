@@ -10,6 +10,7 @@ RED="\e[0;31m"
 GREEN="\e[0;32m"
 PURPLE="\e[0;35m"
 BLUE="\e[0;34m"
+BLACK="\e[0;30m"
 GREY="\e[1;30m"
 RESET="\e[0m"
 
@@ -70,6 +71,7 @@ function set_prompt {
     LAST_COMMAND_CODE=$?
 
     local LOCATION=${PWD/$HOME/"~"}
+    local NB_JOBS=$(jobs | wc -l)
 
     set_window_title "$USERNAME@$HOSTNAME:$LOCATION"
 
@@ -86,6 +88,11 @@ function set_prompt {
 
 
     PS1="$PS1\n"
+
+    # Show the number of jobs currently going
+    if [[ $NB_JOBS != 0 ]]; then
+        PS1="$PS1$NB_JOBS "
+    fi
     if [[ $LAST_COMMAND_CODE == "0" ]]; then
         PS1="$PS1$GREEN➜$RESET "
     else
@@ -98,6 +105,8 @@ PS1="➜ "
 PROMPT_COMMAND=set_prompt
 
 shopt -s autocd dotglob globstar
+# insensitive case path completion in bash
+bind 'set completion-ignore-case on'
 
 # this makes the autocompletion propose changes, instead of stopping to the ambiguous characters
 [[ $- = *i* ]] && bind TAB:menu-complete
@@ -136,12 +145,13 @@ function mkcd() {
 }
 
 function bgrun {
-    "$@ > /dev/null 2>&1 &"
+    $@ > /dev/null 2>&1 &
 }
 
 alias mit='license MIT'
 alias st='cd $APPDATA/Sublime\ Text\ 3/Packages'
-alias live-serve='browser-sync start --server --files "**/*.html, **/*.css, **/*.js"'
+alias live-serve='browser-sync start --server --files "**/*.html, **/*.css, **/*.js" --no-notify'
+alias live-serve-bg='bgrun browser-sync start --server --files "**/*.html, **/*.css, **/*.js" --no-notify'
 
 # git alias
 
