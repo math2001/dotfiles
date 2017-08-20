@@ -8,15 +8,16 @@ endif
 " Plugins {{{
 call plug#begin('~/.vim/plugged')
 
+Plug 'mattn/emmet-vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'garbas/vim-snipmate'
-Plug 'mattn/emmet-vim'
 Plug 'chrisbra/Colorizer'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'dhruvasagar/vim-table-mode'
+Plug 'pangloss/vim-javascript', { 'for': ['javascript'] }
 
 call plug#end()
 " }}}
@@ -28,27 +29,28 @@ colorscheme apprentice
 " Plugins Options {{{
 
 let g:snips_author = "Math2001"
-
+let g:user_emmet_expandabbr_key = ',e'
+let g:table_mode_corner = '|'
 " }}}
 
-" add every file recursively to path to :find them quickly
-set path+=**
-" set line endings to be unix
-set ff=unix
+
+set wildignore+=node_modules/
+set virtualedit=onemore " allow the cursor to move past the end of the line by one more char
+set path+=css/,js/ " add every file recursively to path to :find them quickly
+set ff=unix " set line endings to be unix
 set tabstop=4 shiftwidth=4 shiftround
 " completion in command menu, wrap, highlight current line, and set terminal
 " title
 set wildmenu wrap cursorline title
-" Indentation stuff
+" indentation stuff
 set smarttab expandtab copyindent autoindent
 set backspace=indent,eol,start
 set list listchars=tab:»\ ,nbsp:.,trail:·,eol:¬
 
-" Add backkup files in a common directory to not pollute current directory
-set nobackup nowritebackup noundofile
-set backupdir=$HOME/vimtmp
-set directory=$HOME/vimtmp
-set undodir=$HOME/vimtmp
+" add backkup files in a common directory to not pollute current directory
+set backupdir=$HOME/.vim/_backups
+set directory=$HOME/.vim/_swapfiles
+set undodir=$HOME/.vim/_undos
 
  " prevent vim from auto inserting comment symbols
 set formatoptions-=cro
@@ -58,9 +60,9 @@ set ignorecase smartcase
 " keep the cursor away from the top/bottom with 2 lines when possible
 set scrolloff=2
 
-" Folding
+" folding
 
-set foldenable foldcolumn=0 foldmethod=syntax
+set nofoldenable foldcolumn=0 foldmethod=syntax
 
 " gutter options
 set number relativenumber numberwidth=5
@@ -69,7 +71,6 @@ set incsearch nohlsearch
 " show currently typed letters bellow the status bar
 set showcmd
 
-set showtabline=2
 set laststatus=2
 
 set statusline=
@@ -90,8 +91,11 @@ set statusline+=\ \|\ %p\ %%\ %L
 " default split position when :vsplit :split (feels more natural to me)
 set splitbelow splitright
 
-" Complete with the words in the dictionnary :D
+" complete with the words in the dictionnary :d
 set complete+=kspell
+
+" disable the mouse if it's available
+set mouse-=a
 
 " abbreviations
 cabbrev help tab help
@@ -99,19 +103,24 @@ cabbrev help tab help
 augroup autocmds
     autocmd!
     autocmd FileType html iabbrev <buffer> --- &mdash;
-    autocmd FileType gitcommit start
+    " fix vim bug: open all .md files as markdown
+    autocmd BufNewFile,BufRead *.md set filetype=markdown
+    " set options for markdown
+    autocmd FileType markdown setlocal textwidth=81 linebreak | :TableModeEnable
 
-augroup END
+    au FileType javascript nnoremap <buffer> <leader>b :!node %<cr>
+    au FileType python nnoremap <buffer> <leader>b :!python %<cr>
+augroup end
 
 " keybindings
 
 let mapleader=","
 
 " 'cause that's how you learn
-inoremap <esc> <Nop>
+inoremap <esc> <nop>
 inoremap jk <esc>
 
-" Clipboard
+" clipboard
 
 vnoremap <leader>y "+y
 nnoremap <leader>p "+p
@@ -119,18 +128,21 @@ nnoremap <leader>p "+p
 " quote the current word
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
 
+" duplicate selection
+vnoremap <leader>d y'>p
+
 " quote the visual selection
 vnoremap <leader>" <esc>`<i"<esc>`>la"
 
-noremap <C-k> :m .-2<CR>
-noremap <C-j> :m .+1<CR>
+noremap <c-k> :m .-2<cr>
+noremap <c-j> :m .+1<cr>
 
 nnoremap : ;
 nnoremap ; :
 vnoremap ; :
 vnoremap : ;
 
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>v :vsplit $MYVIMRC<cr>
 
 " reload vimrc when saving
 augroup reloadgvimrc
@@ -139,24 +151,36 @@ augroup reloadgvimrc
     if has("gui_running") && !empty(glob("~/.gvimrc")) 
         source ~/.gvimrc
     endif
-augroup END
+augroup end
 
 " save on focus lost
-augroup AutoWrite
+augroup autowrite
     autocmd! BufLeave * silent! update
-augroup END
+augroup end
 
-augroup SetSpell
+augroup setspell
     autocmd BufRead,BufNewFile *.md setlocal spell
-augroup END
+augroup end
 
-" Style
+" style
 
-highlight CursorLineNr ctermfg=White
-highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=236
-highlight NonText ctermfg=DarkGrey
-highlight SpecialKey ctermfg=DarkGrey
+highlight CursorLineNr ctermfg=white
+highlight CursorLine cterm=none ctermfg=none ctermbg=236
+highlight NonText ctermfg=darkgrey
+highlight SpecialKey ctermfg=darkgrey
 
-" Commandsj
+
+function! Insert(text)
+    " a simple function to insert text where the cursor is
+    execute "normal! \<Esc>a".a:text
+endfunction
+
+function! Strip(text)
+    return substitute(a:text, '^\_s*\(.\{-}\)\_s*$', '\1', '')
+endfunction
+" commands
 
 command! RemoveWindowsLineEndings :%s/\r\(\n\)/\1/g
+command! InsertDate :call Insert(Strip(system('date +"%A %d %B %Y @ %H:%M"')))
+
+
