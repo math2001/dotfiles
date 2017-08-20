@@ -7,8 +7,8 @@ set guioptions -=L " hide the left hand scrollbar
 set guioptions -=r " hides de right end scrollbar
 
 set lines=999 columns=999
-" simalt ~x
 au GUIEnter * simalt ~x
+simalt ~x
 
 colorscheme nova
 
@@ -35,3 +35,4 @@ let g:terminal_color_0_1 = "#465862"
 call HI("LineNr", g:terminal_color_8, g:terminal_color_0_1)
 call HI("CursorLineNr", "white", g:terminal_color_0_1)
 call HI("SignColumn", "", g:terminal_color_0_1)
+call HI("ColorColumn", "", g:terminal_color_5)
