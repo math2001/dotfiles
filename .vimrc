@@ -52,7 +52,7 @@ let g:indent_guides_auto_colors = 0
 
 set wildignore+=node_modules/
 set virtualedit=onemore " allow the cursor to move past the end of the line by one more char
-set path+=css/,js/ " add every file recursively to path to :find them quickly
+set path+=css/,js/,* " add every file recursively to path to :find them quickly
 set ff=unix " set line endings to be unix
 set tabstop=4 shiftwidth=4 shiftround
 " completion in command menu, wrap, highlight current line, and set terminal
@@ -91,23 +91,22 @@ set laststatus=2
 
 set statusline=
 
-"read only flag
-set statusline+=%#identifier#
+" read only flag
 set statusline+=%r
-set statusline+=%*
 
-" display file type
-set statusline+=%{'\\\'.&ff}
-set statusline+=\ %y\ %F
+" modified
+set statusline+=%{&modified?'*':''} " display a little * if modified
+
+set statusline+=%y\ {%{&ff}}\ %F " [filetype] {lineendings} filepath
 
 set statusline+=%= " go to the right side of the status line
-set statusline+=%l,\ %c
-set statusline+=\ \|\ %p\ %%\ %L
+set statusline+=%l,\ %c " line and column
+set statusline+=\ \|\ %p\ %%\ %L " location percentage of the file % line count
 
 " default split position when :vsplit :split (feels more natural to me)
 set splitbelow splitright
 
-" complete with the words in the dictionnary :d
+" complete with the words in the dictionnary :D
 set complete+=kspell
 
 " disable the mouse if it's available
@@ -163,7 +162,8 @@ nnoremap ; :
 vnoremap ; :
 vnoremap : ;
 
-nnoremap <leader>v :call OpenVimrc()<cr>
+nnoremap <leader>ev :call OpenFile($MYVIMRC)<cr>
+nnoremap <leader>eb :call OpenFile("~/.bashrc")<cr>
 
 " reload vimrc when saving
 augroup reloadgvimrc
@@ -189,14 +189,14 @@ highlight CursorLineNr ctermfg=white
 highlight CursorLine cterm=none ctermfg=none ctermbg=236
 highlight NonText ctermfg=DarkGrey
 highlight SpecialKey ctermfg=DarkGrey
-highlight IndentGuidesOdd ctermbg=237
-highlight IndentGuidesEven ctermbg=237
+highlight IndentGuidesOdd ctermbg=236
+highlight IndentGuidesEven ctermbg=236
 
-function! OpenVimrc()
+function! OpenFile(file)
     if &columns > 160
-        vsplit $MYVIMRC
+        execute "vsplit ".a:file
     else
-        tabe $MYVIMRC
+        execute "tabe ".a:file
     endif
 endfunction
 
