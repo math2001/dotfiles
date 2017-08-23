@@ -119,6 +119,7 @@ alias findhere="find . -name"
 alias grep="grep -i --color=auto"
 alias v="vim ~/.vimrc"
 alias b="vim ~/.bashrc"
+alias j="jobs"
 
 function showcolors {
     for i in `seq 0 1`; do
