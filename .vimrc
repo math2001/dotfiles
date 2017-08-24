@@ -29,6 +29,7 @@ Plug 'pangloss/vim-javascript', { 'for': ['javascript'] }
 Plug 'flazz/vim-colorschemes'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-colorscheme-switcher'
+Plug 'xolox/vim-session'
 
 call plug#end()
 
@@ -55,11 +56,11 @@ set virtualedit=onemore " allow the cursor to move past the end of the line by o
 set path+=css/,js/,* " add every file recursively to path to :find them quickly
 set ff=unix " set line endings to be unix
 set tabstop=4 shiftwidth=4 shiftround
-" completion in command menu, wrap, highlight current line, and set terminal
-" title
-set wildmenu wrap cursorline title
-" indentation stuff
-set smarttab expandtab copyindent autoindent
+" completion in command menu, wrap, highlight current line, set terminal
+" title, wrap lines
+set wildmenu wrap cursorline title linebreak
+
+set smarttab expandtab copyindent autoindent " indentation stuff
 set backspace=indent,eol,start
 set list listchars=tab:»\ ,nbsp:.,trail:·,eol:¬
 
@@ -70,24 +71,24 @@ set undodir=$HOME/.vim/_undos
 
  " prevent vim from auto inserting comment symbols
 set formatoptions-=cro
+
 " case insensitive if all lower case in search
 set ignorecase smartcase
 
 " keep the cursor away from the top/bottom with 5 lines when possible
 set scrolloff=5
 
-" folding
-
 set nofoldenable foldcolumn=0 foldmethod=indent
 
-" gutter options
-set number relativenumber numberwidth=5
+set number relativenumber numberwidth=5 " gutter options
 " highlight live when searching, don't highlight the searches when done
 set incsearch nohlsearch
 " show currently typed letters bellow the status bar
 set showcmd
 
+" always show the status line
 set laststatus=2
+
 
 set statusline=
 
@@ -119,13 +120,17 @@ augroup autocmds
     au!
     au FileType html iabbrev <buffer> --- &mdash;
     " fix vim bug: open all .md files as markdown
-    au BufNewFile,BufRead *.md set filetype=markdown
+    au BufNewFile,BufRead *.md setlocal filetype=markdown
     " set options for markdown
-    au FileType markdown setlocal textwidth=81 linebreak | :TableModeEnable
+    au FileType markdown setlocal textwidth=81 | :silent TableModeEnable
 
     au FileType javascript nnoremap <buffer> <leader>b :!node %<cr>
     au FileType python nnoremap <buffer> <leader>b :!python %<cr>
+    au FileType python nnoremap <buffer> <leader>b :!python %<cr>
+    au FileType vim nnoremap <buffer> <leader>b :source %<cr>
 augroup end
+
+" keybindings
 
 let mapleader=","
 
@@ -134,6 +139,12 @@ inoremap <esc> <nop>
 " 'cause I'm lazy...
 inoremap jk <esc>
 
+" to consider wrapped lines as actual lines
+nnoremap j gj
+nnoremap k gk
+
+nnoremap <leader>s :call ScopeInfos()<CR>
+
 " Emmet
 imap hh <C-y>,
 
@@ -141,9 +152,10 @@ imap hh <C-y>,
 vnoremap <leader>y "+y
 nnoremap <leader>p "+p
 
-" quote the current word
+" surrond the current word
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
+nnoremap <leader>` viw<esc>a`<esc>bi`<esc>lel
 
 " my fuzzy file finder
 nnoremap <leader>f :find 
@@ -165,12 +177,11 @@ vnoremap : ;
 nnoremap <leader>ev :call OpenFile($MYVIMRC)<cr>
 nnoremap <leader>eb :call OpenFile("~/.bashrc")<cr>
 
-" reload vimrc when saving
-augroup reloadgvimrc
+augroup reloadvimrc
     autocmd!
     autocmd BufWritePost $MYVIMRC source ~/.vimrc
-    if has("gui_running") && !empty(glob("~/.gvimrc"))
-        source ~/.gvimrc
+    if has("gui_running")
+        autocmd BufWritePost $MYGVIMRC source ~/.vimrc
     endif
 augroup end
 
@@ -192,12 +203,19 @@ highlight SpecialKey ctermfg=DarkGrey
 highlight IndentGuidesOdd ctermbg=236
 highlight IndentGuidesEven ctermbg=236
 
+" functions
+
 function! OpenFile(file)
     if &columns > 160
         execute "vsplit ".a:file
     else
         execute "tabe ".a:file
     endif
+endfunction
+
+function! ScopeInfos()
+    let synid = synIDtrans(synID(line('.'), col('.'), 1))
+    echo printf('Syntax name: "%s" | fg: %s bg: %s', synIDattr(synid, 'name'),  synIDattr(synid, 'fg#'), synIDattr(synid, 'bg#'))
 endfunction
 
 function! Insert(text)
@@ -238,4 +256,6 @@ command! RemoveWindowsLineEndings :%s/\r\(\n\)/\1/g
 command! Date :call Insert(Strip(system('date +"%A %d %B %Y @ %H:%M"')))
 command! -range=% EscapeHTML :call EscapeHTML()
 
-
+if has('gui_running')
+    silent! source ~/.gvimrc
+endif
