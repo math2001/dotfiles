@@ -196,7 +196,7 @@ augroup end
 
 " style
 
-highlight CursorLineNr ctermfg=white
+highlight CursorLineNr ctermfg=white guifg=white
 highlight CursorLine cterm=none ctermfg=none ctermbg=236
 highlight NonText ctermfg=DarkGrey
 highlight SpecialKey ctermfg=DarkGrey
