@@ -1,3 +1,7 @@
+" Todo
+" Run last command with bang :bang
+" Tip difference map noremap
+
 set encoding=utf-8 fileencoding=utf-8
 set nocompatible
 
@@ -29,7 +33,8 @@ Plug 'pangloss/vim-javascript', { 'for': ['javascript'] }
 Plug 'flazz/vim-colorschemes'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-colorscheme-switcher'
-Plug 'xolox/vim-session'
+" Plug 'xolox/vim-session'
+Plug '~/vim-plugins/vim-session/'
 
 call plug#end()
 
@@ -37,19 +42,34 @@ call plug#end()
 
 syntax on
 filetype plugin indent on
-colorscheme apprentice
+if execute('colorscheme') ==# 'default'
+    " Good ones: apprentice, Tomorrow, Tomorrow-night
+    colorscheme apprentice
+endif
 
 " Plugins Options {{{
 
-let g:snips_author="Math2001"
-let g:table_mode_corner='|'
-let NERDSpaceDelims=1
-let g:indent_guides_enable_on_vim_startup=1
-let g:indent_guides_guide_size=1
-let g:indent_guides_auto_colors = 0
+let snips_author = "Math2001"
+let table_mode_corner = '|'
+let vim_markdown_frontmatter = 1
+
+let NERDSpaceDelims = 1
+
+let indent_guides_enable_on_vim_startup = 1
+let indent_guides_guide_size = 1
+let indent_guides_auto_colors = 0
+
+let session_directory = '~/.vim/sessions/'
+let session_autoload = 'yes'
+let session_autosave = 'yes'
+
+let ski_track_map = '~/.vim/sessions/'
 
 " }}}
 
+" Because windows sucks
+set shell=sh
+set shellcmdflag=-c
 
 set wildignore+=node_modules/
 set virtualedit=onemore " allow the cursor to move past the end of the line by one more char
@@ -58,7 +78,7 @@ set ff=unix " set line endings to be unix
 set tabstop=4 shiftwidth=4 shiftround
 " completion in command menu, wrap, highlight current line, set terminal
 " title, wrap lines
-set wildmenu wrap cursorline title linebreak
+set wildmenu wrap title linebreak
 
 set smarttab expandtab copyindent autoindent " indentation stuff
 set backspace=indent,eol,start
@@ -67,9 +87,9 @@ set list listchars=tab:»\ ,nbsp:.,trail:·,eol:¬
 " add backkup files in a common directory to not pollute current directory
 set backupdir=$HOME/.vim/_backups
 set directory=$HOME/.vim/_swapfiles
-set undodir=$HOME/.vim/_undos
+set undofile undodir=$HOME/.vim/_undos
 
- " prevent vim from auto inserting comment symbols
+" prevent vim from auto inserting comment symbols
 set formatoptions-=cro
 
 " case insensitive if all lower case in search
@@ -80,7 +100,7 @@ set scrolloff=5
 
 set nofoldenable foldcolumn=0 foldmethod=indent
 
-set number relativenumber numberwidth=5 " gutter options
+set number numberwidth=5 " gutter options
 " highlight live when searching, don't highlight the searches when done
 set incsearch nohlsearch
 " show currently typed letters bellow the status bar
@@ -89,19 +109,28 @@ set showcmd
 " always show the status line
 set laststatus=2
 
-
 set statusline=
 
-" read only flag
-set statusline+=%r
+set statusline+=%{&readonly?'R':''}
+set statusline+=%{&modifiable==0?'-':''}
+set statusline+=%{&modified?'*':''}
 
-" modified
-set statusline+=%{&modified?'*':''} " display a little * if modified
+set statusline+=%y\ {%{&ff}}\ %.20F " [filetype] {lineendings} filepath
 
-set statusline+=%y\ {%{&ff}}\ %F " [filetype] {lineendings} filepath
+function! GetSessionName()
+    silent! let sessionname = split(substitute(v:this_session,'\\','/','g'),'/')[-1]
+    if !exists('sessionname')
+        return '??'
+    endif
+    if sessionname[-4:] ==? '.vim'
+        let sessionname = sessionname[:-5]
+    return sessionname
+endfunction
 
 set statusline+=%= " go to the right side of the status line
-set statusline+=%l,\ %c " line and column
+set statusline+=%{GetSessionName()}\ \|
+set statusline+=\ %{wordcount()['words']}\ words\ \|
+set statusline+=\ %l,\ %c " line and column
 set statusline+=\ \|\ %p\ %%\ %L " location percentage of the file % line count
 
 " default split position when :vsplit :split (feels more natural to me)
@@ -115,6 +144,18 @@ set mouse-=a
 
 " abbreviations
 cabbrev help tab help
+cabbrev set setlocal
+iabbrev lable label
+iabbrev teh the
+
+function! s:FileTypeSetup(name)
+    if a:name ==# 'markdown'
+        setlocal textwidth=81
+        silent TableModeEnable
+        nnoremap <buffer> <leader>* viw*esc>a*<esc>bi*<esc>lel
+        nnoremap <buffer> <leader>tip :call InsertTipFrontMatter()<CR>
+    endif
+endfunction
 
 augroup autocmds
     au!
@@ -122,7 +163,7 @@ augroup autocmds
     " fix vim bug: open all .md files as markdown
     au BufNewFile,BufRead *.md setlocal filetype=markdown
     " set options for markdown
-    au FileType markdown setlocal textwidth=81 | :silent TableModeEnable
+    au FileType markdown call s:FileTypeSetup('markdown')
 
     au FileType javascript nnoremap <buffer> <leader>b :!node %<cr>
     au FileType python nnoremap <buffer> <leader>b :!python %<cr>
@@ -174,8 +215,9 @@ nnoremap ; :
 vnoremap ; :
 vnoremap : ;
 
-nnoremap <leader>ev :call OpenFile($MYVIMRC)<cr>
-nnoremap <leader>eb :call OpenFile("~/.bashrc")<cr>
+nnoremap <leader>ev :call DynamicOpen($MYVIMRC)<cr>
+nnoremap <leader>eb :call DynamicOpen("~/.bashrc")<cr>
+nnoremap <leader>eg :call DynamicOpen($MYGVIMRC)<cr>
 
 augroup reloadvimrc
     autocmd!
@@ -205,8 +247,27 @@ highlight IndentGuidesEven ctermbg=236
 
 " functions
 
-function! OpenFile(file)
-    if &columns > 160
+function! GetFormattedDate()
+    return Strip(system("date +'%A %d %B %Y @ %H:%M'"))
+endfunction
+
+function! BangLastCommand()
+    let lastcommand = split(@:, ' ')
+    let command = lastcommand[0] . '! ' . join(lastcommand[1:], ' ')
+    execute command 
+endfunction
+
+command! Please call BangLastCommand()
+
+function! InsertTipFrontMatter()
+    let date = GetFormattedDate()
+    call Insert("---\ntitle: \nslug: \ntags: \ndate: ".date."\nplace: \n---\n\n")
+    execute "normal! ?title:\<CR>A "
+    start
+endfunction
+
+function! DynamicOpen(file)
+    if winwidth(win_getid()) > 160
         execute "vsplit ".a:file
     else
         execute "tabe ".a:file
@@ -257,5 +318,5 @@ command! Date :call Insert(Strip(system('date +"%A %d %B %Y @ %H:%M"')))
 command! -range=% EscapeHTML :call EscapeHTML()
 
 if has('gui_running')
-    silent! source ~/.gvimrc
+    source ~/.gvimrc
 endif
