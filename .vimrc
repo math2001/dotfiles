@@ -323,6 +323,6 @@ command! RemoveWindowsLineEndings :%s/\r\(\n\)/\1/g
 command! Date :call Insert(Strip(system('date +"%A %d %B %Y @ %H:%M"')))
 command! -range=% EscapeHTML :call EscapeHTML()
 
-if has('gui_running')
+if has('gui_running') && glob('~/.gvimrc') != ''
     source ~/.gvimrc
 endif

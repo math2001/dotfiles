@@ -26,44 +26,11 @@ function set_window_title {
     echo -ne "\033]0;$@\007"
 }
 
-function has_git_is_in_git_repo {
-
-    local status=$(git status 2>/dev/null)
-    if [[ $? == 127 ]]; then
-        return 1
-    fi
-    if [[ -z $status ]]; then
-        return 1
-    fi
-    if [[ $status == *fatal:* ]]; then
-        return 1
-    fi
-    return 0
-}
-
-function colored_git_branch {
-
-    git_branch="$(git symbolic-ref HEAD 2>/dev/null)" ||
-    git_branch="(unnamed branch)"     # detached HEAD
-
-    git_branch=${git_branch##refs/heads/}
-
-    local result=$(git status --short)
-    if [[ -z $result ]]; then
-        git_branch="$GREEN$git_branch$RESET"
-    else
-        git_branch="$RED$git_branch$RESET"
-    fi
-
-}
-
 function is_ssh {
-
     if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
         return 0
     fi
     return 1
-
 }
 
 function set_prompt {
@@ -75,19 +42,13 @@ function set_prompt {
 
     set_window_title "$USERNAME@$HOSTNAME:$LOCATION"
 
-    PS1="\n"
+    PS1=""
     if is_ssh; then
         PS1="$PS1$GREY[${RESET}ssh$GREY]$RESET "
     fi
     PS1="$PS1$BLUE\u@\h$RESET $PURPLE$LOCATION$RESET"
 
-    if has_git_is_in_git_repo; then
-        colored_git_branch
-        PS1="$PS1 ($git_branch)"
-    fi
-
-
-    PS1="$PS1\n"
+    PS1="$PS1 "
 
     # Show the number of jobs currently going
     if [[ $NB_JOBS != 0 ]]; then
