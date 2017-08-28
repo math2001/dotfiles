@@ -1,21 +1,13 @@
-set guifont=Monaco
+set guifont=Menlo
 set belloff=all " remove the bells
-set guioptions -=m " hides the menu
-set guioptions -=T " hides the toolbar
-set guioptions -=e " display tab like in a terminal, not using the gui version
-set guioptions -=L " hide the left hand scrollbar
-set guioptions -=r " hides de right end scrollbar
+set guioptions-=m " hides the menu
+set guioptions-=T " hides the toolbar
+set guioptions-=e " display tab like in a terminal, not using the gui version
+set guioptions-=L " hide the left hand scrollbar
+set guioptions-=r " hides de right end scrollbar
+set guioptions+=c " use console prompt instead of prompt windows
 
-set lines=999 columns=999
 au GUIEnter * simalt ~x
-simalt ~x
-
-colorscheme nova
-
-augroup reloadgvimrc
-    autocmd!
-    autocmd BufWritePost .gvimrc source ~/.gvimrc
-augroup END
 
 function! HI(...)
     " highlight helper
@@ -29,10 +21,11 @@ function! HI(...)
     exec string
 endfunction
 
-let g:terminal_color_0_1 = "#5F7D86"
-let g:terminal_color_0_1 = "#465862"
+" let g:terminal_color_0_1 = "#465862"
 
-call HI("LineNr", g:terminal_color_8, g:terminal_color_0_1)
-call HI("CursorLineNr", "white", g:terminal_color_0_1)
-call HI("SignColumn", "", g:terminal_color_0_1)
-call HI("ColorColumn", "", g:terminal_color_5)
+" call HI("LineNr", g:terminal_color_8, g:terminal_color_0_1)
+" call HI("CursorLineNr", "white", g:terminal_color_0_1)
+" call HI("SignColumn", "", g:terminal_color_0_1)
+" call HI("ColorColumn", "", g:terminal_color_5)
+" call HI("NonText", g:terminal_color_5)
+" call HI("SpecialKey", g:terminal_color_5)

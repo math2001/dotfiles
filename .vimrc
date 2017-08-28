@@ -42,7 +42,12 @@ call plug#end()
 
 syntax on
 filetype plugin indent on
-if execute('colorscheme') ==# 'default'
+
+function! Strip(text)
+    return substitute(a:text, '^\_s*\(.\{-}\)\_s*$', '\1', '')
+endfunction
+
+if Strip(execute('colorscheme')) ==# 'default'
     " Good ones: apprentice, Tomorrow, Tomorrow-night
     colorscheme apprentice
 endif
@@ -59,9 +64,9 @@ let indent_guides_enable_on_vim_startup = 1
 let indent_guides_guide_size = 1
 let indent_guides_auto_colors = 0
 
-let session_directory = '~/.vim/sessions/'
-let session_autoload = 'yes'
-let session_autosave = 'yes'
+" let session_directory = '~/.vim/sessions/'
+" let session_autoload = 'yes'
+" let session_autosave = 'yes'
 
 let ski_track_map = '~/.vim/sessions/'
 
@@ -79,6 +84,7 @@ set tabstop=4 shiftwidth=4 shiftround
 " completion in command menu, wrap, highlight current line, set terminal
 " title, wrap lines
 set wildmenu wrap title linebreak
+set confirm
 
 set smarttab expandtab copyindent autoindent " indentation stuff
 set backspace=indent,eol,start
@@ -154,7 +160,12 @@ function! s:FileTypeSetup(name)
         silent TableModeEnable
         nnoremap <buffer> <leader>* viw*esc>a*<esc>bi*<esc>lel
         nnoremap <buffer> <leader>tip :call InsertTipFrontMatter()<CR>
+        set nonumber foldcolumn=1
     endif
+endfunction
+
+function! Build(buildexe)
+    execute "!".a:buildexe." ".substitute(expand('%'), '\\', '/', '')
 endfunction
 
 augroup autocmds
@@ -165,9 +176,8 @@ augroup autocmds
     " set options for markdown
     au FileType markdown call s:FileTypeSetup('markdown')
 
-    au FileType javascript nnoremap <buffer> <leader>b :!node %<cr>
-    au FileType python nnoremap <buffer> <leader>b :!python %<cr>
-    au FileType python nnoremap <buffer> <leader>b :!python %<cr>
+    au FileType javascript nnoremap <buffer> <leader>b :call Build('node')<cr>
+    au FileType python nnoremap <buffer> <leader>b :call Build('python')<cr>
     au FileType vim nnoremap <buffer> <leader>b :source %<cr>
 augroup end
 
@@ -282,10 +292,6 @@ endfunction
 function! Insert(text)
     " a simple function to insert text where the cursor is
     execute "normal! \<Esc>a".a:text
-endfunction
-
-function! Strip(text)
-    return substitute(a:text, '^\_s*\(.\{-}\)\_s*$', '\1', '')
 endfunction
 
 function! ToggleHighlightWordUnderCursor()
