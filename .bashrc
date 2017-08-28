@@ -33,37 +33,25 @@ function is_ssh {
     return 1
 }
 
-function set_prompt {
-
-    LAST_COMMAND_CODE=$?
-
-    local LOCATION=${PWD/$HOME/"~"}
-    local NB_JOBS=$(jobs | wc -l)
-
-    set_window_title "$USERNAME@$HOSTNAME:$LOCATION"
-
-    PS1=""
+function light_prompt {
+    local EXIT="$?"
+    PS1="$BLUE\u@\H$RESET $PURPLE\W$RESET"
+    local nbjobs=$(jobs | wc -l)
     if is_ssh; then
-        PS1="$PS1$GREY[${RESET}ssh$GREY]$RESET "
+        PS1="$GREY[ssh]$RESET $PS1"
     fi
-    PS1="$PS1$BLUE\u@\h$RESET $PURPLE$LOCATION$RESET"
-
-    PS1="$PS1 "
-
-    # Show the number of jobs currently going
-    if [[ $NB_JOBS != 0 ]]; then
-        PS1="$PS1$NB_JOBS "
+    if [[ $nbjobs != "0" ]]; then
+        PS1="\j $PS1"
     fi
-    if [[ $LAST_COMMAND_CODE == "0" ]]; then
-        PS1="$PS1$GREEN➜$RESET "
+    if [[ $EXIT == "0" ]]; then
+        PS1="$PS1$GREEN"
     else
-        PS1="$PS1$RED➜$RESET "
+        PS1="$PS1$RED"
     fi
-
+    PS1="$PS1 →$RESET "
 }
 
-PS1="➜ "
-PROMPT_COMMAND=set_prompt
+PROMPT_COMMAND=light_prompt
 
 shopt -s autocd dotglob globstar
 # insensitive case path completion in bash

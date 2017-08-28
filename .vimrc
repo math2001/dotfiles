@@ -14,7 +14,6 @@ endif
 call plug#begin('~/.vim/plugged')
 
 Plug 'mattn/emmet-vim'
-Plug 'nathanaelkane/vim-indent-guides'
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'MarcWeber/vim-addon-mw-utils'
