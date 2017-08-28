@@ -5,6 +5,7 @@
 	trustctime = false
     editor = vim
     filemode = false
+	eol = lf
 [alias]
     nbcommit = rev-list --count HEAD
     last = log -1
