@@ -5,7 +5,7 @@
 set encoding=utf-8 fileencoding=utf-8
 set nocompatible
 
-if has('gui_running')
+if has('win32') && match(&runtimepath, '/.vim')
     set runtimepath +=$HOME/.vim
 endif
 
@@ -249,8 +249,6 @@ augroup end
 
 highlight CursorLineNr ctermfg=white guifg=white
 highlight CursorLine cterm=none ctermfg=none ctermbg=236
-highlight NonText ctermfg=DarkGrey
-highlight SpecialKey ctermfg=DarkGrey
 highlight IndentGuidesOdd ctermbg=236
 highlight IndentGuidesEven ctermbg=236
 
