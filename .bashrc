@@ -34,6 +34,7 @@ function is_ssh {
 }
 
 function light_prompt {
+    set_window_title "BASH $PWD"
     local EXIT="$?"
     PS1="$BLUE\u@\H$RESET $PURPLE\W$RESET"
     local nbjobs=$(jobs | wc -l)
@@ -117,7 +118,7 @@ bind -x '"\C-f": "ls"'
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-if [[ -f ./run-ssh-agent.sh ]]; then
-    source ./run-ssh-agent.sh
-fi
+# if [[ -f ./run-ssh-agent.sh ]]; then
+    # source ./run-ssh-agent.sh
+# fi
 

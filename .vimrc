@@ -33,7 +33,7 @@ Plug 'flazz/vim-colorschemes'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-colorscheme-switcher'
 " Plug 'xolox/vim-session'
-Plug '~/vim-plugins/vim-session/'
+Plug 'tpope/vim-surround'
 
 call plug#end()
 
@@ -69,11 +69,20 @@ let indent_guides_auto_colors = 0
 
 let ski_track_map = '~/.vim/sessions/'
 
+let &t_ti.="\e[1 q"
+let &t_SI.="\e[5 q"
+let &t_EI.="\e[1 q"
+let &t_te.="\e[0 q"
+
 " }}}
+
+" Settings
 
 " Because windows sucks
 set shell=sh
 set shellcmdflag=-c
+
+set spell spellfile="~/.vim/spell.utf-8.add"
 
 set wildignore+=node_modules/
 set virtualedit=onemore " allow the cursor to move past the end of the line by one more char
@@ -83,13 +92,13 @@ set tabstop=4 shiftwidth=4 shiftround
 " completion in command menu, wrap, highlight current line, set terminal
 " title, wrap lines
 set wildmenu wrap title linebreak
-set confirm
+set confirm " AWESOME!!
 
 set smarttab expandtab copyindent autoindent " indentation stuff
 set backspace=indent,eol,start
 set list listchars=tab:»\ ,nbsp:.,trail:·,eol:¬
 
-" add backkup files in a common directory to not pollute current directory
+" add backup files in a common directory to not pollute current directory
 set backupdir=$HOME/.vim/_backups
 set directory=$HOME/.vim/_swapfiles
 set undofile undodir=$HOME/.vim/_undos
@@ -99,6 +108,9 @@ set formatoptions-=cro
 
 " case insensitive if all lower case in search
 set ignorecase smartcase
+
+" highlight current line
+set cursorline
 
 " keep the cursor away from the top/bottom with 5 lines when possible
 set scrolloff=5
@@ -120,7 +132,7 @@ set statusline+=%{&readonly?'R':''}
 set statusline+=%{&modifiable==0?'-':''}
 set statusline+=%{&modified?'*':''}
 
-set statusline+=%y\ {%{&ff}}\ %.20F " [filetype] {lineendings} filepath
+set statusline+=%y\ {%{&ff}}\ %.30F " [filetype] {lineendings} filepath
 
 function! GetSessionName()
     silent! let sessionname = split(substitute(v:this_session,'\\','/','g'),'/')[-1]
@@ -153,31 +165,41 @@ cabbrev set setlocal
 iabbrev lable label
 iabbrev teh the
 
-function! s:FileTypeSetup(name)
+function! FileTypeSetup(name)
     if a:name ==# 'markdown'
         setlocal textwidth=81
         silent TableModeEnable
         nnoremap <buffer> <leader>* viw*esc>a*<esc>bi*<esc>lel
         nnoremap <buffer> <leader>tip :call InsertTipFrontMatter()<CR>
-        set nonumber foldcolumn=1
+        setlocal nonumber foldcolumn=1
+    elseif a:name ==# 'python'
+        setlocal colorcolumn=101
+        nnoremap <buffer> <leader>b :call Build('python')<cr>
+    elseif a:name ==# 'html'
+        iabbrev <buffer> --- &mdash;
+    elseif a:name ==# 'javascript'
+        nnoremap <buffer> <leader>b :call Build('node')<cr>
+        iabbrev <buffer> len length
+    elseif a:name ==# 'vim'
+        nnoremap <buffer> <leader>b :source %<cr>
+    elseif a:name ==# 'qf'
+        nnoremap <buffer> j j
+        nnoremap <buffer> k k
     endif
 endfunction
 
+command! FileTypeSetup call FileTypeSetup(&filetype)
+
 function! Build(buildexe)
+    update
     execute "!".a:buildexe." ".substitute(expand('%'), '\\', '/', '')
 endfunction
 
 augroup autocmds
     au!
-    au FileType html iabbrev <buffer> --- &mdash;
     " fix vim bug: open all .md files as markdown
     au BufNewFile,BufRead *.md setlocal filetype=markdown
-    " set options for markdown
-    au FileType markdown call s:FileTypeSetup('markdown')
-
-    au FileType javascript nnoremap <buffer> <leader>b :call Build('node')<cr>
-    au FileType python nnoremap <buffer> <leader>b :call Build('python')<cr>
-    au FileType vim nnoremap <buffer> <leader>b :source %<cr>
+    au FileType * call FileTypeSetup(expand('<amatch>'))
 augroup end
 
 " keybindings
@@ -193,6 +215,12 @@ inoremap jk <esc>
 nnoremap j gj
 nnoremap k gk
 
+" do not exit visual selection when indenting
+
+vnoremap < <gv
+vnoremap > >gv
+vnoremap = =gv
+
 nnoremap <leader>s :call ScopeInfos()<CR>
 
 " Emmet
@@ -202,13 +230,14 @@ imap hh <C-y>,
 vnoremap <leader>y "+y
 nnoremap <leader>p "+p
 
-" surrond the current word
+" surround the current word
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
 nnoremap <leader>` viw<esc>a`<esc>bi`<esc>lel
 
 " my fuzzy file finder
 nnoremap <leader>f :find 
+nnoremap <leader>tf :tabfind 
 
 " duplicate selection
 vnoremap <leader>d y'>p
@@ -223,6 +252,10 @@ nnoremap : ;
 nnoremap ; :
 vnoremap ; :
 vnoremap : ;
+
+nnoremap z. mzz.`z
+" don't save to register when using x
+nnoremap x "_x
 
 nnoremap <leader>ev :call DynamicOpen($MYVIMRC)<cr>
 nnoremap <leader>eb :call DynamicOpen("~/.bashrc")<cr>
@@ -239,10 +272,6 @@ augroup end
 " save on focus lost
 augroup autowrite
     autocmd! BufLeave * silent! update
-augroup end
-
-augroup setspell
-    autocmd BufRead,BufNewFile *.md setlocal spell
 augroup end
 
 " style
