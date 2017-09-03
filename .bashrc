@@ -101,7 +101,7 @@ function bgrun {
 
 alias mit='license MIT'
 alias st='cd $APPDATA/Sublime\ Text\ 3/Packages'
-alias live-serve='browser-sync start --server --files "**/*.html, **/*.css, **/*.js" --no-notify'
+alias live-serve='browser-sync start --server --files "**/*.html, **/*.css, js/**/*.js" --no-notify'
 alias live-serve-bg='bgrun browser-sync start --server --files "**/*.html, **/*.css, **/*.js" --no-notify'
 
 # git alias
@@ -117,8 +117,19 @@ bind -x '"\C-f": "ls"'
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+export HISTCONTROL=ignoreboth:erasedups
+
 
 # if [[ -f ./run-ssh-agent.sh ]]; then
     # source ./run-ssh-agent.sh
 # fi
+
+if [[ -f ./git-completion.bash ]]; then
+    source ./git-completion.bash
+fi
+
+if [ -z "$SSH_AUTH_SOCK" ] ; then
+    eval `ssh-agent`
+    ssh-add
+fi
 

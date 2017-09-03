@@ -22,8 +22,8 @@ Plug 'garbas/vim-snipmate'
 
 Plug 'chrisbra/Colorizer'
 
-Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/nerdcommenter'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'tpope/vim-commentary'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'plasticboy/vim-markdown'
 
@@ -67,8 +67,17 @@ let indent_guides_auto_colors = 0
 " let session_autoload = 'yes'
 " let session_autosave = 'yes'
 
+let netrw_liststyle = 3
+let netrw_banner = 0
+let netrw_browse_split = 4
+let netrw_winsize = 30
+
 let ski_track_map = '~/.vim/sessions/'
 
+let ctrlp_working_path_mode = 'r'
+let ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+
+" set cursor insert/normal in terminal
 let &t_ti.="\e[1 q"
 let &t_SI.="\e[5 q"
 let &t_EI.="\e[1 q"
@@ -78,15 +87,16 @@ let &t_te.="\e[0 q"
 
 " Settings
 
+set lazyredraw
+
 " Because windows sucks
 set shell=sh
 set shellcmdflag=-c
 
 set spell spellfile="~/.vim/spell.utf-8.add"
 
-set wildignore+=node_modules/
 set virtualedit=onemore " allow the cursor to move past the end of the line by one more char
-set path+=css/,js/,* " add every file recursively to path to :find them quickly
+set path=,,*
 set ff=unix " set line endings to be unix
 set tabstop=4 shiftwidth=4 shiftround
 " completion in command menu, wrap, highlight current line, set terminal
@@ -172,6 +182,8 @@ function! FileTypeSetup(name)
         nnoremap <buffer> <leader>* viw*esc>a*<esc>bi*<esc>lel
         nnoremap <buffer> <leader>tip :call InsertTipFrontMatter()<CR>
         setlocal nonumber foldcolumn=1
+    elseif a:name ==# 'css'
+        setlocal tabstop=2 shiftwidth=2
     elseif a:name ==# 'python'
         setlocal colorcolumn=101
         nnoremap <buffer> <leader>b :call Build('python')<cr>
@@ -215,13 +227,9 @@ inoremap jk <esc>
 nnoremap j gj
 nnoremap k gk
 
-" do not exit visual selection when indenting
-
-vnoremap < <gv
-vnoremap > >gv
-vnoremap = =gv
-
 nnoremap <leader>s :call ScopeInfos()<CR>
+
+nmap <leader>c m`gcc``
 
 " Emmet
 imap hh <C-y>,
@@ -229,18 +237,13 @@ imap hh <C-y>,
 " clipboard
 vnoremap <leader>y "+y
 nnoremap <leader>p "+p
-
-" surround the current word
-nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
-nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
-nnoremap <leader>` viw<esc>a`<esc>bi`<esc>lel
-
-" my fuzzy file finder
-nnoremap <leader>f :find 
-nnoremap <leader>tf :tabfind 
+nnoremap <leader>P "+P
 
 " duplicate selection
 vnoremap <leader>d y'>p
+
+nnoremap <leader>q q:kk
+nnoremap <leader>r :%s/
 
 " quote the visual selection
 vnoremap <leader>" <esc>`<i"<esc>`>la"
@@ -267,11 +270,6 @@ augroup reloadvimrc
     if has("gui_running")
         autocmd BufWritePost $MYGVIMRC source ~/.vimrc
     endif
-augroup end
-
-" save on focus lost
-augroup autowrite
-    autocmd! BufLeave * silent! update
 augroup end
 
 " style
