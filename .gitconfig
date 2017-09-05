@@ -6,6 +6,7 @@
     editor = vim
     filemode = false
 	eol = lf
+	autocrlf = false
 [alias]
     nbcommit = rev-list --count HEAD
     last = log -1
