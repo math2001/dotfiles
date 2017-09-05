@@ -1,6 +1,8 @@
 " Todo
-" Run last command with bang :bang
 " Tip difference map noremap
+
+set shell=sh
+set shellcmdflag=-c
 
 set encoding=utf-8 fileencoding=utf-8
 set nocompatible
@@ -32,7 +34,6 @@ Plug 'pangloss/vim-javascript', { 'for': ['javascript'] }
 Plug 'flazz/vim-colorschemes'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-colorscheme-switcher'
-" Plug 'xolox/vim-session'
 Plug 'tpope/vim-surround'
 
 call plug#end()
@@ -51,7 +52,7 @@ if Strip(execute('colorscheme')) ==# 'default'
     colorscheme apprentice
 endif
 
-" Plugins Options {{{
+" Plugins settings {{{
 
 let snips_author = "Math2001"
 let table_mode_corner = '|'
@@ -63,16 +64,12 @@ let indent_guides_enable_on_vim_startup = 1
 let indent_guides_guide_size = 1
 let indent_guides_auto_colors = 0
 
-" let session_directory = '~/.vim/sessions/'
-" let session_autoload = 'yes'
-" let session_autosave = 'yes'
-
 let netrw_liststyle = 3
 let netrw_banner = 0
 let netrw_browse_split = 4
 let netrw_winsize = 30
 
-let ski_track_map = '~/.vim/sessions/'
+let ski_folder = '~/.vim/sessions/'
 
 let ctrlp_working_path_mode = 'r'
 let ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
@@ -85,9 +82,10 @@ let &t_te.="\e[0 q"
 
 " }}}
 
-" Settings
+" Options
 
 set lazyredraw
+set autoread
 
 " Because windows sucks
 set shell=sh
@@ -115,6 +113,8 @@ set undofile undodir=$HOME/.vim/_undos
 
 " prevent vim from auto inserting comment symbols
 set formatoptions-=cro
+
+" set sessionoptions-=options
 
 " case insensitive if all lower case in search
 set ignorecase smartcase
