@@ -1,7 +1,3 @@
-#!/bin/sh
+#!/bin/bash
 
-pwd
-
-echo 'Running'
-
-# python ./pre-commit.py
+python $GIT_DIR/hooks/pre-commit.py

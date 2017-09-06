@@ -1,6 +1,3 @@
-" Todo
-" Tip difference map noremap
-
 set shell=sh
 set shellcmdflag=-c
 
