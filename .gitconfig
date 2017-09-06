@@ -3,7 +3,7 @@
     name = Mathieu PATUREL
 [core]
     hooksPath=~/dotfiles/git-hooks
-    trustctime = false
+	trustctime = false
     editor = vim
     filemode = false
     eol = lf

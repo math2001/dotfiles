@@ -34,8 +34,8 @@ function is_ssh {
 }
 
 function light_prompt {
-    set_window_title "BASH $PWD"
     local EXIT="$?"
+    set_window_title "BASH $PWD"
     PS1="$BLUE\u@\H$RESET $PURPLE\W$RESET"
     local nbjobs=$(jobs | wc -l)
     if is_ssh; then
