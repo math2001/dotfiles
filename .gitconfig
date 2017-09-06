@@ -2,11 +2,12 @@
     email = australie.p@gmail.com
     name = Mathieu PATUREL
 [core]
-	trustctime = false
+    hooksPath=~/dotfiles/git-hooks
+    trustctime = false
     editor = vim
     filemode = false
-	eol = lf
-	autocrlf = false
+    eol = lf
+    autocrlf = false
 [alias]
     nbcommit = rev-list --count HEAD
     last = log -1
@@ -28,3 +29,7 @@
 [mergetool]
     prompt = false
     trustexitcode = false
+[hooksforbiddenwords]
+    py = print
+    js = console.log,debugger
+    go = fmt.Println

@@ -184,6 +184,7 @@ function! FileTypeSetup(name)
     elseif a:name ==# 'python'
         setlocal colorcolumn=101
         nnoremap <buffer> <leader>b :call Build('python')<cr>
+        iabbrev <buffer> yeild yield
     elseif a:name ==# 'html'
         iabbrev <buffer> --- &mdash;
     elseif a:name ==# 'javascript'
@@ -194,6 +195,8 @@ function! FileTypeSetup(name)
     elseif a:name ==# 'qf'
         nnoremap <buffer> j j
         nnoremap <buffer> k k
+    elseif a:name ==# 'gitconfig'
+        setlocal nospell
     endif
 endfunction
 
@@ -242,9 +245,6 @@ vnoremap <leader>d y'>p
 nnoremap <leader>q q:kk
 nnoremap <leader>r :%s/
 
-" quote the visual selection
-vnoremap <leader>" <esc>`<i"<esc>`>la"
-
 nnoremap <silent> <leader>w :call ToggleHighlightWordUnderCursor()<CR>
 nnoremap <silent> <leader>W :match none<CR>
 
@@ -269,14 +269,13 @@ augroup reloadvimrc
     endif
 augroup end
 
-" style
+" Style
 
 highlight CursorLineNr ctermfg=white guifg=white
 highlight CursorLine cterm=none ctermfg=none ctermbg=236
 highlight NonText ctermfg=DarkGrey
 highlight SpecialKey ctermfg=DarkGrey
-highlight IndentGuidesOdd ctermbg=236
-highlight IndentGuidesEven ctermbg=236
+highlight Visual ctermbg=232 cterm=NONE ctermfg=NONE
 
 " functions
 

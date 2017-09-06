@@ -70,6 +70,7 @@ alias grep="grep -i --color=auto"
 alias v="vim ~/.vimrc"
 alias b="vim ~/.bashrc"
 alias j="jobs"
+alias getmod="stat -c '%a %n'"
 
 function showcolors {
     for i in `seq 0 1`; do
@@ -124,8 +125,8 @@ export HISTCONTROL=ignoreboth:erasedups
     # source ./run-ssh-agent.sh
 # fi
 
-if [[ -f ./git-completion.bash ]]; then
-    source ./git-completion.bash
+if [[ -f ./git-completions.bash ]]; then
+    source ./git-completions.bash
 fi
 
 if [ -z "$SSH_AUTH_SOCK" ] ; then

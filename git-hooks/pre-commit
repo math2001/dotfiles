@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+
+import subprocess
+from threading import Thread
+import time
+import re
+import os
+from collections import namedtuple
+
+LineResult = namedtuple('LineResult', ['type', 'value'])
+
+START_TIME = time.time() * 1000
+COMMA_SPLIT = re.compile(r'(?<!\\),')
+IGNORE = re.compile(r'(\W|^)allow debug(\W|$)')
+
+def get_filenames(target):
+    def _get_filenames():
+        cmdline = 'git ls-files --other --modified --exclude-standard'
+        target['filenames']= subprocess.check_output(cmdline).decode().strip().splitlines()
+    return _get_filenames
+
+def getconfig(target):
+    def _getconfig():
+        cmdline = 'git config --get-regexp hooksforbiddenwords\\.'
+        lines = subprocess.check_output(cmdline).decode().strip().splitlines()
+        obj = {}
+        for line in lines:
+            line = line.split('.', 1)[1]
+            key, value = line.split(' ', 1)
+            obj[key] = [bit.replace('\\,', ',') for bit in COMMA_SPLIT.split(value)]
+        target['config'] = obj
+    return _getconfig
+
+def checkline(line, keywords):
+    for keyword in keywords:
+        if IGNORE.search(line) is not None:
+            return LineResult('IGNORE', None)
+        if keyword.search(line) is not None:
+            return LineResult('FAIL', keyword.pattern[6:-6])
+    return LineResult('OK', None)
+
+def checkfile(fp, keywords):
+    messages = []
+    line_nb = 1
+    for line in fp:
+        line_nb += 1
+        result = checkline(line, keywords)
+        if result.type == 'FAIL':
+            messages.append('Found "{}" line {}'.format(result.value, line_nb))
+        elif result.type == 'IGNORE':
+            return []
+    return messages
+
+def checkall(filenames, config):
+    messages = {}
+    for filename in filenames:
+        ext = os.path.splitext(filename)[1][1:]
+        if ext not in config.keys():
+            continue
+        with open(os.path.abspath(filename)) as fp:
+            msgs = checkfile(fp, config[ext])
+            if not msgs:
+                continue
+            messages[filename] = msgs
+    return messages
+    
+
+def displaymessages(messages):
+    print('Found debug functions')
+    print('=====================')
+    for filename, messages in messages.items():
+        print(filename)
+        for message in messages:
+            print('  -', message)
+
+def main():
+    results = {}
+    prfilenames = Thread(target=get_filenames(results))
+    prconfig = Thread(target=getconfig(results))
+    prfilenames.start()
+    prconfig.start()
+    prfilenames.join()
+    prconfig.join()
+
+    for ext in results['config']:
+        results['config'][ext] = map(lambda kw: re.compile(r'(\W|^){}(\W|$)'.format(kw)),
+                                     results['config'][ext])
+
+    messages = checkall(results['filenames'], results['config'])
+    if messages == {}:
+        exit(0)
+    displaymessages(messages)
+    exit(1)
+
+
+if __name__ == '__main__':
+    main()
+    print('Done in {}ms'.format(round((time.time() * 1000) - START_TIME, 2)))
+
