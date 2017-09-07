@@ -124,12 +124,10 @@ export HISTCONTROL=ignoreboth:erasedups
     # source ./run-ssh-agent.sh
 # fi
 
-if [[ -f ./git-completion.bash ]]; then
-    source ./git-completion.bash
+if [[ -f ~/dotfiles/git-completion.bash ]]; then
+    source ~/dotfiles/git-completion.bash
 fi
 
-if [ -z "$SSH_AUTH_SOCK" ] ; then
-    eval `ssh-agent`
-    ssh-add
-fi
+source ~/dotfiles/ssh-agent-manager.sh
 
+cd
