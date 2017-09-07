@@ -70,6 +70,7 @@ alias grep="grep -i --color=auto"
 alias v="vim ~/.vimrc"
 alias b="vim ~/.bashrc"
 alias j="jobs"
+alias getmod="stat -c '%a %n'"
 
 function showcolors {
     for i in `seq 0 1`; do
@@ -119,13 +120,8 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export HISTCONTROL=ignoreboth:erasedups
 
-
-# if [[ -f ./run-ssh-agent.sh ]]; then
-    # source ./run-ssh-agent.sh
-# fi
-
-if [[ -f ~/dotfiles/git-completion.bash ]]; then
-    source ~/dotfiles/git-completion.bash
+if [[ -f ./git-completions.bash ]]; then
+    source ./git-completions.bash
 fi
 
 source ~/dotfiles/ssh-agent-manager.sh

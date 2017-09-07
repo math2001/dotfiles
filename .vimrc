@@ -28,7 +28,6 @@ Plug 'pangloss/vim-javascript', { 'for': ['javascript'] }
 Plug 'flazz/vim-colorschemes'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-colorscheme-switcher'
-" Plug 'xolox/vim-session'
 Plug 'tpope/vim-surround'
 
 call plug#end()
@@ -47,7 +46,7 @@ if Strip(execute('colorscheme')) ==# 'default'
     colorscheme apprentice
 endif
 
-" Plugins Options {{{
+" Plugins settings {{{
 
 let snips_author = "Math2001"
 let table_mode_corner = '|'
@@ -78,11 +77,10 @@ endif
 
 " }}}
 
-" Settings
-
-set sessionoptions-=options
+" Options
 
 set lazyredraw
+set autoread
 
 " Because windows sucks
 set shell=sh
@@ -172,6 +170,7 @@ function! FileTypeSetup(name)
     elseif a:name ==# 'python'
         setlocal colorcolumn=101
         nnoremap <buffer> <leader>b :call Build('python')<cr>
+        iabbrev <buffer> yeild yield
     elseif a:name ==# 'html'
         iabbrev <buffer> --- &mdash;
     elseif a:name ==# 'javascript'
@@ -184,6 +183,8 @@ function! FileTypeSetup(name)
     elseif a:name ==# 'qf'
         nnoremap <buffer> j j
         nnoremap <buffer> k k
+    elseif a:name ==# 'gitconfig'
+        setlocal nospell
     endif
 endfunction
 
@@ -237,9 +238,6 @@ vnoremap <leader>d y'>p
 nnoremap <leader>q q:kk
 nnoremap <leader>r :%s/
 
-" quote the visual selection
-vnoremap <leader>" <esc>`<i"<esc>`>la"
-
 nnoremap <silent> <leader>w :call ToggleHighlightWordUnderCursor()<CR>
 nnoremap <silent> <leader>W :match none<CR>
 
@@ -268,7 +266,6 @@ augroup end
 
 highlight CursorLineNr ctermfg=white guifg=white
 highlight Visual ctermbg=234 ctermfg=NONE guifg=NONE guibg=#000000 cterm=NONE gui=NONE
-highlight CursorLine cterm=none ctermfg=none ctermbg=236
 
 " functions
 
