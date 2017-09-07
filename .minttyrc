@@ -28,3 +28,6 @@ White=112,120,128
 BoldWhite=197,200,198
 RightClickAction=menu
 Scrollbar=none
+BoldAsColour=yes
+Locale=en_AU
+Term=xterm-256color

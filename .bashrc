@@ -8,6 +8,7 @@ cd
 
 alias list='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
 
+eval `dircolors ~/dotfiles/.dircolors`
 
 RED="\e[0;31m"
 GREEN="\e[0;32m"

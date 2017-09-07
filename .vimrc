@@ -138,7 +138,7 @@ set statusline+=%{&modified?'*':''}
 set statusline+=%y\ {%{&ff}}\ %.30F " [filetype] {lineendings} filepath
 
 set statusline+=%= " go to the right side of the status line
-set statusline+=%{g:ski_session}\ \|
+" set statusline+=%{g:ski_session}\ \|
 set statusline+=\ %{wordcount()['words']}\ words\ \|
 set statusline+=\ %l,\ %c " line and column
 set statusline+=\ \|\ %p\ %%\ %L " location percentage of the file % line count
@@ -338,5 +338,3 @@ command! -range=% EscapeHTML :call EscapeHTML()
 if has('gui_running') && glob('~/.gvimrc') != ''
     source ~/.gvimrc
 endif
-
-set runtimepath+=~/vim-plugins/ski/
