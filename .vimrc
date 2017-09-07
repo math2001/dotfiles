@@ -1,10 +1,7 @@
-set shell=sh
-set shellcmdflag=-c
-
 set encoding=utf-8 fileencoding=utf-8
 set nocompatible
 
-if has('gui_running')
+if has('win32') && match(&runtimepath, '/.vim')
     set runtimepath +=$HOME/.vim
 endif
 
@@ -55,8 +52,6 @@ let snips_author = "Math2001"
 let table_mode_corner = '|'
 let vim_markdown_frontmatter = 1
 
-let NERDSpaceDelims = 1
-
 let indent_guides_enable_on_vim_startup = 1
 let indent_guides_guide_size = 1
 let indent_guides_auto_colors = 0
@@ -64,18 +59,21 @@ let indent_guides_auto_colors = 0
 let netrw_liststyle = 3
 let netrw_banner = 0
 let netrw_browse_split = 4
-let netrw_winsize = 30
+let netrw_winsize = 15
 
 let ski_folder = '~/.vim/sessions/'
+let ski_update_on_buffer_change = 1
 
-let ctrlp_working_path_mode = 'r'
+let ctrlp_working_path_mode = 'ra'
 let ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
 
 " set cursor insert/normal in terminal
-let &t_ti.="\e[1 q"
-let &t_SI.="\e[5 q"
-let &t_EI.="\e[1 q"
-let &t_te.="\e[0 q"
+if !has('gui_running')
+    let &t_ti.="\e[1 q"
+    let &t_SI.="\e[5 q"
+    let &t_EI.="\e[1 q"
+    let &t_te.="\e[0 q"
+endif
 
 " }}}
 
@@ -111,8 +109,6 @@ set undofile undodir=$HOME/.vim/_undos
 " prevent vim from auto inserting comment symbols
 set formatoptions-=cro
 
-" set sessionoptions-=options
-
 " case insensitive if all lower case in search
 set ignorecase smartcase
 
@@ -141,18 +137,8 @@ set statusline+=%{&modified?'*':''}
 
 set statusline+=%y\ {%{&ff}}\ %.30F " [filetype] {lineendings} filepath
 
-function! GetSessionName()
-    silent! let sessionname = split(substitute(v:this_session,'\\','/','g'),'/')[-1]
-    if !exists('sessionname')
-        return '??'
-    endif
-    if sessionname[-4:] ==? '.vim'
-        let sessionname = sessionname[:-5]
-    return sessionname
-endfunction
-
 set statusline+=%= " go to the right side of the status line
-set statusline+=%{GetSessionName()}\ \|
+set statusline+=%{g:ski_session}\ \|
 set statusline+=\ %{wordcount()['words']}\ words\ \|
 set statusline+=\ %l,\ %c " line and column
 set statusline+=\ \|\ %p\ %%\ %L " location percentage of the file % line count
@@ -160,7 +146,7 @@ set statusline+=\ \|\ %p\ %%\ %L " location percentage of the file % line count
 " default split position when :vsplit :split (feels more natural to me)
 set splitbelow splitright
 
-" complete with the words in the dictionnary :D
+" complete with the words in the dictionary :D
 set complete+=kspell
 
 " disable the mouse if it's available
@@ -190,6 +176,8 @@ function! FileTypeSetup(name)
     elseif a:name ==# 'javascript'
         nnoremap <buffer> <leader>b :call Build('node')<cr>
         iabbrev <buffer> len length
+    elseif a:name ==# 'sh'
+        nnoremap <buffer> <leader>b :call Build('sh')<cr>
     elseif a:name ==# 'vim'
         nnoremap <buffer> <leader>b :source %<cr>
     elseif a:name ==# 'qf'
@@ -204,7 +192,7 @@ command! FileTypeSetup call FileTypeSetup(&filetype)
 
 function! Build(buildexe)
     update
-    execute "!".a:buildexe." ".substitute(expand('%'), '\\', '/', '')
+    execute "!".a:buildexe." ".substitute(expand('%'), '\\', '/', 'g')
 endfunction
 
 augroup autocmds
@@ -219,7 +207,12 @@ augroup end
 let mapleader=","
 
 " 'cause that's how you learn
-inoremap <esc> <nop>
+inoremap <esc> <Nop>
+inoremap <C-a> <HOME>
+inoremap <C-e> <END>
+inoremap <C-b> <C-o>b
+inoremap <C-f> <C-o>w
+
 " 'cause I'm lazy...
 inoremap jk <esc>
 
@@ -272,10 +265,7 @@ augroup end
 " Style
 
 highlight CursorLineNr ctermfg=white guifg=white
-highlight CursorLine cterm=none ctermfg=none ctermbg=236
-highlight NonText ctermfg=DarkGrey
-highlight SpecialKey ctermfg=DarkGrey
-highlight Visual ctermbg=232 cterm=NONE ctermfg=NONE
+highlight Visual ctermbg=234 ctermfg=NONE guifg=NONE guibg=#000000 cterm=NONE gui=NONE
 
 " functions
 
@@ -348,3 +338,5 @@ command! -range=% EscapeHTML :call EscapeHTML()
 if has('gui_running') && glob('~/.gvimrc') != ''
     source ~/.gvimrc
 endif
+
+set runtimepath+=~/vim-plugins/ski/

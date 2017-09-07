@@ -120,17 +120,10 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export HISTCONTROL=ignoreboth:erasedups
 
-
-# if [[ -f ./run-ssh-agent.sh ]]; then
-    # source ./run-ssh-agent.sh
-# fi
-
 if [[ -f ./git-completions.bash ]]; then
     source ./git-completions.bash
 fi
 
-if [ -z "$SSH_AUTH_SOCK" ] ; then
-    eval `ssh-agent`
-    ssh-add
-fi
+source ~/dotfiles/ssh-agent-manager.sh
 
+cd
