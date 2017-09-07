@@ -1,9 +1,12 @@
-if [[ $(uname) != "Linux" ]]; then
-    PATH="$PATH:/c/Program Files/Git/bin:C:\Program Files\Git\mingw64\bin"
-    alias list='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
-else
-    alias list='ls'
-fi
+# if [[ $(uname) != "Linux" ]]; then
+#     PATH="$PATH:/c/Program Files/Git/bin:C:\Program Files\Git\mingw64\bin"
+#     alias list='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
+# else
+#     alias list='ls'
+# fi
+cd
+
+alias list='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
 
 
 RED="\e[0;31m"
@@ -125,5 +128,3 @@ if [[ -f ./git-completions.bash ]]; then
 fi
 
 source ~/dotfiles/ssh-agent-manager.sh
-
-cd
