@@ -1,3 +1,0 @@
-#!/bin/bash
-
-python $GIT_DIR/hooks/pre-commit.py
