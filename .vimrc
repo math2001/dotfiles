@@ -185,6 +185,8 @@ function! FileTypeSetup(name)
         nnoremap <buffer> k k
     elseif a:name ==# 'gitconfig'
         setlocal nospell
+    elseif a:name ==# 'go'
+        nnoremap <buffer> <leader>b :call Build('go run ')<CR>
     endif
 endfunction
 

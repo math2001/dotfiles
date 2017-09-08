@@ -1,4 +1,4 @@
-if [[ ! -f ~/.ssh-agent-code ]] || [[ $(ps -a | grep ssh-agent) == '' ]]; then
+if [[ ! -f ~/.ssh-agent-code ]] || [[ $(ps all | grep ssh-agent) == '' ]]; then
     echo '[sam] Create new ssh agent'
     ssh-agent > ~/.ssh-agent-code
 fi
