@@ -1,14 +1,4 @@
-# if [[ $(uname) != "Linux" ]]; then
-#     PATH="$PATH:/c/Program Files/Git/bin:C:\Program Files\Git\mingw64\bin"
-#     alias list='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
-# else
-#     alias list='ls'
-# fi
-cd
-
 alias list='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
-
-eval `dircolors ~/dotfiles/.dircolors`
 
 RED="\e[0;31m"
 GREEN="\e[0;32m"
@@ -123,6 +113,13 @@ bind -x '"\C-f": "ls"'
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export HISTCONTROL=ignoreboth:erasedups
+export SHELL
+
+# set ls colors
+if [[ -f ~/dotfiles/.dircolors ]]; then
+    eval `dircolors ~/dotfiles/.dircolors`
+fi
+
 
 if [[ -f ./git-completions.bash ]]; then
     source ./git-completions.bash
