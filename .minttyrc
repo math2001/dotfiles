@@ -14,8 +14,9 @@ Transparency=off
 BackgroundColour=38,38,38
 ForegroundColour=188,188,188
 CursorColour=188,188,188
-Black=28,28,28
-BoldBlack=68,68,68
+
+Black=80,80,80
+BoldBlack=100,100,100
 Red=175,95,95
 BoldRed=255,135,0
 Green=95,135,95
