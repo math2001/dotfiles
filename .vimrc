@@ -251,12 +251,13 @@ nnoremap z. mzz.`z
 nnoremap x "_x
 
 nnoremap <leader>ev :call DynamicOpen($MYVIMRC)<cr>
+nnoremap <leader>elv :call DynamicOpen("~/local.vimrc")<cr>
 nnoremap <leader>eb :call DynamicOpen("~/.bashrc")<cr>
 nnoremap <leader>eg :call DynamicOpen($MYGVIMRC)<cr>
 
 augroup reloadvimrc
     autocmd!
-    autocmd BufWritePost $MYVIMRC source ~/.vimrc
+    autocmd BufWritePost $MYVIMRC\|local.vimrc source ~/.vimrc
     if has("gui_running")
         autocmd BufWritePost $MYGVIMRC source ~/.vimrc
     endif
@@ -337,4 +338,9 @@ command! -range=% EscapeHTML :call EscapeHTML()
 
 if has('gui_running') && glob('~/.gvimrc') != ''
     source ~/.gvimrc
+endif
+
+if len(globpath('~', 'local.vimrc', 0, 1)) == 1
+    source ~/local.vimrc
+else
 endif
