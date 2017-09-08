@@ -9,6 +9,7 @@
     eol = lf
     autocrlf = false
 [alias]
+    worddiff=diff --color-words=.
     nbcommit = rev-list --count HEAD
     last = log -1
     msg = !cat \".git/COMMIT_EDITMSG\"
@@ -16,8 +17,6 @@
     last-tag = describe --abbrev=0 --tags
     aliases = config --get-regexp alias.
     amend = commit --amend
-[init]
-    templateDir = ~/git-template/content
 [push]
     default = matching
 [color]
