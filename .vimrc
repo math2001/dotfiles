@@ -153,8 +153,6 @@ set complete+=kspell
 set mouse-=a
 
 " abbreviations
-cabbrev help tab help
-cabbrev set setlocal
 iabbrev lable label
 iabbrev teh the
 

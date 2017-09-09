@@ -1,12 +1,12 @@
 alias list='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
 
-RED="\e[0;31m"
-GREEN="\e[0;32m"
-PURPLE="\e[0;35m"
-BLUE="\e[0;34m"
-BLACK="\e[0;30m"
-GREY="\e[1;30m"
-RESET="\e[0m"
+RED="\[\e[0;31m\]"
+GREEN="\[\e[0;32m\]"
+PURPLE="\[\e[0;35m\]"
+BLUE="\[\e[0;34m\]"
+BLACK="\[\e[0;30m\]"
+GREY="\[\e[1;30m\]"
+RESET="\[\e[0m\]"
 
 function get_stds {
     # get both stdout and stderr to a single string
@@ -65,6 +65,7 @@ alias v="vim ~/.vimrc"
 alias b="vim ~/.bashrc"
 alias j="jobs"
 alias getmod="stat -c '%a %n'"
+alias todo="~/go/act/act -file=~/act"
 
 function showcolors {
     for i in `seq 0 1`; do
@@ -103,6 +104,7 @@ alias live-serve-bg='bgrun browser-sync start --server --files "**/*.html, **/*.
 
 alias gs="git status --short"
 alias gl="git log -10 --color --oneline --decorate | goemoji"
+alias act="~/go/act/act"
 
 # shortcut
 
