@@ -177,7 +177,7 @@ function! FileTypeSetup(name)
         nnoremap <buffer> <leader>b :call Build('node')<cr>
         iabbrev <buffer> len length
     elseif a:name ==# 'sh'
-        nnoremap <buffer> <leader>b :call Build('sh')<cr>
+        nnoremap <buffer> <leader>b :call Build('bash')<cr>
     elseif a:name ==# 'vim'
         nnoremap <buffer> <leader>b :source %<cr>
     elseif a:name ==# 'qf'
