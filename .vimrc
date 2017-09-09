@@ -185,6 +185,8 @@ function! FileTypeSetup(name)
         setlocal nospell
     elseif a:name ==# 'go'
         nnoremap <buffer> <leader>b :call Build('go run ')<CR>
+    elseif a:name ==# 'tmux'
+        set nospell
     endif
 endfunction
 
@@ -255,18 +257,19 @@ nnoremap <leader>elv :call DynamicOpen("~/local.vimrc")<cr>
 nnoremap <leader>eb :call DynamicOpen("~/.bashrc")<cr>
 nnoremap <leader>eg :call DynamicOpen($MYGVIMRC)<cr>
 
-augroup reloadvimrc
+augroup autoreloadconfigfiles
     autocmd!
     autocmd BufWritePost $MYVIMRC\|local.vimrc source ~/.vimrc
     if has("gui_running")
         autocmd BufWritePost $MYGVIMRC source ~/.vimrc
     endif
+    autocmd BufWritePost .tmux.conf silent! !tmux source-file ~/.tmux.conf
 augroup end
 
 " Style
 
 highlight CursorLineNr ctermfg=white guifg=white
-highlight Visual ctermbg=234 ctermfg=NONE guifg=NONE guibg=#000000 cterm=NONE gui=NONE
+highlight Visual ctermbg=232 ctermfg=NONE guifg=NONE guibg=#000000 cterm=NONE gui=NONE
 
 " functions
 
