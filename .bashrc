@@ -8,6 +8,9 @@ BLACK="\[\e[0;30m\]"
 GREY="\[\e[1;30m\]"
 RESET="\[\e[0m\]"
 
+BRIGHT_BLUE="\[\e[1;34m\]"
+BRIGHT_PURPLE="\[\e[1;35m\]"
+
 function get_stds {
     # get both stdout and stderr to a single string
     TMP=$(mktemp)
@@ -30,7 +33,7 @@ function is_ssh {
 function light_prompt {
     local EXIT="$?"
     set_window_title "BASH $PWD"
-    PS1="$BLUE\u@\H$RESET $PURPLE\W$RESET"
+    PS1="$BLUE$BRIGHT\u@\H$RESET $BRIGHT_PURPLE\W$RESET"
     local nbjobs=$(jobs | wc -l)
     if is_ssh; then
         PS1="$GREY[ssh]$RESET $PS1"
@@ -117,6 +120,7 @@ export LANG=en_US.UTF-8
 export HISTCONTROL=ignoreboth:erasedups
 export SHELL
 export GOPATH="$HOME/gopackages/"
+export FCEDIT="vim"
 
 # set ls colors
 if [[ -f ~/dotfiles/.dircolors ]]; then
