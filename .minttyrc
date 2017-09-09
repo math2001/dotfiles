@@ -38,3 +38,6 @@ Scrollbar=none
 
 Locale=en_AU
 Term=xterm-256color
+BellType=0
+BellFlash=no
+BellPopup=yes

@@ -1,8 +1,10 @@
 set encoding=utf-8 fileencoding=utf-8
 set nocompatible
+syntax on
+filetype plugin indent on
 
 if has('win32') && match(&runtimepath, '/.vim')
-    set runtimepath +=$HOME/.vim
+    set runtimepath+=$HOME/.vim
 endif
 
 " Plugins {{{
@@ -14,7 +16,6 @@ Plug 'jiangmiao/auto-pairs'
 
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
 
 Plug 'chrisbra/Colorizer'
 
@@ -29,6 +30,7 @@ Plug 'flazz/vim-colorschemes'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-colorscheme-switcher'
 Plug 'tpope/vim-surround'
+Plug 'SirVer/ultisnips'
 
 call plug#end()
 
@@ -52,10 +54,6 @@ let snips_author = "Math2001"
 let table_mode_corner = '|'
 let vim_markdown_frontmatter = 1
 
-let indent_guides_enable_on_vim_startup = 1
-let indent_guides_guide_size = 1
-let indent_guides_auto_colors = 0
-
 let netrw_liststyle = 3
 let netrw_banner = 0
 let netrw_browse_split = 4
@@ -66,6 +64,20 @@ let ski_update_on_buffer_change = 1
 
 let ctrlp_working_path_mode = 'ra'
 let ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+
+set runtimepath+=~/.vim/plugged/ultisnips
+
+let UltiSnipsExpandTrigger = "<c-h>"
+let UltiSnipsListSnippets = "<c-tab>"
+let UltiSnipsJumpForwardTrigger = "<c-j>"
+let UltiSnipsJumpBackwardTrigger = "<c-k>"
+
+let UltiSnipsEditSplit = "vertical"
+let UltiSnipsUsePythonVersion = 3
+set runtimepath+=~/dotfiles/vim-snippets/
+let UltiSnipsSnippetsDir = "~/dotfiles/vim-snippets/"
+let UltiSnipsSnippetsDirectories = ["vim-snippets"]
+let UltiSnipsEnabledSnipMate = 0
 
 " set cursor insert/normal in terminal
 if !has('gui_running')
@@ -81,6 +93,8 @@ endif
 
 set lazyredraw
 set autoread
+
+set noerrorbells " no sound from vim, it's a text editor, not a music player
 
 " Because windows sucks
 set shell=sh

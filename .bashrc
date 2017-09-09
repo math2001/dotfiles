@@ -5,9 +5,11 @@ GREEN="\[\e[0;32m\]"
 PURPLE="\[\e[0;35m\]"
 BLUE="\[\e[0;34m\]"
 BLACK="\[\e[0;30m\]"
-GREY="\[\e[1;30m\]"
 RESET="\[\e[0m\]"
 
+BRIGHT_BLACK="\[\e[1;30m\]"
+BRIGHT_RED="\[\e[1;31m\]"
+BRIGHT_GREEN="\[\e[1;32m\]"
 BRIGHT_BLUE="\[\e[1;34m\]"
 BRIGHT_PURPLE="\[\e[1;35m\]"
 
@@ -32,19 +34,19 @@ function is_ssh {
 
 function light_prompt {
     local EXIT="$?"
-    set_window_title "BASH $PWD"
-    PS1="$BLUE$BRIGHT\u@\H$RESET $BRIGHT_PURPLE\W$RESET"
+    set_window_title "$PWD"
+    PS1="$BLUE\w$RESET"
     local nbjobs=$(jobs | wc -l)
     if is_ssh; then
-        PS1="$GREY[ssh]$RESET $PS1"
+        PS1="$BRIGHT_BLACK[ssh]$RESET $PS1"
     fi
     if [[ $nbjobs != "0" ]]; then
-        PS1="\j $PS1"
+        PS1="$BRIGHT_BLACK\j$RESET $PS1"
     fi
     if [[ $EXIT == "0" ]]; then
-        PS1="$PS1$GREEN"
+        PS1="$PS1$BRIGHT_GREEN"
     else
-        PS1="$PS1$RED"
+        PS1="$PS1$BRIGHT_RED"
     fi
     PS1="$PS1 →$RESET "
 }
