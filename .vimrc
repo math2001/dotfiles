@@ -63,7 +63,7 @@ let netrw_winsize = 15
 let ski_folder = '~/.vim/sessions/'
 let ski_update_on_buffer_change = 1
 
-let ctrlp_working_path_mode = 'ra'
+let ctrlp_working_path_mode = 0
 let ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
 
 set runtimepath+=~/.vim/plugged/ultisnips
