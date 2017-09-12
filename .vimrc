@@ -12,6 +12,7 @@ endif
 call plug#begin('~/.vim/plugged')
 
 Plug 'mattn/emmet-vim'
+Plug 'cespare/vim-toml'
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'MarcWeber/vim-addon-mw-utils'
@@ -200,7 +201,10 @@ function! FileTypeSetup(name)
     elseif a:name ==# 'go'
         nnoremap <buffer> <leader>b :call Build('go run ')<CR>
     elseif a:name ==# 'tmux'
-        set nospell
+        setlocal nospell
+    elseif a:name ==# 'yaml'
+        setlocal tabstop=2 shiftwidth=2
+        setlocal nospell
     endif
 endfunction
 
@@ -250,6 +254,7 @@ nnoremap <leader>P "+P
 
 " duplicate selection
 vnoremap <leader>d y'>p
+nnoremap <leader>d mzyyp`zj
 
 nnoremap <leader>q q:kk
 nnoremap <leader>r :%s/
@@ -361,3 +366,8 @@ if len(globpath('~', 'local.vimrc', 0, 1)) == 1
     source ~/local.vimrc
 else
 endif
+
+command! HugoDebug :call Insert('<code>{{ printf "%#v" . }}</code>') |
+            \ :normal "bbbb"
+nnoremap <silent> <leader>h :HugoDebug<CR>
+

@@ -15,7 +15,10 @@ function __load_ssh_agent {
         eval $(cat ~/.ssh-agent-code) > /dev/null
         if ! __is_right_ssh_pid; then
             __create_ssh_agent
+            eval $(cat ~/.ssh-agent-code) > /dev/null
         fi
+    else
+        __create_ssh_agent
     fi
 }
 

@@ -35,13 +35,10 @@ function is_ssh {
 function light_prompt {
     local EXIT="$?"
     set_window_title "$PWD"
-    PS1="$BLUE\w$RESET"
-    local nbjobs=$(jobs | wc -l)
+    PS1="$BRIGHT_BLACK\j$RESET"
+    PS1="$PS1 $BLUE\w$RESET"
     if is_ssh; then
         PS1="$BRIGHT_BLACK[ssh]$RESET $PS1"
-    fi
-    if [[ $nbjobs != "0" ]]; then
-        PS1="$BRIGHT_BLACK\j$RESET $PS1"
     fi
     if [[ $EXIT == "0" ]]; then
         PS1="$PS1$BRIGHT_GREEN"
@@ -135,3 +132,5 @@ if [[ -f ./git-completions.bash ]]; then
 fi
 
 source ~/dotfiles/ssh-agent-manager.sh
+
+export PATH="$HOME/.yarn/bin:$PATH"
