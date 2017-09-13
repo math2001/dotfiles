@@ -45,10 +45,12 @@ endfunction
 
 if Strip(execute('colorscheme')) ==# 'default'
     " Good ones: apprentice, Tomorrow, Tomorrow-night
-    set background=dark
     let g:gruvbox_bold = 0
-    colorscheme gruvbox
+    colorscheme apprentice
 endif
+
+highlight LineNr ctermbg=235
+highlight Visual ctermbg=237 ctermfg=NONE guifg=NONE guibg=#3A3A3A cterm=NONE gui=NONE
 
 " Plugins settings {{{
 
@@ -285,10 +287,6 @@ augroup autoreloadconfigfiles
     autocmd BufWritePost .tmux.conf silent! !tmux source-file ~/.tmux.conf
 augroup end
 
-" Style
-
-" highlight CursorLineNr ctermfg=white guifg=white
-" highlight Visual ctermbg=232 ctermfg=NONE guifg=NONE guibg=#000000 cterm=NONE gui=NONE
 
 " functions
 
