@@ -18,20 +18,19 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 
-Plug 'chrisbra/Colorizer'
-
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tpope/vim-commentary'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'plasticboy/vim-markdown'
 
-Plug 'pangloss/vim-javascript', { 'for': ['javascript'] }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'html'] }
 
 Plug 'flazz/vim-colorschemes'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-colorscheme-switcher'
 Plug 'tpope/vim-surround'
 Plug 'SirVer/ultisnips'
+" Plug 'othree/html5.vim'
 
 call plug#end()
 
@@ -46,7 +45,9 @@ endfunction
 
 if Strip(execute('colorscheme')) ==# 'default'
     " Good ones: apprentice, Tomorrow, Tomorrow-night
-    colorscheme apprentice
+    set background=dark
+    let g:gruvbox_bold = 0
+    colorscheme gruvbox
 endif
 
 " Plugins settings {{{
@@ -177,7 +178,6 @@ function! FileTypeSetup(name)
         silent TableModeEnable
         nnoremap <buffer> <leader>* viw*esc>a*<esc>bi*<esc>lel
         nnoremap <buffer> <leader>tip :call InsertTipFrontMatter()<CR>
-        setlocal nonumber foldcolumn=1
     elseif a:name ==# 'css'
         setlocal tabstop=2 shiftwidth=2
     elseif a:name ==# 'python'
@@ -287,8 +287,8 @@ augroup end
 
 " Style
 
-highlight CursorLineNr ctermfg=white guifg=white
-highlight Visual ctermbg=232 ctermfg=NONE guifg=NONE guibg=#000000 cterm=NONE gui=NONE
+" highlight CursorLineNr ctermfg=white guifg=white
+" highlight Visual ctermbg=232 ctermfg=NONE guifg=NONE guibg=#000000 cterm=NONE gui=NONE
 
 " functions
 
@@ -351,6 +351,12 @@ function! EscapeHTML() range
     execute a:firstline.",".a:lastline."s/\</\\&lt;/g"
     execute a:firstline.",".a:lastline."s/\>/\\&gt;/g"
 endfunction
+
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
 
 " commands
 
