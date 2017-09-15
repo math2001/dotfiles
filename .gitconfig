@@ -11,7 +11,7 @@
 [alias]
     worddiff=diff --color-words=.
     nbcommit = rev-list --count HEAD
-    last = log -1
+    last = log -1 --relative-date
     msg = !cat \".git/COMMIT_EDITMSG\"
     hub = "!f () { local REPO; local URL; [[ -f .githubrepo ]] && REPO=\"$(head -n 1 .githubrepo)\" || REPO=\"${PWD##*/}\"; URL=\"https://github.com/math2001/$REPO\"; if [[ \"$1\" == i ]]; then URL=\"$URL/issues\"; elif [[ \"$1\" == s ]]; then URL=\"$URL/settings\"; elif [[ \"$1\" == p ]]; then URL=\"$URL/pulls\"; elif [[ \"$1\" == w ]]; then URL=\"$URL/wiki\"; elif [[ \"$1\" == b ]]; then URL=\"$URL/branches\"; elif [[ \"$1\" == r ]]; then URL=\"$URL/releases\"; elif [[ \"$1\" == 'in' ]]; then URL=\"$URL/issues/new\"; fi; echo \"Opening $URL\"; }; f"
     last-tag = describe --abbrev=0 --tags
