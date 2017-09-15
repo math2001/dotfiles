@@ -49,8 +49,9 @@ if Strip(execute('colorscheme')) ==# 'default'
     colorscheme apprentice
 endif
 
-highlight LineNr ctermbg=235
+highlight LineNr ctermbg=235 guibg=#262626
 highlight Visual ctermbg=237 ctermfg=NONE guifg=NONE guibg=#3A3A3A cterm=NONE gui=NONE
+highlight Cursor gui=reverse guibg=NONE
 
 " Plugins settings {{{
 

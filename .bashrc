@@ -105,7 +105,7 @@ alias live-serve-bg='bgrun browser-sync start --server --files "**/*.html, **/*.
 # git alias
 
 alias gs="git status --short"
-alias gl="git log -10 --color --oneline --decorate | goemoji"
+alias gl="git log -10 --color --oneline --decorate"
 alias act="~/go/act/act"
 
 # shortcut
