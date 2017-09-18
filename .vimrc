@@ -231,19 +231,25 @@ let mapleader=","
 
 " 'cause that's how you learn
 inoremap <esc> <Nop>
+
 inoremap <C-a> <HOME>
 inoremap <C-e> <END>
 inoremap <C-b> <C-o>b
 inoremap <C-f> <C-o>w
 
 " 'cause I'm lazy...
-inoremap jk <esc>
+inoremap jk <Esc>
+inoremap kj <Esc>
 
 " to consider wrapped lines as actual lines
 nnoremap j gj
 nnoremap k gk
+vnoremap j gj
+vnoremap k gk
 
 nnoremap <leader>s :call ScopeInfos()<CR>
+
+nnoremap <leader>l :autocmd TextChanged,TextChangedI <buffer> write<CR>
 
 nmap <leader>c m`gcc``
 
@@ -270,9 +276,12 @@ nnoremap ; :
 vnoremap ; :
 vnoremap : ;
 
+" keep position on the line (use ` instead of ')
 nnoremap z. mzz.`z
 " don't save to register when using x
 nnoremap x "_x
+" visualize pasted text
+nnoremap gp `[v`]
 
 nnoremap <leader>ev :call DynamicOpen($MYVIMRC)<cr>
 nnoremap <leader>elv :call DynamicOpen("~/local.vimrc")<cr>

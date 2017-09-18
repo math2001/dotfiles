@@ -16,6 +16,8 @@
     last-tag = describe --abbrev=0 --tags
     aliases = config --get-regexp alias.
     amend = commit --amend
+	c = checkout
+	b = branch
 [push]
     default = matching
 [color]

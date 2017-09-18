@@ -1,3 +1,5 @@
+complete -r
+
 alias list='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
 
 RED="\[\e[0;31m\]"
@@ -134,3 +136,7 @@ fi
 source ~/dotfiles/ssh-agent-manager.sh
 
 export PATH="$HOME/.yarn/bin:$PATH"
+
+# this is the graal. Native vim movement in the terminal!!!
+set -o vi
+bind -m vi-insert "\C-l":clear-screen
