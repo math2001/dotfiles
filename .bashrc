@@ -1,5 +1,3 @@
-complete -r
-
 alias list='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
 
 RED="\[\e[0;31m\]"
