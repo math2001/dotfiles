@@ -20,6 +20,7 @@ Plug 'tomtom/tlib_vim'
 
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tpope/vim-commentary'
+Plug 'scrooloose/nerdtree'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'plasticboy/vim-markdown'
 
@@ -30,7 +31,7 @@ Plug 'xolox/vim-misc'
 Plug 'xolox/vim-colorscheme-switcher'
 Plug 'tpope/vim-surround'
 Plug 'SirVer/ultisnips'
-" Plug 'othree/html5.vim'
+Plug 'othree/html5.vim'
 
 call plug#end()
 
@@ -68,7 +69,7 @@ let ski_folder = '~/.vim/sessions/'
 let ski_update_on_buffer_change = 1
 
 let ctrlp_working_path_mode = 0
-let ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+let ctrlp_custom_ignore = '(node_modules)\|(DS_Store)\|(.git)'
 
 set runtimepath+=~/.vim/plugged/ultisnips
 
@@ -174,6 +175,8 @@ set mouse-=a
 " abbreviations
 iabbrev lable label
 iabbrev teh the
+iabbrev github GitHub
+iabbrev repo repository
 
 function! FileTypeSetup(name)
     if a:name ==# 'markdown'

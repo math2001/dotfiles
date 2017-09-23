@@ -53,11 +53,16 @@ function light_prompt {
 PROMPT_COMMAND=light_prompt
 
 shopt -s autocd dotglob globstar
+
+# this is the graal. Native vim movement in the terminal!!!
+set -o vi
+bind -m vi-insert "\C-l":clear-screen
+
 # insensitive case path completion in bash
 bind 'set completion-ignore-case on'
 
 # this makes the autocompletion propose changes, instead of stopping to the ambiguous characters
-[[ $- = *i* ]] && bind TAB:menu-complete
+bind TAB:menu-complete
 
 alias s="source ~/.bashrc"
 alias ls="list -X -A -F --color=auto"
@@ -136,7 +141,3 @@ fi
 source ~/dotfiles/ssh-agent-manager.sh
 
 export PATH="$HOME/.yarn/bin:$PATH"
-
-# this is the graal. Native vim movement in the terminal!!!
-set -o vi
-bind -m vi-insert "\C-l":clear-screen

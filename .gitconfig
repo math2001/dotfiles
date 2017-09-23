@@ -12,12 +12,10 @@
     worddiff=diff --color-words=.
     nbcommit = rev-list --count HEAD
     last = log -1 --relative-date
-    msg = !cat \".git/COMMIT_EDITMSG\"
     last-tag = describe --abbrev=0 --tags
     aliases = config --get-regexp alias.
     amend = commit --amend
-	c = checkout
-	b = branch
+	append = commit --amend --no-edit
 [push]
     default = matching
 [color]
