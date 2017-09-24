@@ -73,6 +73,7 @@ alias b="vim ~/.bashrc"
 alias j="jobs"
 alias getmod="stat -c '%a %n'"
 alias todo="~/go/act/act -file=~/act"
+alias path='echo "$PATH" | tr ":" "\n"'
 
 function showcolors {
     for i in `seq 0 1`; do

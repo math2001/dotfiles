@@ -70,7 +70,7 @@ let ski_folder = '~/.vim/sessions/'
 let ski_update_on_buffer_change = 1
 
 let ctrlp_working_path_mode = 0
-let ctrlp_custom_ignore = '(node_modules)\|(DS_Store)\|(.git)'
+let g:ctrlp_custom_ignore = { 'dir': '.git$\|node_modules$' }
 
 set runtimepath+=~/.vim/plugged/ultisnips
 
@@ -176,12 +176,12 @@ set mouse-=a
 " abbreviations
 iabbrev lable label
 iabbrev teh the
-iabbrev github GitHub
 iabbrev repo repository
 
 function! FileTypeSetup(name)
     if a:name ==# 'markdown'
-        setlocal textwidth=81
+        iabbrev <buffer> github GitHub
+        setlocal textwidth=80 colorcolumn=81
         silent TableModeEnable
         nnoremap <buffer> <leader>* viw*esc>a*<esc>bi*<esc>lel
         nnoremap <buffer> <leader>tip :call InsertTipFrontMatter()<CR>
@@ -288,7 +288,7 @@ nnoremap x "_x
 nnoremap gp `[v`]
 
 nnoremap <leader>eV :call DynamicOpen($MYVIMRC)<cr>
-nnoremap <leader>ev :call DynamicOpen("~/.dotfiles/.vimrc")<cr>
+nnoremap <leader>ev :call DynamicOpen("~/dotfiles/.vimrc")<cr>
 nnoremap <leader>eB :call DynamicOpen("~/.bashrc")<cr>
 nnoremap <leader>eb :call DynamicOpen("~/dotfiles/.bashrc")<cr>
 nnoremap <leader>eT :call DynamicOpen("~/.tmux.conf")<cr>
