@@ -32,6 +32,7 @@ Plug 'xolox/vim-colorscheme-switcher'
 Plug 'tpope/vim-surround'
 Plug 'SirVer/ultisnips'
 Plug 'othree/html5.vim'
+Plug 'christoomey/vim-tmux-navigator'
 
 call plug#end()
 
@@ -286,14 +287,17 @@ nnoremap x "_x
 " visualize pasted text
 nnoremap gp `[v`]
 
-nnoremap <leader>ev :call DynamicOpen($MYVIMRC)<cr>
-nnoremap <leader>elv :call DynamicOpen("~/local.vimrc")<cr>
-nnoremap <leader>eb :call DynamicOpen("~/.bashrc")<cr>
+nnoremap <leader>eV :call DynamicOpen($MYVIMRC)<cr>
+nnoremap <leader>ev :call DynamicOpen("~/.dotfiles/.vimrc")<cr>
+nnoremap <leader>eB :call DynamicOpen("~/.bashrc")<cr>
+nnoremap <leader>eb :call DynamicOpen("~/dotfiles/.bashrc")<cr>
+nnoremap <leader>eT :call DynamicOpen("~/.tmux.conf")<cr>
+nnoremap <leader>et :call DynamicOpen("~/dotfiles/.tmux.conf")<cr>
 nnoremap <leader>eg :call DynamicOpen($MYGVIMRC)<cr>
 
 augroup autoreloadconfigfiles
     autocmd!
-    autocmd BufWritePost $MYVIMRC\|local.vimrc source ~/.vimrc
+    autocmd BufWritePost .vimrc source ~/.vimrc
     if has("gui_running")
         autocmd BufWritePost $MYGVIMRC source ~/.vimrc
     endif
