@@ -33,8 +33,14 @@ function is_ssh {
 }
 
 function light_prompt {
-    local EXIT="$?"
-    set_window_title "$PWD"
+    local EXIT=$?
+    trap '
+    if [[ "$IS_USER_COMMAND" -eq 1 ]] && [[ "$BASH_COMMAND" != "$COMMAND_PROMPT" ]]; then
+        IS_USER_COMMAND=0
+        set -- $BASH_COMMAND
+        set_window_title "$1 @ $(dirs +0)"
+    fi
+    ' DEBUG
     PS1="$BRIGHT_BLACK\j$RESET"
     PS1="$PS1 $BLUE\w$RESET"
     if is_ssh; then
@@ -46,6 +52,7 @@ function light_prompt {
         PS1="$PS1$BRIGHT_RED"
     fi
     PS1="$PS1 →$RESET "
+    IS_USER_COMMAND=1
 }
 
 PROMPT_COMMAND=light_prompt
@@ -68,8 +75,8 @@ alias ll="ls -lh"
 alias cls="echo -e '\\0033\\0143'"
 alias findhere="find . -name"
 alias grep="grep -i --color=auto"
-alias v="vim ~/.vimrc"
-alias b="vim ~/.bashrc"
+alias v="vim ~/dotfiles/.vimrc"
+alias b="vim ~/dotfiles/.bashrc"
 alias j="jobs"
 alias getmod="stat -c '%a %n'"
 alias todo="~/go/act/act -file=~/act"
@@ -111,12 +118,14 @@ alias live-serve-bg='bgrun browser-sync start --server --files "**/*.html, **/*.
 # git alias
 
 alias gs="git status --short"
-alias gl="git log -10 --color --oneline --decorate"
+alias gml="git log --oneline --decorate --all --tags --graph --date-order -10"
+alias gl="git log --oneline --decorate --tags --graph --date-order -10"
 alias act="~/go/act/act"
 
 # shortcut
 
-bind -x '"\C-f": "ls"'
+# bind -x '"\C-f": "ls"'
+bind -x '"\C-f": "xclip -o"'
 
 # exported variables
 

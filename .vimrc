@@ -237,7 +237,6 @@ let mapleader=","
 inoremap <esc> <Nop>
 
 inoremap <C-a> <HOME>
-inoremap <C-e> <END>
 inoremap <C-b> <C-o>b
 inoremap <C-f> <C-o>w
 

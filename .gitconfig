@@ -2,7 +2,7 @@
     email = australie.p@gmail.com
     name = Mathieu PATUREL
 [core]
-    hooksPath=~/dotfiles/git-hooks
+    ; hooksPath=~/dotfiles/git-hooks
 	trustctime = false
     editor = vim
     filemode = false
