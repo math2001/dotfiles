@@ -28,11 +28,12 @@ Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'html'] }
 
 Plug 'flazz/vim-colorschemes'
 Plug 'xolox/vim-misc'
-Plug 'xolox/vim-colorscheme-switcher'
 Plug 'tpope/vim-surround'
-Plug 'SirVer/ultisnips'
 Plug 'othree/html5.vim'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'hail2u/vim-css3-syntax'
+Plug 'sampsyo/autolink.vim'
+Plug 'w0rp/ale'
 
 call plug#end()
 
@@ -47,7 +48,6 @@ endfunction
 
 if Strip(execute('colorscheme')) ==# 'default'
     " Good ones: apprentice, Tomorrow, Tomorrow-night
-    let g:gruvbox_bold = 0
     colorscheme apprentice
 endif
 
@@ -133,6 +133,9 @@ set formatoptions-=cro
 " case insensitive if all lower case in search
 set ignorecase smartcase
 
+" use the case used the prefix to complete (ins-completion)
+set infercase
+
 " highlight current line
 set cursorline
 
@@ -167,11 +170,7 @@ set statusline+=\ \|\ %p\ %%\ %L " location percentage of the file % line count
 " default split position when :vsplit :split (feels more natural to me)
 set splitbelow splitright
 
-" complete with the words in the dictionary :D
-set complete+=kspell
-
-" disable the mouse if it's available
-set mouse-=a
+set mouse=a
 
 " abbreviations
 iabbrev lable label
@@ -193,6 +192,8 @@ function! FileTypeSetup(name)
         iabbrev <buffer> yeild yield
     elseif a:name ==# 'html'
         iabbrev <buffer> --- &mdash;
+        setlocal nosmartindent indentexpr=
+        filetype indent off
     elseif a:name ==# 'javascript'
         nnoremap <buffer> <leader>b :call Build('node')<cr>
         iabbrev <buffer> len length
@@ -255,6 +256,7 @@ nnoremap <leader>s :call ScopeInfos()<CR>
 nnoremap <leader>l :autocmd TextChanged,TextChangedI <buffer> write<CR>
 
 nmap <leader>c m`gcc``
+vmap <leader>c gc
 
 " Emmet
 imap hh <C-y>,
@@ -278,6 +280,9 @@ nnoremap : ;
 nnoremap ; :
 vnoremap ; :
 vnoremap : ;
+
+nnoremap \ ;
+nnoremap \| ,
 
 " keep position on the line (use ` instead of ')
 nnoremap z. mzz.`z
@@ -368,9 +373,15 @@ endfunction
 
 augroup numbertoggle
   autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+  autocmd BufEnter,FocusGained,InsertLeave *
+              \ if &number | setlocal relativenumber | endif
+  autocmd BufLeave,FocusLost,InsertEnter   *
+              \ if &number | setlocal norelativenumber | endif
 augroup END
+
+
+autocmd! numbertoggle BufEnter,FocusGained,InsertLeave,
+    \ BufLeave,FocusLost,InsertEnter *.txt
 
 " commands
 
@@ -389,5 +400,6 @@ endif
 
 command! HugoDebug :call Insert('<code>{{ printf "%#v" . }}</code>') |
             \ :normal "bbbb"
+command! HugoMore :call Insert("<!--more-->")
 nnoremap <silent> <leader>h :HugoDebug<CR>
 

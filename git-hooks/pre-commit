@@ -11,18 +11,18 @@ LineResult = namedtuple('LineResult', ['type', 'value'])
 
 START_TIME = time.time() * 1000
 COMMA_SPLIT = re.compile(r'(?<!\\),')
-IGNORE = re.compile(r'(\W|^)allow debug(\W|$)')
+IGNORE = re.compile(r'(\W|^)allowdebugfeatures(\W|$)')
 
 def get_filenames(target):
     def _get_filenames():
-        cmdline = 'git ls-files --other --modified --exclude-standard'
-        target['filenames']= subprocess.check_output(cmdline).decode().strip().splitlines()
+        cmdline = 'git ls-files --other --cached --exclude-standard'
+        target['filenames'] = subprocess.check_output(cmdline, shell=True).decode().strip().splitlines()
     return _get_filenames
 
 def getconfig(target):
     def _getconfig():
         cmdline = 'git config --get-regexp hooksforbiddenwords\\.'
-        lines = subprocess.check_output(cmdline).decode().strip().splitlines()
+        lines = subprocess.check_output(cmdline, shell=True).decode().strip().splitlines()
         obj = {}
         for line in lines:
             line = line.split('.', 1)[1]
@@ -32,16 +32,16 @@ def getconfig(target):
     return _getconfig
 
 def checkline(line, keywords):
+    if IGNORE.search(line) is not None:
+        return LineResult('IGNORE', None)
     for keyword in keywords:
-        if IGNORE.search(line) is not None:
-            return LineResult('IGNORE', None)
         if keyword.search(line) is not None:
             return LineResult('FAIL', keyword.pattern[6:-6])
     return LineResult('OK', None)
 
 def checkfile(fp, keywords):
     messages = []
-    line_nb = 1
+    line_nb = 0
     for line in fp:
         line_nb += 1
         result = checkline(line, keywords)
@@ -49,6 +49,8 @@ def checkfile(fp, keywords):
             messages.append('Found "{}" line {}'.format(result.value, line_nb))
         elif result.type == 'IGNORE':
             return []
+        elif result.type != 'OK':
+            raise ValueError('Unknown result type "{}"'.format(result.type))
     return messages
 
 def checkall(filenames, config):
@@ -57,7 +59,7 @@ def checkall(filenames, config):
         ext = os.path.splitext(filename)[1][1:]
         if ext not in config.keys():
             continue
-        with open(os.path.abspath(filename)) as fp:
+        with open(os.path.abspath(filename), encoding='utf-8') as fp:
             msgs = checkfile(fp, config[ext])
             if not msgs:
                 continue
@@ -66,8 +68,6 @@ def checkall(filenames, config):
     
 
 def displaymessages(messages):
-    print('Found debug functions')
-    print('=====================')
     for filename, messages in messages.items():
         print(filename)
         for message in messages:
@@ -83,10 +83,11 @@ def main():
     prconfig.join()
 
     for ext in results['config']:
-        results['config'][ext] = map(lambda kw: re.compile(r'(\W|^){}(\W|$)'.format(kw)),
-                                     results['config'][ext])
+        results['config'][ext] = list(map(lambda kw: re.compile(r'(\W|^){}(\W|$)'.format(kw)),
+                                          results['config'][ext]))
 
     messages = checkall(results['filenames'], results['config'])
+
     if messages == {}:
         exit(0)
     displaymessages(messages)

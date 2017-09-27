@@ -59,10 +59,6 @@ PROMPT_COMMAND=light_prompt
 
 shopt -s autocd dotglob globstar
 
-# this is the graal. Native vim movement in the terminal!!!
-set -o vi
-bind -m vi-insert "\C-l":clear-screen
-
 # insensitive case path completion in bash
 bind 'set completion-ignore-case on'
 
@@ -81,6 +77,7 @@ alias j="jobs"
 alias getmod="stat -c '%a %n'"
 alias todo="~/go/act/act -file=~/act"
 alias path='echo "$PATH" | tr ":" "\n"'
+alias deploy="./deploy.sh --quiet"
 
 function showcolors {
     for i in `seq 0 1`; do
@@ -135,6 +132,7 @@ export HISTCONTROL=ignoreboth:erasedups
 export SHELL
 export GOPATH="$HOME/gopackages/"
 export FCEDIT="vim"
+export EDITOR="vim"
 
 # set ls colors
 if [[ -f ~/dotfiles/.dircolors ]]; then
