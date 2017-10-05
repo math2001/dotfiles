@@ -1,59 +1,40 @@
+packadd minpac
+
 set encoding=utf-8 fileencoding=utf-8
 set nocompatible
 syntax on
 filetype plugin indent on
 
-if has('win32') && match(&runtimepath, '/.vim')
-    set runtimepath+=$HOME/.vim
-endif
-
 " Plugins {{{
 
-call plug#begin('~/.vim/plugged')
+call minpac#init()
 
-Plug 'mattn/emmet-vim'
-Plug 'cespare/vim-toml'
-Plug 'jiangmiao/auto-pairs'
+call minpac#add('k-takata/minpac', {'type': 'opt'})
+call minpac#add('christoomey/vim-tmux-navigator')
 
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
+call minpac#add('tpope/vim-surround')
+call minpac#add('tpope/vim-commentary')
+call minpac#add('jiangmiao/auto-pairs')
 
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'tpope/vim-commentary'
-Plug 'scrooloose/nerdtree'
-Plug 'dhruvasagar/vim-table-mode'
-Plug 'plasticboy/vim-markdown'
+call minpac#add('w0rp/ale')
 
-Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'html'] }
+call minpac#add('jiangmiao/auto-pairs')
+call minpac#add('mattn/emmet-vim')
 
-Plug 'flazz/vim-colorschemes'
-Plug 'xolox/vim-misc'
-Plug 'tpope/vim-surround'
-Plug 'othree/html5.vim'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'hail2u/vim-css3-syntax'
-Plug 'sampsyo/autolink.vim'
-Plug 'w0rp/ale'
+call minpac#add('ctrlpvim/ctrlp.vim')
 
-call plug#end()
+call minpac#add('dhruvasagar/vim-table-mode')
+call minpac#add('plasticboy/vim-markdown')
+call minpac#add('hail2u/vim-css3-syntax')
+call minpac#add('othree/html5.vim')
+call minpac#add('pangloss/vim-javascript')
 
 " }}}
 
-syntax on
-filetype plugin indent on
 
 function! Strip(text)
     return substitute(a:text, '^\_s*\(.\{-}\)\_s*$', '\1', '')
 endfunction
-
-if Strip(execute('colorscheme')) ==# 'default'
-    " Good ones: apprentice, Tomorrow, Tomorrow-night
-    colorscheme apprentice
-endif
-
-highlight LineNr ctermbg=235 guibg=#262626
-highlight Visual ctermbg=237 ctermfg=NONE guifg=NONE guibg=#3A3A3A cterm=NONE gui=NONE
-highlight Cursor gui=reverse guibg=NONE
 
 " Plugins settings {{{
 
@@ -61,30 +42,8 @@ let snips_author = "Math2001"
 let table_mode_corner = '|'
 let vim_markdown_frontmatter = 1
 
-let netrw_liststyle = 3
-let netrw_banner = 0
-let netrw_browse_split = 4
-let netrw_winsize = 15
-
-let ski_folder = '~/.vim/sessions/'
-let ski_update_on_buffer_change = 1
-
 let ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = { 'dir': '.git$\|node_modules$' }
-
-set runtimepath+=~/.vim/plugged/ultisnips
-
-let UltiSnipsExpandTrigger = "<c-h>"
-let UltiSnipsListSnippets = "<c-tab>"
-let UltiSnipsJumpForwardTrigger = "<c-j>"
-let UltiSnipsJumpBackwardTrigger = "<c-k>"
-
-let UltiSnipsEditSplit = "vertical"
-let UltiSnipsUsePythonVersion = 3
-set runtimepath+=~/dotfiles/vim-snippets/
-let UltiSnipsSnippetsDir = "~/dotfiles/vim-snippets/"
-let UltiSnipsSnippetsDirectories = ["vim-snippets"]
-let UltiSnipsEnabledSnipMate = 0
 
 " set cursor insert/normal in terminal
 if !has('gui_running')
@@ -96,16 +55,20 @@ endif
 
 " }}}
 
+colorscheme basecolors
+
 " Options
 
+set cmdheight=2
 set lazyredraw
 set autoread
+
+set wildignore=node_modules/*
 
 set noerrorbells " no sound from vim, it's a text editor, not a music player
 
 " Because windows sucks
-set shell=sh
-set shellcmdflag=-c
+set shell=sh shellcmdflag=-c
 
 set spell spellfile="~/.vim/spell.utf-8.add"
 
@@ -123,18 +86,15 @@ set backspace=indent,eol,start
 set list listchars=tab:»\ ,nbsp:.,trail:·,eol:¬
 
 " add backup files in a common directory to not pollute current directory
-set backupdir=$HOME/.vim/_backups
-set directory=$HOME/.vim/_swapfiles
-set undofile undodir=$HOME/.vim/_undos
+set backupdir=$HOME/.vim/.backups
+set directory=$HOME/.vim/.swapfiles
+set undofile undodir=$HOME/.vim/.undos
 
 " prevent vim from auto inserting comment symbols
 set formatoptions-=cro
 
 " case insensitive if all lower case in search
 set ignorecase smartcase
-
-" use the case used the prefix to complete (ins-completion)
-set infercase
 
 " highlight current line
 set cursorline
@@ -145,8 +105,8 @@ set scrolloff=5
 set nofoldenable foldcolumn=0 foldmethod=indent
 
 set number numberwidth=5 " gutter options
-" highlight live when searching, don't highlight the searches when done
-set incsearch nohlsearch
+" highlight live when searching and keep them on once I'm done
+set incsearch hlsearch
 " show currently typed letters bellow the status bar
 set showcmd
 
@@ -162,7 +122,6 @@ set statusline+=%{&modified?'*':''}
 set statusline+=%y\ {%{&ff}}\ %.30F " [filetype] {lineendings} filepath
 
 set statusline+=%= " go to the right side of the status line
-" set statusline+=%{g:ski_session}\ \|
 set statusline+=\ %{wordcount()['words']}\ words\ \|
 set statusline+=\ %l,\ %c " line and column
 set statusline+=\ \|\ %p\ %%\ %L " location percentage of the file % line count
@@ -175,11 +134,11 @@ set mouse=a
 " abbreviations
 iabbrev lable label
 iabbrev teh the
-iabbrev repo repository
 
 function! FileTypeSetup(name)
     if a:name ==# 'markdown'
         iabbrev <buffer> github GitHub
+        iabbrev <buffer> repo repository
         setlocal textwidth=80 colorcolumn=81
         silent TableModeEnable
         nnoremap <buffer> <leader>* viw*esc>a*<esc>bi*<esc>lel
@@ -192,8 +151,6 @@ function! FileTypeSetup(name)
         iabbrev <buffer> yeild yield
     elseif a:name ==# 'html'
         iabbrev <buffer> --- &mdash;
-        setlocal nosmartindent indentexpr=
-        filetype indent off
     elseif a:name ==# 'javascript'
         nnoremap <buffer> <leader>b :call Build('node')<cr>
         iabbrev <buffer> len length
@@ -228,6 +185,7 @@ augroup autocmds
     " fix vim bug: open all .md files as markdown
     au BufNewFile,BufRead *.md setlocal filetype=markdown
     au FileType * call FileTypeSetup(expand('<amatch>'))
+    au InsertEnter * set nohlsearch
 augroup end
 
 " keybindings
@@ -237,6 +195,8 @@ let mapleader=","
 " 'cause that's how you learn
 inoremap <esc> <Nop>
 
+nnoremap <leader>h :nohlsearch<CR>
+
 inoremap <C-a> <HOME>
 inoremap <C-b> <C-o>b
 inoremap <C-f> <C-o>w
@@ -244,6 +204,7 @@ inoremap <C-f> <C-o>w
 " 'cause I'm lazy...
 inoremap jk <Esc>
 inoremap kj <Esc>
+inoremap kk k
 
 " to consider wrapped lines as actual lines
 nnoremap j gj
@@ -259,7 +220,7 @@ nmap <leader>c m`gcc``
 vmap <leader>c gc
 
 " Emmet
-imap hh <C-y>,
+imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 
 " clipboard
 vnoremap <leader>y "+y
@@ -267,11 +228,11 @@ nnoremap <leader>p "+p
 nnoremap <leader>P "+P
 
 " duplicate selection
-vnoremap <leader>d y'>p
-nnoremap <leader>d mzyyp`zj
+vnoremap <leader>d "yy'>"yp
+nnoremap <leader>d mz"yyy"yp`zj
 
 nnoremap <leader>q q:kk
-nnoremap <leader>r :%s/
+nnoremap <leader>r m`"zyiw*#:%s///g<left><left><C-r>z
 
 nnoremap <silent> <leader>w :call ToggleHighlightWordUnderCursor()<CR>
 nnoremap <silent> <leader>W :match none<CR>
@@ -380,9 +341,6 @@ augroup numbertoggle
 augroup END
 
 
-autocmd! numbertoggle BufEnter,FocusGained,InsertLeave,
-    \ BufLeave,FocusLost,InsertEnter *.txt
-
 " commands
 
 command! RemoveWindowsLineEndings :%s/\r\(\n\)/\1/g
@@ -393,13 +351,8 @@ if has('gui_running') && glob('~/.gvimrc') != ''
     source ~/.gvimrc
 endif
 
-if len(globpath('~', 'local.vimrc', 0, 1)) == 1
-    source ~/local.vimrc
-else
-endif
-
 command! HugoDebug :call Insert('<code>{{ printf "%#v" . }}</code>') |
             \ :normal "bbbb"
 command! HugoMore :call Insert("<!--more-->")
-nnoremap <silent> <leader>h :HugoDebug<CR>
 
+command! PackUpdate :call minpac#update()

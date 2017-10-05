@@ -66,7 +66,7 @@ bind 'set completion-ignore-case on'
 bind TAB:menu-complete
 
 alias s="source ~/.bashrc"
-alias ls="list -X -A -F --color=auto"
+alias ls="list -X -F --color=auto"
 alias ll="ls -lh"
 alias cls="echo -e '\\0033\\0143'"
 alias findhere="find . -name"
@@ -147,3 +147,5 @@ fi
 source ~/dotfiles/ssh-agent-manager.sh
 
 export PATH="$HOME/.yarn/bin:$PATH"
+export PATH="node_modules/.bin/:$PATH"
+export PATH="../node_modules/.bin/:$PATH"
