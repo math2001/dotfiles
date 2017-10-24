@@ -1,0 +1,6 @@
+pack/
+.vim/session
+.vim/.undos
+.vim/.swapfiles
+.vim/.backups
+__pycache__/
