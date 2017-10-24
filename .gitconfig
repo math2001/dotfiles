@@ -2,8 +2,8 @@
     email = australie.p@gmail.com
     name = Mathieu PATUREL
 [core]
-    ; hooksPath=~/dotfiles/git-hooks
-	trustctime = false
+    hooksPath=~/dotfiles/git-hooks
+    trustctime = false
     editor = vim
     filemode = false
     eol = lf
@@ -15,7 +15,8 @@
     last-tag = describe --abbrev=0 --tags
     aliases = config --get-regexp alias.
     amend = commit --amend
-	append = commit --amend --no-edit
+    append = commit --amend --no-edit
+    up = push origin HEAD --quiet
 [push]
     default = matching
 [color]
@@ -30,4 +31,6 @@
 [hooksforbiddenwords]
     py = print
     js = console.log,debugger
-    go = fmt.Println
+    go = print,println
+[url "git@github.com:"]
+    insteadOf = https://github.com/

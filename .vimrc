@@ -11,6 +11,7 @@ call minpac#init()
 
 call minpac#add('k-takata/minpac', {'type': 'opt'})
 call minpac#add('christoomey/vim-tmux-navigator')
+call minpac#add('danro/rename.vim')
 
 call minpac#add('tpope/vim-surround')
 call minpac#add('tpope/vim-commentary')
@@ -19,15 +20,17 @@ call minpac#add('jiangmiao/auto-pairs')
 call minpac#add('w0rp/ale')
 
 call minpac#add('jiangmiao/auto-pairs')
+call minpac#add('SirVer/ultisnips')
 call minpac#add('mattn/emmet-vim')
+call minpac#add('jceb/emmet.snippets')
 
 call minpac#add('ctrlpvim/ctrlp.vim')
 
+call minpac#add('pangloss/vim-javascript')
 call minpac#add('dhruvasagar/vim-table-mode')
 call minpac#add('plasticboy/vim-markdown')
 call minpac#add('hail2u/vim-css3-syntax')
 call minpac#add('othree/html5.vim')
-call minpac#add('pangloss/vim-javascript')
 
 " }}}
 
@@ -42,8 +45,19 @@ let snips_author = "Math2001"
 let table_mode_corner = '|'
 let vim_markdown_frontmatter = 1
 
+let ale_lint_on_text_changed = "never"
+let ale_lint_on_enter = 0
+
 let ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = { 'dir': '.git$\|node_modules$' }
+
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
+let g:UltiSnipsSnippetsDir='~/.vim/mysnippets'
+let g:UltiSnipsSnippetDirectories=["mysnippets"]
+let g:UltiSnipsEditSplit="horizontal"
 
 " set cursor insert/normal in terminal
 if !has('gui_running')
@@ -59,6 +73,7 @@ colorscheme basecolors
 
 " Options
 
+set hidden
 set cmdheight=2
 set lazyredraw
 set autoread
@@ -129,7 +144,7 @@ set statusline+=\ \|\ %p\ %%\ %L " location percentage of the file % line count
 " default split position when :vsplit :split (feels more natural to me)
 set splitbelow splitright
 
-set mouse=a
+set mouse=
 
 " abbreviations
 iabbrev lable label
@@ -151,6 +166,7 @@ function! FileTypeSetup(name)
         iabbrev <buffer> yeild yield
     elseif a:name ==# 'html'
         iabbrev <buffer> --- &mdash;
+        setlocal nowrap
     elseif a:name ==# 'javascript'
         nnoremap <buffer> <leader>b :call Build('node')<cr>
         iabbrev <buffer> len length
@@ -185,12 +201,17 @@ augroup autocmds
     " fix vim bug: open all .md files as markdown
     au BufNewFile,BufRead *.md setlocal filetype=markdown
     au FileType * call FileTypeSetup(expand('<amatch>'))
-    au InsertEnter * set nohlsearch
 augroup end
 
 " keybindings
 
 let mapleader=","
+
+" run nohlsearch as soon as we enter insert mode (noh doesn't work in
+" autocommands) 
+for s:c in ['a', 'A', '<Insert>', 'i', 'I', 'gI', 'gi', 'o', 'O']
+    exe 'nnoremap ' . s:c . ' :nohlsearch<CR>' . s:c
+endfor
 
 " 'cause that's how you learn
 inoremap <esc> <Nop>
@@ -203,8 +224,6 @@ inoremap <C-f> <C-o>w
 
 " 'cause I'm lazy...
 inoremap jk <Esc>
-inoremap kj <Esc>
-inoremap kk k
 
 " to consider wrapped lines as actual lines
 nnoremap j gj
@@ -268,7 +287,6 @@ augroup autoreloadconfigfiles
     endif
     autocmd BufWritePost .tmux.conf silent! !tmux source-file ~/.tmux.conf
 augroup end
-
 
 " functions
 
@@ -356,3 +374,4 @@ command! HugoDebug :call Insert('<code>{{ printf "%#v" . }}</code>') |
 command! HugoMore :call Insert("<!--more-->")
 
 command! PackUpdate :call minpac#update()
+command! PackClean :call minpac#clean()

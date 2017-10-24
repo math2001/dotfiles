@@ -108,8 +108,7 @@ function bgrun {
 }
 
 alias mit='license MIT'
-alias st='cd $APPDATA/Sublime\ Text\ 3/Packages'
-alias live-serve='browser-sync start --server --files "**/*.html, **/*.css, js/**/*.js" --no-notify'
+alias live-serve='browser-sync start --files "**/*.html, **/*.css, **/*.js" --no-notify --no-open --server'
 alias live-serve-bg='bgrun browser-sync start --server --files "**/*.html, **/*.css, **/*.js" --no-notify'
 
 # git alias
