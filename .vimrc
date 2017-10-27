@@ -1,4 +1,5 @@
 packadd minpac
+packadd matchit
 
 set encoding=utf-8 fileencoding=utf-8
 set nocompatible
@@ -22,9 +23,11 @@ call minpac#add('w0rp/ale')
 call minpac#add('jiangmiao/auto-pairs')
 call minpac#add('SirVer/ultisnips')
 call minpac#add('mattn/emmet-vim')
-call minpac#add('jceb/emmet.snippets')
+call minpac#add('tpope/vim-unimpaired')
+call minpac#add('tpope/vim-repeat')
 
-call minpac#add('ctrlpvim/ctrlp.vim')
+call minpac#add('junegunn/fzf.vim')
+call minpac#add('mhinz/vim-startify')
 
 call minpac#add('pangloss/vim-javascript')
 call minpac#add('dhruvasagar/vim-table-mode')

@@ -4,3 +4,4 @@ pack/
 .vim/.swapfiles
 .vim/.backups
 __pycache__/
+.vim/.netrwhist

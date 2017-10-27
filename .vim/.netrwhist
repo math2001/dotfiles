@@ -1,8 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =6
-let g:netrw_dirhist_1='/mnt/c/Users/Home/tools/live-svg'
-let g:netrw_dirhist_2='/etc/profile.d'
-let g:netrw_dirhist_3='/mnt/c/Users/Home/.vim/pythonx/__pycache__'
-let g:netrw_dirhist_4='/mnt/c/Users/Home/.vim/pythonx'
-let g:netrw_dirhist_5='/mnt/c/Users/Home/dotfiles/.git'
-let g:netrw_dirhist_6='/mnt/c/Users/Home/dotfiles/.vim'
