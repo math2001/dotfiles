@@ -86,7 +86,7 @@ set wildignore=node_modules/*
 set noerrorbells " no sound from vim, it's a text editor, not a music player
 
 " Because windows sucks
-set shell=sh shellcmdflag=-c
+set shell=sh shellcmdflag=-c shellslash
 
 set spell spellfile="~/.vim/spell.utf-8.add"
 

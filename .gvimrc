@@ -7,6 +7,8 @@ set guioptions-=L " hide the left hand scrollbar
 set guioptions-=r " hides de right end scrollbar
 set guioptions+=c " use console prompt instead of prompt windows
 
-au GUIEnter * simalt ~x
+aug GUI_ENTER
+    au GUIEnter * simalt ~x
+aug END
 
 set guifont=Fira\ Code:h10
