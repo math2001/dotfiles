@@ -125,11 +125,7 @@ bind -x '"\C-f": "xclip -o"'
 
 # exported variables
 
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
 export HISTCONTROL=ignoreboth:erasedups
-export SHELL
-export GOPATH="$HOME/gopackages/"
 export FCEDIT="vim"
 export EDITOR="vim"
 
@@ -145,6 +141,5 @@ fi
 
 source ~/dotfiles/ssh-agent-manager.sh
 
-export PATH="$HOME/.yarn/bin:$PATH"
 export PATH="node_modules/.bin/:$PATH"
 export PATH="../node_modules/.bin/:$PATH"
