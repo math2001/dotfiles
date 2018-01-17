@@ -1,5 +1,4 @@
 function __create_ssh_agent {
-    echo '[sam] Create new ssh agent'
     ssh-agent > ~/.ssh-agent-code
 }
 
@@ -11,6 +10,7 @@ function __is_right_ssh_pid {
 }
 
 function __load_ssh_agent {
+    # load the current ssh agent running (create one of none exists)
     if [[ -f ~/.ssh-agent-code ]]; then
         eval $(cat ~/.ssh-agent-code) > /dev/null
         if ! __is_right_ssh_pid; then
@@ -24,7 +24,11 @@ function __load_ssh_agent {
 
 __load_ssh_agent
 
+# if no key is loaded on the ssh, then load one
 if [[ $(ssh-add -l) == "The agent has no identities." ]]; then
-    ssh-add -t 86400
+	echo -e "${RED}No key loaded on ssh agent"
+	echo -e "→ Run ${BRIGHT_RED}ssh-add${RED} to add one${RESET}"
 fi
 
+# a day
+alias ssh-add="ssh-add -t 86400"

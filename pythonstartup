@@ -1,0 +1,19 @@
+#! /usr/bin/python
+# Make sure the PYTHONSTARTUP environment variable is pointing to this file
+# something like PYTHONSTARTUP="$HOME/dotfiles/pythonstartup"
+
+import os
+import math
+import sys
+
+# doesn't need brakets to call a command
+def create_command(func, *args, **kwargs):
+	class Sample:
+		pass
+	Sample.__repr__ = lambda self: str(func(*args, **kwargs))[0:0]
+	sample = Sample()
+	return sample
+
+# change 'clear' to 'cls' on Windows
+clear = create_command(os.system, "clear")
+exit = create_command(sys.exit)

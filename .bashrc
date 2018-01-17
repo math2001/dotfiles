@@ -1,17 +1,22 @@
-alias list='ls --ignore="NTUSER*" --ignore="ntuser.*" --ignore="*.dmp"'
+RESET="\e[0m"
 
-RED="\[\e[0;31m\]"
-GREEN="\[\e[0;32m\]"
-PURPLE="\[\e[0;35m\]"
-BLUE="\[\e[0;34m\]"
-BLACK="\[\e[0;30m\]"
-RESET="\[\e[0m\]"
+BLACK="\e[0;30m"
+RED="\e[0;31m"
+GREEN="\e[0;32m"
+YELLOW="\e[0;33m"
+BLUE="\e[0;34m"
+PURPLE="\e[0;35m"
+AQUA="\e[0;36m"
+WHITE="\e[0;37m"
 
-BRIGHT_BLACK="\[\e[1;30m\]"
-BRIGHT_RED="\[\e[1;31m\]"
-BRIGHT_GREEN="\[\e[1;32m\]"
-BRIGHT_BLUE="\[\e[1;34m\]"
-BRIGHT_PURPLE="\[\e[1;35m\]"
+BRIGHT_BLACK="\e[1;30m"
+BRIGHT_RED="\e[1;31m"
+BRIGHT_GREEN="\e[1;32m"
+BRIGHT_YELLOW="\e[1;33m"
+BRIGHT_BLUE="\e[1;34m"
+BRIGHT_PURPLE="\e[1;35m"
+BRIGHT_AQUA="\e[1;36m"
+BRIGHT_WHITE="\e[1;37m"
 
 function get_stds {
     # get both stdout and stderr to a single string
@@ -34,25 +39,17 @@ function is_ssh {
 
 function light_prompt {
     local EXIT=$?
-    trap '
-    if [[ "$IS_USER_COMMAND" -eq 1 ]] && [[ "$BASH_COMMAND" != "$COMMAND_PROMPT" ]]; then
-        IS_USER_COMMAND=0
-        set -- $BASH_COMMAND
-        set_window_title "$1 @ $(dirs +0)"
-    fi
-    ' DEBUG
-    PS1="$BRIGHT_BLACK\j$RESET"
-    PS1="$PS1 $BLUE\w$RESET"
+    PS1="\[$BRIGHT_BLACK\]\j\[$RESET\]"
+    PS1="$PS1 \[$BLUE\]\w\[$RESET\]"
     if is_ssh; then
-        PS1="$BRIGHT_BLACK[ssh]$RESET $PS1"
+        PS1="\[$BRIGHT_BLACK\][ssh]\[$RESET\] $PS1"
     fi
     if [[ $EXIT == "0" ]]; then
-        PS1="$PS1$BRIGHT_GREEN"
+        PS1="$PS1\[$BRIGHT_GREEN\]"
     else
-        PS1="$PS1$BRIGHT_RED"
+        PS1="$PS1\[$BRIGHT_RED\]"
     fi
-    PS1="$PS1 →$RESET "
-    IS_USER_COMMAND=1
+    PS1="$PS1 →\[$RESET\] "
 }
 
 PROMPT_COMMAND=light_prompt
@@ -66,10 +63,11 @@ bind 'set completion-ignore-case on'
 bind TAB:menu-complete
 
 alias s="source ~/.bashrc"
-alias ls="list -X -F --color=auto"
+alias ls="ls -X -F --color=auto"
+alias la="ls -A"
 alias ll="ls -lh"
-alias cls="echo -e '\\0033\\0143'"
-alias findhere="find . -name"
+alias lla="ll -a"
+alias ip="ip -c" # add color
 alias grep="grep -i --color=auto"
 alias v="vim ~/dotfiles/.vimrc"
 alias b="vim ~/dotfiles/.bashrc"

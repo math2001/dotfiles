@@ -3,6 +3,7 @@ packadd matchit
 
 set encoding=utf-8 fileencoding=utf-8
 set nocompatible
+
 syntax on
 filetype plugin indent on
 
@@ -44,7 +45,6 @@ endfunction
 
 " Plugins settings {{{
 
-let snips_author = "Math2001"
 let table_mode_corner = '|'
 let vim_markdown_frontmatter = 1
 
@@ -72,7 +72,7 @@ endif
 
 " }}}
 
-colorscheme basecolors
+" colorscheme basecolors
 
 " Options
 
@@ -84,9 +84,6 @@ set autoread
 set wildignore=node_modules/*
 
 set noerrorbells " no sound from vim, it's a text editor, not a music player
-
-" Because windows sucks
-set shell=sh shellcmdflag=-c shellslash
 
 set spell spellfile="~/.vim/spell.utf-8.add"
 
@@ -115,7 +112,6 @@ set formatoptions-=cro
 set ignorecase smartcase
 
 " highlight current line
-set cursorline
 
 " keep the cursor away from the top/bottom with 5 lines when possible
 set scrolloff=5
@@ -289,6 +285,7 @@ augroup autoreloadconfigfiles
         autocmd BufWritePost $MYGVIMRC source ~/.vimrc
     endif
     autocmd BufWritePost .tmux.conf silent! !tmux source-file ~/.tmux.conf
+    autocmd BufWritePost ~/.vim/colors/*.vim :so <afile>
 augroup end
 
 " functions
