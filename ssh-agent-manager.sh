@@ -26,8 +26,7 @@ __load_ssh_agent
 
 # if no key is loaded on the ssh, then load one
 if [[ $(ssh-add -l) == "The agent has no identities." ]]; then
-	echo -e "${RED}No key loaded on ssh agent"
-	echo -e "→ Run ${BRIGHT_RED}ssh-add${RED} to add one${RESET}"
+	echo -e "${RED}No key loaded on ssh agent → run ${BRIGHT_RED}ssh-add${RED} to add one${RESET}"
 fi
 
 # a day

@@ -63,11 +63,12 @@ bind 'set completion-ignore-case on'
 bind TAB:menu-complete
 
 alias s="source ~/.bashrc"
+alias which="which --all"
 alias ls="ls -X -F --color=auto"
 alias la="ls -A"
 alias ll="ls -lh"
 alias lla="ll -a"
-alias ip="ip -c" # add color
+alias ip="ip -c" # adds color
 alias grep="grep -i --color=auto"
 alias v="vim ~/dotfiles/.vimrc"
 alias b="vim ~/dotfiles/.bashrc"
