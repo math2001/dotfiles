@@ -27,12 +27,14 @@ call minpac#add('mattn/emmet-vim')
 call minpac#add('tpope/vim-unimpaired')
 call minpac#add('tpope/vim-repeat')
 
+set runtimepath^=~/.fzf
 call minpac#add('junegunn/fzf.vim')
 call minpac#add('mhinz/vim-startify')
 
 call minpac#add('pangloss/vim-javascript')
 call minpac#add('dhruvasagar/vim-table-mode')
 call minpac#add('plasticboy/vim-markdown')
+call minpac#add('mzlogin/vim-markdown-toc')
 call minpac#add('hail2u/vim-css3-syntax')
 call minpac#add('othree/html5.vim')
 
@@ -44,6 +46,8 @@ function! Strip(text)
 endfunction
 
 " Plugins settings {{{
+
+let tmux_navigator_no_mappings = 0
 
 let table_mode_corner = '|'
 let vim_markdown_frontmatter = 1
@@ -72,12 +76,12 @@ endif
 
 " }}}
 
-" colorscheme basecolors
+colorscheme darkbase
 
 " Options
 
+set autowrite
 set hidden
-set cmdheight=2
 set lazyredraw
 set autoread
 
@@ -91,9 +95,7 @@ set virtualedit=onemore " allow the cursor to move past the end of the line by o
 set path=,,*
 set ff=unix " set line endings to be unix
 set tabstop=4 shiftwidth=4 shiftround
-" completion in command menu, wrap, highlight current line, set terminal
-" title, wrap lines
-set wildmenu wrap title linebreak
+set wildmenu wrap linebreak
 set confirm " AWESOME!!
 
 set smarttab expandtab copyindent autoindent " indentation stuff
@@ -130,7 +132,7 @@ set laststatus=2
 set statusline=
 
 set statusline+=%{&readonly?'R':''}
-set statusline+=%{&modifiable==0?'-':''}
+set statusline+=%{&modifiable==0?'F':''}
 set statusline+=%{&modified?'*':''}
 
 set statusline+=%y\ {%{&ff}}\ %.30F " [filetype] {lineendings} filepath
@@ -151,7 +153,6 @@ iabbrev teh the
 
 function! FileTypeSetup(name)
     if a:name ==# 'markdown'
-        iabbrev <buffer> github GitHub
         iabbrev <buffer> repo repository
         setlocal textwidth=80 colorcolumn=81
         silent TableModeEnable
@@ -161,7 +162,7 @@ function! FileTypeSetup(name)
         setlocal tabstop=2 shiftwidth=2
     elseif a:name ==# 'python'
         setlocal colorcolumn=101
-        nnoremap <buffer> <leader>b :call Build('python')<cr>
+        setlocal makeprg=python\ %
         iabbrev <buffer> yeild yield
     elseif a:name ==# 'html'
         iabbrev <buffer> --- &mdash;
@@ -185,15 +186,19 @@ function! FileTypeSetup(name)
     elseif a:name ==# 'yaml'
         setlocal tabstop=2 shiftwidth=2
         setlocal nospell
+    elseif a:name ==# 'pascal'
+        setlocal makeprg=~/run-pascal.sh\ %
     endif
 endfunction
 
 command! FileTypeSetup call FileTypeSetup(&filetype)
 
-function! Build(buildexe)
-    update
-    execute "!".a:buildexe." ".substitute(expand('%'), '\\', '/', 'g')
-endfunction
+" function! Build(buildexe)
+"     update
+"     make
+"     " TODO: fix for other languages
+"     " execute "!".a:buildexe." ".substitute(expand('%'), '\\', '/', 'g')
+" endfunction
 
 augroup autocmds
     au!
@@ -215,11 +220,16 @@ endfor
 " 'cause that's how you learn
 inoremap <esc> <Nop>
 
+nnoremap <leader>b :update\|make<CR>
+
 nnoremap <leader>h :nohlsearch<CR>
 
 inoremap <C-a> <HOME>
 inoremap <C-b> <C-o>b
 inoremap <C-f> <C-o>w
+
+" nnoremap <C-j> <C-e>
+" nnoremap <C-k> <C-y>
 
 " 'cause I'm lazy...
 inoremap jk <Esc>
@@ -254,6 +264,8 @@ nnoremap <leader>r m`"zyiw*#:%s///g<left><left><C-r>z
 
 nnoremap <silent> <leader>w :call ToggleHighlightWordUnderCursor()<CR>
 nnoremap <silent> <leader>W :match none<CR>
+
+nnoremap <C-p> :Files<CR>
 
 nnoremap : ;
 nnoremap ; :

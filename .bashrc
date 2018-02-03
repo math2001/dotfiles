@@ -70,9 +70,9 @@ alias ll="ls -lh"
 alias lla="ll -a"
 alias ip="ip -c" # adds color
 alias grep="grep -i --color=auto"
-alias v="vim ~/dotfiles/.vimrc"
-alias b="vim ~/dotfiles/.bashrc"
-alias j="jobs"
+alias vimrc="vim ~/dotfiles/.vimrc"
+alias bashrc="vim ~/dotfiles/.bashrc"
+alias fdf="fd --type f"
 alias getmod="stat -c '%a %n'"
 alias todo="~/go/act/act -file=~/act"
 alias path='echo "$PATH" | tr ":" "\n"'
@@ -127,18 +127,16 @@ bind -x '"\C-f": "xclip -o"'
 export HISTCONTROL=ignoreboth:erasedups
 export FCEDIT="vim"
 export EDITOR="vim"
+export FZF_DEFAULT_COMMAND='fd --type f'
 
 # set ls colors
 if [[ -f ~/dotfiles/.dircolors ]]; then
     eval `dircolors ~/dotfiles/.dircolors`
 fi
 
-
-if [[ -f ./git-completions.bash ]]; then
-    source ./git-completions.bash
-fi
-
 source ~/dotfiles/ssh-agent-manager.sh
 
 export PATH="node_modules/.bin/:$PATH"
 export PATH="../node_modules/.bin/:$PATH"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
