@@ -1,18 +1,9 @@
-# My Dotfiles
-
-Cloning the files:
-
-**The files will be overwritten, watch out!**
-
-## `.vimrc`
+# My dotfiles
 
 ```bash
-curl https://raw.githubusercontent.com/math2001/dotfiles/master/.vimrc > ~/.vimrc
+$ git clone https://github.com/math2001/dotfiles
+# use what you need
+$ ln -s dotfiles/.bashrc .bashrc
+$ ln -s dotfiles/.vimrc .vimrc
+$ ln -s dotfiles/.tmux.conf .tmux.conf
 ```
-
-## `.bashrc`
-
-```bash
-curl https://raw.githubusercontent.com/math2001/dotfiles/master/.bashrc > ~/.bashrc
-```
-
