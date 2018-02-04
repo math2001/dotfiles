@@ -80,6 +80,7 @@ colorscheme darkbase
 
 " Options
 
+set viminfo='100,<50,s10,h,f100
 set autowrite
 set hidden
 set lazyredraw
@@ -113,8 +114,6 @@ set formatoptions-=cro
 " case insensitive if all lower case in search
 set ignorecase smartcase
 
-" highlight current line
-
 " keep the cursor away from the top/bottom with 5 lines when possible
 set scrolloff=5
 
@@ -135,10 +134,18 @@ set statusline+=%{&readonly?'R':''}
 set statusline+=%{&modifiable==0?'F':''}
 set statusline+=%{&modified?'*':''}
 
-set statusline+=%y\ {%{&ff}}\ %.30F " [filetype] {lineendings} filepath
+set statusline+=%y
+if &ff !=# 'unix'
+    set statusline+=\ {%{&ff}}
+endif
+set statusline+=\ %.30F
+
+" set statusline+=%y\ {%{&ff}}\ %.30F " [filetype] {lineendings} filepath
 
 set statusline+=%= " go to the right side of the status line
-set statusline+=\ %{wordcount()['words']}\ words\ \|
+if &filetype ==# 'markdown'
+    set statusline+=\ %{wordcount()['words']}\ words\ \|
+endif
 set statusline+=\ %l,\ %c " line and column
 set statusline+=\ \|\ %p\ %%\ %L " location percentage of the file % line count
 
@@ -193,13 +200,6 @@ endfunction
 
 command! FileTypeSetup call FileTypeSetup(&filetype)
 
-" function! Build(buildexe)
-"     update
-"     make
-"     " TODO: fix for other languages
-"     " execute "!".a:buildexe." ".substitute(expand('%'), '\\', '/', 'g')
-" endfunction
-
 augroup autocmds
     au!
     " fix vim bug: open all .md files as markdown
@@ -220,7 +220,7 @@ endfor
 " 'cause that's how you learn
 inoremap <esc> <Nop>
 
-nnoremap <leader>b :update\|make<CR>
+nnoremap <leader>b :make<CR>
 
 nnoremap <leader>h :nohlsearch<CR>
 

@@ -30,7 +30,11 @@ function set_window_title {
     echo -ne "\033]0;$@\007"
 }
 
-set_window_title ${PWD/*\//}
+function window_title {
+    set_window_title "$(history | tail -2 | head -1 | awk '{print $2}')@${PWD/*\//}"
+}
+
+window_title
 
 function is_ssh {
     if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
@@ -40,7 +44,7 @@ function is_ssh {
 }
 
 function light_prompt {
-    set_window_title ${PWD/*\//}
+    window_title
     local EXIT=$?
     PS1="\[$BRIGHT_BLACK\]\j\[$RESET\]"
     PS1="$PS1 \[$BLUE\]\w\[$RESET\]"
