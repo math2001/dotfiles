@@ -31,7 +31,7 @@ function set_window_title {
 }
 
 function window_title {
-    set_window_title "$(history | tail -2 | head -1 | awk '{print $2}')@${PWD/*\//}"
+    set_window_title "$(history | awk 'END {print $2}')@${PWD/*\//}"
 }
 
 window_title
