@@ -26,12 +26,8 @@ function get_stds {
     rm "$TMP"
 }
 
-function set_window_title {
-    echo -ne "\033]0;$@\007"
-}
-
 function window_title {
-    set_window_title "$(history | awk 'END {print $2}')@${PWD/*\//}"
+    echo -ne "\033]0;$(history | awk 'END {print $2}')@${PWD/*\//}\007"
 }
 
 window_title

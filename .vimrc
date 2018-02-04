@@ -141,9 +141,7 @@ set statusline+=\ %.30F
 " set statusline+=%y\ {%{&ff}}\ %.30F " [filetype] {lineendings} filepath
 
 set statusline+=%= " go to the right side of the status line
-if &filetype ==# 'markdown'
-    set statusline+=\ %{wordcount()['words']}\ words\ \|
-endif
+set statusline+=\ %{wordcount()['words']}\ words\ \|
 set statusline+=\ %l,\ %c " line and column
 set statusline+=\ \|\ %p\ %%\ %L " location percentage of the file % line count
 
