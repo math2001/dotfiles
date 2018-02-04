@@ -2,7 +2,6 @@ packadd minpac
 packadd matchit
 
 set encoding=utf-8 fileencoding=utf-8
-set nocompatible
 
 syntax on
 filetype plugin indent on
@@ -80,7 +79,6 @@ colorscheme darkbase
 
 " Options
 
-set viminfo='100,<50,s10,h,f100
 set autowrite
 set hidden
 set lazyredraw
@@ -205,6 +203,16 @@ augroup autocmds
     " fix vim bug: open all .md files as markdown
     au BufNewFile,BufRead *.md setlocal filetype=markdown
     au FileType * call FileTypeSetup(expand('<amatch>'))
+    
+    " When editing a file, always jump to the last known cursor position.
+    " Don't do it when the position is invalid, when inside an event handler
+    " (happens when dropping a file on gvim) and for a commit message (it's
+    " likely a different one than last time).
+    " - from defaults.vim (/usr/share/vim/vim80/defaults.vim)
+    autocmd BufReadPost *
+      \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+      \ |   exe "normal! g`\""
+      \ | endif
 augroup end
 
 " keybindings
