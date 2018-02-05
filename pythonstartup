@@ -17,3 +17,6 @@ def create_command(func, *args, **kwargs):
 # change 'clear' to 'cls' on Windows
 clear = create_command(os.system, "clear")
 exit = create_command(sys.exit)
+
+def pythagoras(x, y):
+    return math.sqrt(x ** 2 + y ** 2)
