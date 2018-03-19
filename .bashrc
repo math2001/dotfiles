@@ -65,6 +65,7 @@ bind 'set completion-ignore-case on'
 # this makes the autocompletion propose changes, instead of stopping to the ambiguous characters
 bind TAB:menu-complete
 
+alias duck="w3m duckduckgo.com"
 alias s="source ~/.bashrc"
 alias which="which --all"
 alias ls="ls -X -F --color=auto"

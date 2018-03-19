@@ -31,6 +31,7 @@ call minpac#add('junegunn/fzf.vim')
 call minpac#add('mhinz/vim-startify')
 
 call minpac#add('pangloss/vim-javascript')
+call minpac#add('fatih/vim-go')
 call minpac#add('dhruvasagar/vim-table-mode')
 call minpac#add('plasticboy/vim-markdown')
 call minpac#add('mzlogin/vim-markdown-toc')
@@ -46,7 +47,11 @@ endfunction
 
 " Plugins settings {{{
 
+let go_fmt_command = "goimports"
+
 let tmux_navigator_no_mappings = 0
+
+let startify_list_order = ['bookmarks', 'commands']
 
 let table_mode_corner = '|'
 let vim_markdown_frontmatter = 1
@@ -66,12 +71,12 @@ let g:UltiSnipsSnippetDirectories=["mysnippets"]
 let g:UltiSnipsEditSplit="horizontal"
 
 " set cursor insert/normal in terminal
-if !has('gui_running')
-    let &t_ti.="\e[1 q"
-    let &t_SI.="\e[5 q"
-    let &t_EI.="\e[1 q"
-    let &t_te.="\e[0 q"
-endif
+" if !has('gui_running')
+"     let &t_ti.="\e[1 q"
+"     let &t_SI.="\e[5 q"
+"     let &t_EI.="\e[1 q"
+"     let &t_te.="\e[0 q"
+" endif
 
 " }}}
 
@@ -99,7 +104,8 @@ set confirm " AWESOME!!
 
 set smarttab expandtab copyindent autoindent " indentation stuff
 set backspace=indent,eol,start
-set list listchars=tab:»\ ,nbsp:.,trail:·,eol:¬
+set list listchars=tab:\ \ ,nbsp:.,trail:·,eol:¬
+
 
 " add backup files in a common directory to not pollute current directory
 set backupdir=$HOME/.vim/.backups
@@ -161,6 +167,9 @@ function! FileTypeSetup(name)
         silent TableModeEnable
         nnoremap <buffer> <leader>* viw*esc>a*<esc>bi*<esc>lel
         nnoremap <buffer> <leader>tip :call InsertTipFrontMatter()<CR>
+        iabbrev env environment
+        iabbrev gov government
+        iabbrev bu business
     elseif a:name ==# 'css'
         setlocal tabstop=2 shiftwidth=2
     elseif a:name ==# 'python'
@@ -183,7 +192,7 @@ function! FileTypeSetup(name)
     elseif a:name ==# 'gitconfig'
         setlocal nospell
     elseif a:name ==# 'go'
-        nnoremap <buffer> <leader>b :call Build('go run ')<CR>
+        setlocal makeprg=make
     elseif a:name ==# 'tmux'
         setlocal nospell
     elseif a:name ==# 'yaml'
@@ -226,7 +235,7 @@ endfor
 " 'cause that's how you learn
 inoremap <esc> <Nop>
 
-nnoremap <leader>b :make<CR>
+nnoremap <leader>b :make!<CR>
 
 nnoremap <leader>h :nohlsearch<CR>
 
@@ -284,7 +293,7 @@ nnoremap \| ,
 " keep position on the line (use ` instead of ')
 nnoremap z. mzz.`z
 " don't save to register when using x
-nnoremap x "_x
+" nnoremap x "_x
 " visualize pasted text
 nnoremap gp `[v`]
 
@@ -309,8 +318,10 @@ augroup end
 " functions
 
 function! GetFormattedDate()
-    return Strip(system("date +'%A %d %B %Y @ %H:%M'"))
+    return Strip(system("date +'%A %d %B %Y'"))
 endfunction
+
+
 
 function! BangLastCommand()
     let lastcommand = split(@:, ' ')
@@ -368,19 +379,10 @@ function! EscapeHTML() range
     execute a:firstline.",".a:lastline."s/\>/\\&gt;/g"
 endfunction
 
-augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave *
-              \ if &number | setlocal relativenumber | endif
-  autocmd BufLeave,FocusLost,InsertEnter   *
-              \ if &number | setlocal norelativenumber | endif
-augroup END
-
-
 " commands
 
 command! RemoveWindowsLineEndings :%s/\r\(\n\)/\1/g
-command! Date :call Insert(Strip(system('date +"%A %d %B %Y @ %H:%M"')))
+command! Date :call Insert(Strip(GetFormattedDate()))
 command! -range=% EscapeHTML :call EscapeHTML()
 
 if has('gui_running') && glob('~/.gvimrc') != ''
