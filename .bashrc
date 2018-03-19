@@ -18,6 +18,11 @@ BRIGHT_PURPLE="\e[1;35m"
 BRIGHT_AQUA="\e[1;36m"
 BRIGHT_WHITE="\e[1;37m"
 
+
+function duck {
+    w3m "https://duckduckgo.com?q=$*"
+}
+
 function get_stds {
     # get both stdout and stderr to a single string
     TMP=$(mktemp)
@@ -65,7 +70,6 @@ bind 'set completion-ignore-case on'
 # this makes the autocompletion propose changes, instead of stopping to the ambiguous characters
 bind TAB:menu-complete
 
-alias duck="w3m duckduckgo.com"
 alias s="source ~/.bashrc"
 alias which="which --all"
 alias ls="ls -X -F --color=auto"
