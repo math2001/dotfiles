@@ -83,7 +83,7 @@ hi SpellCap         ctermbg=NONE        ctermfg=darkyellow  cterm=undercurl
 hi SpellLocal       ctermbg=NONE        ctermfg=darkgreen   cterm=undercurl
 hi SpellRare        ctermbg=NONE        ctermfg=darkmagenta cterm=undercurl
 
-hi ColorColumn      ctermbg=black       ctermfg=NONE        cterm=NONE
+hi ColorColumn      ctermbg=darkgrey ctermfg=black       cterm=NONE
 hi SignColumn       ctermbg=black       ctermfg=darkgray    cterm=NONE
 
 hi link Boolean                  Constant
