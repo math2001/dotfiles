@@ -85,6 +85,8 @@ alias getmod="stat -c '%a %n'"
 alias todo="~/go/act/act -file=~/act"
 alias path='echo "$PATH" | tr ":" "\n"'
 alias deploy="./deploy.sh --quiet"
+alias fullbat="upower -i /org/freedesktop/UPower/devices/battery_BAT1"
+alias bat="fullbat | command grep 'percentage\|state\|time to'"
 
 function showcolors {
     for i in `seq 0 1`; do
@@ -96,6 +98,18 @@ function showcolors {
         done
         echo 
     done
+}
+
+function godoc {
+    go doc $@ | less
+}
+
+function goproject {
+    cd $GOPATH/src/github.com/math2001/$@
+}
+
+function mtest {
+    cd $GOPATH/src/mtest/$@
 }
 
 function license {
@@ -115,6 +129,8 @@ function bgrun {
 }
 
 alias mit='license MIT'
+alias gd="godoc"
+alias gp="goproject"
 alias live-serve='browser-sync start --files "**/*.html, **/*.css, **/*.js" --no-notify --no-open --server'
 alias live-serve-bg='bgrun browser-sync start --server --files "**/*.html, **/*.css, **/*.js" --no-notify'
 
@@ -122,7 +138,7 @@ alias live-serve-bg='bgrun browser-sync start --server --files "**/*.html, **/*.
 
 alias gs="git status --short"
 alias gml="git log --oneline --decorate --all --tags --graph --date-order -10"
-alias gl="git log --oneline --decorate --tags --graph --date-order -10"
+alias gl="git log --oneline --decorate --graph --date-order -10"
 alias act="~/go/act/act"
 
 # shortcut

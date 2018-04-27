@@ -20,7 +20,6 @@ call minpac#add('jiangmiao/auto-pairs')
 
 call minpac#add('w0rp/ale')
 
-call minpac#add('jiangmiao/auto-pairs')
 call minpac#add('SirVer/ultisnips')
 call minpac#add('mattn/emmet-vim')
 call minpac#add('tpope/vim-unimpaired')
@@ -31,7 +30,7 @@ call minpac#add('junegunn/fzf.vim')
 call minpac#add('mhinz/vim-startify')
 
 call minpac#add('pangloss/vim-javascript')
-call minpac#add('fatih/vim-go')
+" call minpac#add('fatih/vim-go')
 call minpac#add('dhruvasagar/vim-table-mode')
 call minpac#add('plasticboy/vim-markdown')
 call minpac#add('mzlogin/vim-markdown-toc')
@@ -93,7 +92,7 @@ set wildignore=node_modules/*
 
 set noerrorbells " no sound from vim, it's a text editor, not a music player
 
-set spell spellfile="~/.vim/spell.utf-8.add"
+set nospell spellfile="~/.vim/spell.utf-8.add"
 
 set virtualedit=onemore " allow the cursor to move past the end of the line by one more char
 set path=,,*
@@ -162,6 +161,7 @@ iabbrev teh the
 
 function! FileTypeSetup(name)
     if a:name ==# 'markdown'
+        set spell
         iabbrev <buffer> repo repository
         setlocal textwidth=80 colorcolumn=81
         silent TableModeEnable
@@ -174,7 +174,7 @@ function! FileTypeSetup(name)
         setlocal tabstop=2 shiftwidth=2
     elseif a:name ==# 'python'
         setlocal colorcolumn=101
-        setlocal makeprg=python\ %
+        setlocal makeprg=python\ main.py
         iabbrev <buffer> yeild yield
     elseif a:name ==# 'html'
         iabbrev <buffer> --- &mdash;
@@ -191,8 +191,12 @@ function! FileTypeSetup(name)
         nnoremap <buffer> k k
     elseif a:name ==# 'gitconfig'
         setlocal nospell
-    elseif a:name ==# 'go'
-        setlocal makeprg=make
+    elseif a:name ==# 'go' " golang
+        nnoremap <leader>b :GoRun<CR>
+        nnoremap <leader>b :!go run main.go<CR>
+        nnoremap <leader>v :!go run %<CR>
+        nnoremap <C-u> :GoDoc<CR>
+        set nospell
     elseif a:name ==# 'tmux'
         setlocal nospell
     elseif a:name ==# 'yaml'
@@ -220,6 +224,8 @@ augroup autocmds
       \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
       \ |   exe "normal! g`\""
       \ | endif
+
+    " autocmd BufWritePost *.go :silent !goimports -w %
 augroup end
 
 " keybindings
@@ -231,6 +237,8 @@ let mapleader=","
 for s:c in ['a', 'A', '<Insert>', 'i', 'I', 'gI', 'gi', 'o', 'O']
     exe 'nnoremap ' . s:c . ' :nohlsearch<CR>' . s:c
 endfor
+
+nnoremap <leader>a :ALENextWrap<CR>
 
 " 'cause that's how you learn
 inoremap <esc> <Nop>
