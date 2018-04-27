@@ -4,13 +4,13 @@ if exists("syntax_on")
 syntax reset
 endif
 
-let colors_name = "basecolors"
+let colors_name = "darkbase"
 
-hi Normal           ctermbg=NONE        ctermfg=white          cterm=NONE
+hi Normal           ctermbg=NONE        ctermfg=grey          cterm=NONE
 
 set background=dark
 
-hi Comment          ctermbg=NONE        ctermfg=DarkGrey        cterm=NONE
+hi Comment          ctermbg=NONE        ctermfg=DarkGrey    cterm=NONE
 hi Conceal          ctermbg=NONE        ctermfg=white       cterm=NONE
 hi Constant         ctermbg=NONE        ctermfg=red         cterm=NONE
 hi Function         ctermbg=NONE        ctermfg=yellow      cterm=NONE
@@ -47,7 +47,7 @@ hi TabLineSel       ctermbg=black       ctermfg=green       cterm=NONE
 hi Cursor           ctermbg=NONE        ctermfg=NONE        cterm=NONE
 hi CursorColumn     ctermbg=darkgray    ctermfg=NONE        cterm=NONE
 hi CursorLineNr     ctermbg=black       ctermfg=cyan        cterm=NONE
-hi CursorLine       ctermbg=Black       ctermfg=NONE        cterm=NONE
+hi CursorLine       ctermbg=darkgrey    ctermfg=NONE        cterm=NONE
 
 hi helpLeadBlank    ctermbg=NONE        ctermfg=NONE        cterm=NONE
 hi helpNormal       ctermbg=NONE        ctermfg=NONE        cterm=NONE
