@@ -175,6 +175,7 @@ function! FileTypeSetup(name)
     elseif a:name ==# 'python'
         setlocal colorcolumn=101
         setlocal makeprg=python\ main.py
+        setlocal textwidth=80 colorcolumn=81
         iabbrev <buffer> yeild yield
     elseif a:name ==# 'html'
         iabbrev <buffer> --- &mdash;
