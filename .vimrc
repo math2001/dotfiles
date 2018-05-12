@@ -20,7 +20,7 @@ call minpac#add('jiangmiao/auto-pairs')
 
 call minpac#add('w0rp/ale')
 
-call minpac#add('SirVer/ultisnips')
+" call minpac#add('SirVer/ultisnips')
 call minpac#add('mattn/emmet-vim')
 call minpac#add('tpope/vim-unimpaired')
 call minpac#add('tpope/vim-repeat')
@@ -31,11 +31,12 @@ call minpac#add('mhinz/vim-startify')
 
 call minpac#add('pangloss/vim-javascript')
 " call minpac#add('fatih/vim-go')
-call minpac#add('dhruvasagar/vim-table-mode')
+call minpac#add('dhruvasagar/vim-table-mode', {'type': 'opt'})
 call minpac#add('plasticboy/vim-markdown')
 call minpac#add('mzlogin/vim-markdown-toc')
 call minpac#add('hail2u/vim-css3-syntax')
 call minpac#add('othree/html5.vim')
+call minpac#add('Vimjas/vim-python-pep8-indent')
 
 " }}}
 
@@ -61,6 +62,8 @@ let ale_lint_on_enter = 0
 let ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = { 'dir': '.git$\|node_modules$' }
 
+let fzf_history_dir = '~/.local/share/fzf-history'
+
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
@@ -79,7 +82,7 @@ let g:UltiSnipsEditSplit="horizontal"
 
 " }}}
 
-colorscheme darkbase
+" colorscheme darkbase
 
 " Options
 
@@ -98,7 +101,7 @@ set virtualedit=onemore " allow the cursor to move past the end of the line by o
 set path=,,*
 set ff=unix " set line endings to be unix
 set tabstop=4 shiftwidth=4 shiftround
-set wildmenu wrap linebreak
+set wildmenu nolinebreak nowrap
 set confirm " AWESOME!!
 
 set smarttab expandtab copyindent autoindent " indentation stuff
@@ -155,28 +158,43 @@ set splitbelow splitright
 
 set mouse=
 
+function! BuildPython(test)
+    silent execute "!clear"
+    if a:test && filereadable('./tests/main.py')
+        execute "!python tests/main.py"
+    elseif filereadable('./main.py')
+        execute "!python main.py"
+    else
+        execute "!python ".bufname("%")
+    endif
+endfunction
+
 " abbreviations
 iabbrev lable label
 iabbrev teh the
 
 function! FileTypeSetup(name)
     if a:name ==# 'markdown'
-        set spell
+        setlocal spell wrap
         iabbrev <buffer> repo repository
-        setlocal textwidth=80 colorcolumn=81
-        silent TableModeEnable
         nnoremap <buffer> <leader>* viw*esc>a*<esc>bi*<esc>lel
-        nnoremap <buffer> <leader>tip :call InsertTipFrontMatter()<CR>
+        nnoremap <buffer> <leader>f :call InsertTipFrontMatter()<CR>
         iabbrev env environment
         iabbrev gov government
         iabbrev bu business
+        packadd vim-table-mode
+        setlocal textwidth=80
+        silent TableModeEnable
     elseif a:name ==# 'css'
         setlocal tabstop=2 shiftwidth=2
     elseif a:name ==# 'python'
         setlocal colorcolumn=101
-        setlocal makeprg=python\ main.py
-        setlocal textwidth=80 colorcolumn=81
+        nnoremap <buffer> <leader>b :call BuildPython(0)<CR>
+        nnoremap <buffer> <leader>r :call BuildPython(1)<CR>
+        nnoremap <buffer> M :BLines def <CR>
+        setlocal colorcolumn=81
         iabbrev <buffer> yeild yield
+        ALEDisable
     elseif a:name ==# 'html'
         iabbrev <buffer> --- &mdash;
         setlocal nowrap
@@ -215,7 +233,9 @@ augroup autocmds
     " fix vim bug: open all .md files as markdown
     au BufNewFile,BufRead *.md setlocal filetype=markdown
     au FileType * call FileTypeSetup(expand('<amatch>'))
-    
+    " remove trailling white spaces
+    au BufWritePre * %s/\s\+$//e
+
     " When editing a file, always jump to the last known cursor position.
     " Don't do it when the position is invalid, when inside an event handler
     " (happens when dropping a file on gvim) and for a commit message (it's
@@ -234,7 +254,7 @@ augroup end
 let mapleader=","
 
 " run nohlsearch as soon as we enter insert mode (noh doesn't work in
-" autocommands) 
+" autocommands)
 for s:c in ['a', 'A', '<Insert>', 'i', 'I', 'gI', 'gi', 'o', 'O']
     exe 'nnoremap ' . s:c . ' :nohlsearch<CR>' . s:c
 endfor
@@ -284,12 +304,12 @@ vnoremap <leader>d "yy'>"yp
 nnoremap <leader>d mz"yyy"yp`zj
 
 nnoremap <leader>q q:kk
-nnoremap <leader>r m`"zyiw*#:%s///g<left><left><C-r>z
 
 nnoremap <silent> <leader>w :call ToggleHighlightWordUnderCursor()<CR>
 nnoremap <silent> <leader>W :match none<CR>
 
 nnoremap <C-p> :Files<CR>
+nnoremap <S-L> :BLines<CR>
 
 nnoremap : ;
 nnoremap ; :
@@ -335,7 +355,7 @@ endfunction
 function! BangLastCommand()
     let lastcommand = split(@:, ' ')
     let command = lastcommand[0] . '! ' . join(lastcommand[1:], ' ')
-    execute command 
+    execute command
 endfunction
 
 command! Please call BangLastCommand()

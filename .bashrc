@@ -77,7 +77,7 @@ alias la="ls -A"
 alias ll="ls -lh"
 alias lla="ll -a"
 alias ip="ip -c" # adds color
-alias grep="grep -i --color=auto"
+alias grep="grep -i --exclude-dir=.git --color=auto"
 alias vimrc="vim ~/dotfiles/.vimrc"
 alias bashrc="vim ~/dotfiles/.bashrc"
 alias fdf="fd --type f"
@@ -87,6 +87,7 @@ alias path='echo "$PATH" | tr ":" "\n"'
 alias deploy="./deploy.sh --quiet"
 alias fullbat="upower -i /org/freedesktop/UPower/devices/battery_BAT1"
 alias bat="fullbat | command grep 'percentage\|state\|time to'"
+alias copy="xclip -selection clipboard"
 
 function showcolors {
     for i in `seq 0 1`; do
@@ -96,7 +97,7 @@ function showcolors {
             fi
             echo -en "\e[$i;${e}m\\\\e[$i;${e}m$RESET "
         done
-        echo 
+        echo
     done
 }
 
@@ -146,17 +147,19 @@ alias act="~/go/act/act"
 # bind -x '"\C-f": "ls"'
 bind -x '"\C-f": "xclip -o"'
 
-# exported variables
+# environment variables
 
 export HISTCONTROL=ignoreboth:erasedups
 export FCEDIT="vim"
 export EDITOR="vim"
 export FZF_DEFAULT_COMMAND='fd --type f'
+export PYTHONASYNCIODEBUG="1"
 
 # set ls colors
 if [[ -f ~/dotfiles/.dircolors ]]; then
     eval `dircolors ~/dotfiles/.dircolors`
 fi
+
 
 source ~/dotfiles/ssh-agent-manager.sh
 
@@ -164,3 +167,10 @@ export PATH="node_modules/.bin/:$PATH"
 export PATH="../node_modules/.bin/:$PATH"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+
+if [[ ! $TERM = *"tmux"* ]]; then
+    # the -2 adds support for 256 colors (yay!)
+    tmux -2
+    exit
+fi

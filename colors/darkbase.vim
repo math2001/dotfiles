@@ -1,14 +1,15 @@
 hi clear
 
+" a colorscheme based on the colors of the terminal
+
 if exists("syntax_on")
 syntax reset
 endif
 
 let colors_name = "darkbase"
-
-hi Normal           ctermbg=NONE        ctermfg=grey          cterm=NONE
-
 set background=dark
+
+hi Normal           ctermbg=NONE        ctermfg=grey        cterm=NONE
 
 hi Comment          ctermbg=NONE        ctermfg=DarkGrey    cterm=NONE
 hi Conceal          ctermbg=NONE        ctermfg=white       cterm=NONE
@@ -83,7 +84,7 @@ hi SpellCap         ctermbg=NONE        ctermfg=darkyellow  cterm=undercurl
 hi SpellLocal       ctermbg=NONE        ctermfg=darkgreen   cterm=undercurl
 hi SpellRare        ctermbg=NONE        ctermfg=darkmagenta cterm=undercurl
 
-hi ColorColumn      ctermbg=darkgrey ctermfg=black       cterm=NONE
+hi ColorColumn      ctermbg=235         ctermfg=grey       cterm=NONE
 hi SignColumn       ctermbg=black       ctermfg=darkgray    cterm=NONE
 
 hi link Boolean                  Constant
