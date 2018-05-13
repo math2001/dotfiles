@@ -82,7 +82,7 @@ let g:UltiSnipsEditSplit="horizontal"
 
 " }}}
 
-" colorscheme darkbase
+colorscheme darkbase
 
 " Options
 
@@ -259,6 +259,17 @@ for s:c in ['a', 'A', '<Insert>', 'i', 'I', 'gI', 'gi', 'o', 'O']
     exe 'nnoremap ' . s:c . ' :nohlsearch<CR>' . s:c
 endfor
 
+" paste from actual clipboard
+nnoremap <silent> <leader>p :let @z=system('xclip -selection clipboard -o')<CR>"zp
+nnoremap <silent> <leader>P :let @z=system('xclip -selection clipboard -o')<CR>"zP
+
+vnoremap <silent> <leader>y :<home>silent <End>w !xclip -selection clipboard<CR>
+nnoremap <silent> <leader>y V:<home>silent <End>w !xclip -selection clipboard<CR>
+
+" center the search result on the screen
+nnoremap n nzz
+nnoremap N Nzz
+
 nnoremap <leader>a :ALENextWrap<CR>
 
 " 'cause that's how you learn
@@ -285,6 +296,7 @@ vnoremap j gj
 vnoremap k gk
 
 nnoremap <leader>s :call ScopeInfos()<CR>
+nnoremap <F6> :set spell!<CR>:set spell?<CR>
 
 nnoremap <leader>l :autocmd TextChanged,TextChangedI <buffer> write<CR>
 
@@ -293,11 +305,6 @@ vmap <leader>c gc
 
 " Emmet
 imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
-
-" clipboard
-vnoremap <leader>y "+y
-nnoremap <leader>p "+p
-nnoremap <leader>P "+P
 
 " duplicate selection
 vnoremap <leader>d "yy'>"yp

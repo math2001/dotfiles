@@ -70,6 +70,8 @@ bind 'set completion-ignore-case on'
 # this makes the autocompletion propose changes, instead of stopping to the ambiguous characters
 bind TAB:menu-complete
 
+alias pyll="grep '.\{81\}' **/*.py"
+alias log="cat *.log"
 alias s="source ~/.bashrc"
 alias which="which --all"
 alias ls="ls -X -F --color=auto"
@@ -153,7 +155,6 @@ export HISTCONTROL=ignoreboth:erasedups
 export FCEDIT="vim"
 export EDITOR="vim"
 export FZF_DEFAULT_COMMAND='fd --type f'
-export PYTHONASYNCIODEBUG="1"
 
 # set ls colors
 if [[ -f ~/dotfiles/.dircolors ]]; then
