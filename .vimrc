@@ -36,7 +36,6 @@ call minpac#add('plasticboy/vim-markdown')
 call minpac#add('mzlogin/vim-markdown-toc')
 call minpac#add('hail2u/vim-css3-syntax')
 call minpac#add('othree/html5.vim')
-call minpac#add('Vimjas/vim-python-pep8-indent')
 
 " }}}
 
@@ -169,6 +168,76 @@ function! BuildPython(test)
     endif
 endfunction
 
+function! IndentLevel(lnum)
+    return indent(a:lnum) / &shiftwidth
+endfunction
+
+function! NextNonBlankLine(lnum)
+    let numlines = line('$')
+    let current = a:lnum + 1
+
+    while current <= numlines
+        if getline(current) =~? '\v\S'
+            return current
+        endif
+
+        let current += 1
+    endwhile
+
+    return -2
+endfunction
+
+function! FoldFunctions(lnum)
+    let l:line = getline(a:lnum)
+    let l:nextlinenum = NextNonBlankLine(a:lnum)
+    let l:nextline = getline(l:nextlinenum)
+
+    if l:line =~# '\v\s*def .*'
+        let b:functionindentlevel=IndentLevel(a:lnum)
+        return '1'
+    endif
+
+    if l:line =~? '\v^\s*$'
+        if l:nextline =~# '\v\s*def .*' || IndentLevel(l:nextlinenum) == 0
+            let b:functionindentlevel = -1
+            return '0'
+        endif
+        return '-1'
+    endif
+
+    if IndentLevel(a:lnum) > 0:
+        return '-1'
+    endif
+
+    if b:functionindentlevel != -1
+        return '1'
+    endif
+    return '-1'
+endfunction
+
+function! Rjust(string, width, fill)
+    let l:string = a:string
+    while strlen(l:string) < a:width
+        let l:string = l:string . a:fill
+    endwhile
+    return l:string
+endfunction
+
+function! FoldText()
+    let l:line = Rjust(getline(v:foldstart) . ' ', 80, '-')
+    let l:index = 0
+    let l:char = l:line[l:index]
+    while char == ' '
+        let l:index = l:index + 1
+        let l:char = l:line[l:index]
+    endwhile
+    let l:space = ' '
+    if l:index == 0
+        let l:space = ''
+    endif
+    return repeat('-', l:index - 1) . l:space . l:line[index:]
+endfunction
+
 " abbreviations
 iabbrev lable label
 iabbrev teh the
@@ -188,7 +257,11 @@ function! FileTypeSetup(name)
     elseif a:name ==# 'css'
         setlocal tabstop=2 shiftwidth=2
     elseif a:name ==# 'python'
-        setlocal colorcolumn=101
+        let b:functionindentlevel = -1
+        setlocal foldmethod=expr
+        setlocal foldexpr=FoldFunctions(v:lnum)
+        setlocal foldtext=FoldText()
+        execute 'setlocal fillchars+=fold:\ '
         nnoremap <buffer> <leader>b :call BuildPython(0)<CR>
         nnoremap <buffer> <leader>r :call BuildPython(1)<CR>
         nnoremap <buffer> M :BLines def <CR>
@@ -198,6 +271,7 @@ function! FileTypeSetup(name)
     elseif a:name ==# 'html'
         iabbrev <buffer> --- &mdash;
         setlocal nowrap
+        imap <buffer> <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
     elseif a:name ==# 'javascript'
         nnoremap <buffer> <leader>b :call Build('node')<cr>
         iabbrev <buffer> len length
@@ -253,6 +327,12 @@ augroup end
 
 let mapleader=","
 
+nnoremap <space> za
+nnoremap H ^
+vnoremap H ^
+nnoremap L $
+vnoremap L $
+
 " run nohlsearch as soon as we enter insert mode (noh doesn't work in
 " autocommands)
 for s:c in ['a', 'A', '<Insert>', 'i', 'I', 'gI', 'gi', 'o', 'O']
@@ -303,9 +383,6 @@ nnoremap <leader>l :autocmd TextChanged,TextChangedI <buffer> write<CR>
 nmap <leader>c m`gcc``
 vmap <leader>c gc
 
-" Emmet
-imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
-
 " duplicate selection
 vnoremap <leader>d "yy'>"yp
 nnoremap <leader>d mz"yyy"yp`zj
@@ -316,7 +393,6 @@ nnoremap <silent> <leader>w :call ToggleHighlightWordUnderCursor()<CR>
 nnoremap <silent> <leader>W :match none<CR>
 
 nnoremap <C-p> :Files<CR>
-nnoremap <S-L> :BLines<CR>
 
 nnoremap : ;
 nnoremap ; :
