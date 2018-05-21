@@ -187,32 +187,39 @@ function! NextNonBlankLine(lnum)
     return -2
 endfunction
 
+function! PrevFunctionLine(lnum, expr)
+    let current = a:lnum - 1
+
+    while current > 0
+        if getline(current) =~# a:expr
+            return current
+        endif
+
+        let current -= 1
+    endwhile
+
+    return -2
+endfunction
+
 function! FoldFunctions(lnum)
+    let l:function = '\v\s*((async )?def .*|\@\w+)'
+    let l:emptyline = '\v^\s*$'
+
     let l:line = getline(a:lnum)
+    let l:prevlinenum = PrevFunctionLine(a:lnum, l:function)
     let l:nextlinenum = NextNonBlankLine(a:lnum)
     let l:nextline = getline(l:nextlinenum)
 
-    if l:line =~# '\v\s*def .*'
-        let b:functionindentlevel=IndentLevel(a:lnum)
+
+    if l:line =~# l:function
         return '1'
     endif
 
-    if l:line =~? '\v^\s*$'
-        if l:nextline =~# '\v\s*def .*' || IndentLevel(l:nextlinenum) == 0
-            let b:functionindentlevel = -1
-            return '0'
-        endif
-        return '-1'
+    if l:line =~# l:emptyline && IndentLevel(l:nextlinenum) <= IndentLevel(l:prevlinenum)
+        return '0'
     endif
 
-    if IndentLevel(a:lnum) > 0:
-        return '-1'
-    endif
-
-    if b:functionindentlevel != -1
-        return '1'
-    endif
-    return '-1'
+    return '='
 endfunction
 
 function! Rjust(string, width, fill)
@@ -224,7 +231,14 @@ function! Rjust(string, width, fill)
 endfunction
 
 function! FoldText()
-    let l:line = Rjust(getline(v:foldstart) . ' ', 80, '-')
+    let l:linenb = v:foldstart
+    let l:line = getline(l:linenb)
+    " don't render the decorators
+    while l:line =~? '@[a-zAZ_][a-z-AZ0-9_]'
+        let l:linenb = l:linenb + 1
+        let l:line = getline(l:linenb)
+    endwhile
+    let l:line = Rjust(l:line . ' ', 80, '-')
     let l:index = 0
     let l:char = l:line[l:index]
     while char == ' '
