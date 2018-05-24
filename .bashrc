@@ -23,6 +23,19 @@ function duck {
     w3m "https://duckduckgo.com?q=$*"
 }
 
+_update_title () {
+    if [ "$BASH_COMMAND" == 'light_prompt' ]; then
+        return
+    elif [ "$1" ]; then
+        title=$@
+    else
+        title=${BASH_COMMAND/ *}
+    fi
+    printf "\e]0;%s@%s\007" "$title" "${PWD/*\//}"
+}
+
+trap '_update_title' DEBUG
+
 function get_stds {
     # get both stdout and stderr to a single string
     TMP=$(mktemp)
@@ -30,12 +43,6 @@ function get_stds {
     cat "$TMP"
     rm "$TMP"
 }
-
-function window_title {
-    echo -ne "\033]0;$(history | awk 'END {print $2}')@${PWD/*\//}\007"
-}
-
-window_title
 
 function is_ssh {
     if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
@@ -45,7 +52,6 @@ function is_ssh {
 }
 
 function light_prompt {
-    window_title
     local EXIT=$?
     PS1="\[$BRIGHT_BLACK\]\j\[$RESET\]"
     PS1="$PS1 \[$BLUE\]\w\[$RESET\]"
@@ -90,6 +96,7 @@ alias deploy="./deploy.sh --quiet"
 alias fullbat="upower -i /org/freedesktop/UPower/devices/battery_BAT1"
 alias bat="fullbat | command grep 'percentage\|state\|time to'"
 alias copy="xclip -selection clipboard"
+alias ncurl="curl --proxy 'proxy.det.nsw.edu.au:8080' --proxy-ntlm --proxy-user 'mathieu.paturel'"
 
 function showcolors {
     for i in `seq 0 1`; do

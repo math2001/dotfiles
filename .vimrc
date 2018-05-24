@@ -20,7 +20,6 @@ call minpac#add('jiangmiao/auto-pairs')
 
 call minpac#add('w0rp/ale')
 
-" call minpac#add('SirVer/ultisnips')
 call minpac#add('mattn/emmet-vim')
 call minpac#add('tpope/vim-unimpaired')
 call minpac#add('tpope/vim-repeat')
@@ -206,16 +205,16 @@ function! FoldFunctions(lnum)
     let l:emptyline = '\v^\s*$'
 
     let l:line = getline(a:lnum)
-    let l:prevlinenum = PrevFunctionLine(a:lnum, l:function)
     let l:nextlinenum = NextNonBlankLine(a:lnum)
     let l:nextline = getline(l:nextlinenum)
 
 
     if l:line =~# l:function
+        let b:functionindentlevel = IndentLevel(a:lnum)
         return '1'
     endif
 
-    if l:line =~# l:emptyline && IndentLevel(l:nextlinenum) <= IndentLevel(l:prevlinenum)
+    if l:line =~# l:emptyline && IndentLevel(l:nextlinenum) <= b:functionindentlevel
         return '0'
     endif
 
@@ -521,3 +520,6 @@ command! HugoMore :call Insert("<!--more-->")
 
 command! PackUpdate :call minpac#update()
 command! PackClean :call minpac#clean()
+
+command! ProfileMe :profile start profile.log <bar> profile func * <bar> profile file *
+command! ProfileStop :profile pause
