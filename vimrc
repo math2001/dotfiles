@@ -19,6 +19,7 @@ call minpac#add('tpope/vim-surround')
 call minpac#add('fatih/vim-go')
 call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('jiangmiao/auto-pairs')
+call minpac#add('tpope/vim-endwise')
 
 let g:AutoPairsCenterLine = 0
 let g:AutoPairsMultilineClose = 0
@@ -30,7 +31,6 @@ source ~/dotfiles/vim/fzf-jump-def.vim
 nnoremap <C-P> :Files<CR>
 
 call minpac#add('w0rp/ale', {'type': 'opt'})
-call minpac#add('tpope/vim-endwise', {'type': 'opt'})
 call minpac#add('pangloss/vim-javascript', {'type': 'opt'})
 call minpac#add('mzlogin/vim-markdown-toc', {'type': 'opt'})
 call minpac#add('mattn/emmet-vim', {'type': 'opt'})
@@ -89,12 +89,19 @@ nnoremap <leader>d mqyyp`qj
 
 " open in a split pane/new tab depending on the size. It opens in the current
 " buffer is it is empty
-function! s:smartopen(path)
-
+function! SmartOpen(path)
+	" the width of the current window
+	 if expand("%") == "" && &modified == 0
+		 execute "edit ".a:path
+	 elseif winwidth(win_getid()) > 160
+		 execute "vsplit ".a:path
+	 else
+		 execute "tabe ".a:path
+	endif
 endfunction
 
-nnoremap <leader>ev :tabe ~/dotfiles/vimrc<CR>
-nnoremap <leader>et :tabe ~/dotfiles/tmux.conf<CR>
+nnoremap <leader>ev :call SmartOpen('~/dotfiles/vimrc')<CR>
+nnoremap <leader>et :tabe SmartOpen('~/dotfiles/tmux.conf')<CR>
 
 nnoremap L $
 nnoremap H ^
