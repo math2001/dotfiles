@@ -1,0 +1,5 @@
+pack/
+vim/session
+vim/.undos
+__pycache__/
+vim/.netrwhist

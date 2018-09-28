@@ -1,0 +1,40 @@
+[user]
+    email = australie.p@gmail.com
+    name = Mathieu PATUREL
+[core]
+    hooksPath=~/dotfiles/git-hooks
+    trustctime = false
+    editor = vim
+    filemode = false
+    eol = lf
+    autocrlf = false
+[alias]
+    worddiff=diff --color-words=.
+    nbcommit = rev-list --count HEAD
+    last = log -1 --relative-date
+    last-tag = describe --abbrev=0 --tags
+    aliases = config --get-regexp alias.
+    amend = commit --amend
+    append = commit --amend --no-edit
+    up = push origin HEAD --quiet
+    ignore=!echo>>.gitignore
+    hub=!xdg-open https://github.com/$(git remote get-url origin | grep -o -E \"\\w+\\/\\w+(.git)?$\")
+[push]
+    default = matching
+[color]
+    ui = true
+[credential]
+    helper = cache --timeout=3600
+[merge]
+    tool = vimdiff
+[mergetool]
+    prompt = false
+    trustexitcode = false
+[hooksforbiddenwords]
+    ; js = debugger
+    go = print,println
+; [url "git@github.com:"]
+;     insteadOf = https://github.com/
+; [http]
+;	proxy = http://mathieu.paturel@proxy.det.nsw.edu.au:8080
+;    proxyauthmethod = ntlm
