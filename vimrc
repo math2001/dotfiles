@@ -43,6 +43,8 @@ call minpac#add('w0rp/ale', {'type': 'opt'})
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
 let g:ale_list_window_size = 0
+" just lint on save
+let g:ale_lint_on_text_changed = 0
 
 nmap <leader>a :ALENextWrap<CR>
 
@@ -144,6 +146,12 @@ endfor
 "
 " Custom commands/functions
 "
+
+command! ProfileMe :profile start porfile.log 
+			\ <bar> profile func * 
+			\ <bar> profile file *
+command! ProfileStop :profile pause
+
 
 command! -nargs=? FTEdit execute "tabe ~/.vim/ftplugin/" .
 						\ ("<args>" == "" ? &filetype : "<args>") . ".vim"

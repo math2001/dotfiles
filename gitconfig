@@ -20,7 +20,7 @@
     ignore=!echo>>.gitignore
     hub=!xdg-open https://github.com/$(git remote get-url origin | grep -o -E \"\\w+\\/\\w+(.git)?$\")
 [push]
-    default = matching
+    default = simple
 [color]
     ui = true
 [credential]
