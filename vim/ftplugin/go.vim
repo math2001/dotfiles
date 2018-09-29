@@ -10,6 +10,7 @@ else
 endif
 
 setlocal formatoptions-=a
+setlocal nowrap
 
 abbrev <buffer> wr w http.ResponseWriter, r *http.Request
 
