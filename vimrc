@@ -87,7 +87,7 @@ set ttimeoutlen=100
 
 " Hint: use gf (go to file), c-o and c-i to browse
 set laststatus=2
-source statusline.vim
+source ~/dotfiles/vim/statusline.vim
 
 augroup global
     au!
