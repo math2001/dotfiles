@@ -1,8 +1,10 @@
 set -Ux EDITOR vim
 set -Ux FZF_DEFAULT_COMMAND 'fd --type f'
 
+# a much better color than the old grey thing (at least for my colors)
+set fish_color_autosuggestion brblack 
+
 set -gx PATH ~/.local/bin/ ~/go/bin ~/.gem/ruby/2.5.0/bin $PATH
-set -gx ACK_OPTIONS "--smart-case"
 
 alias curl="curl -L"
 alias ncurl="curl --proxy 'proxy.det.nsw.edu.au:8080' --proxy-ntlm --proxy-user 'mathieu.paturel'"

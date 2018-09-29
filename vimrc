@@ -20,6 +20,7 @@ call minpac#add('fatih/vim-go')
 call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('jiangmiao/auto-pairs')
 call minpac#add('tpope/vim-endwise')
+call minpac#add('dag/vim-fish')
 
 let g:AutoPairsCenterLine = 0
 let g:AutoPairsMultilineClose = 0
@@ -31,6 +32,9 @@ source ~/dotfiles/vim/fzf-jump-def.vim
 nnoremap <C-P> :Files<CR>
 
 call minpac#add('w0rp/ale', {'type': 'opt'})
+let g:ale_sign_column_always = 1
+let g:ale_sign_error = "!"
+let g:ale_sign_warning = "~"
 call minpac#add('pangloss/vim-javascript', {'type': 'opt'})
 call minpac#add('mzlogin/vim-markdown-toc', {'type': 'opt'})
 call minpac#add('mattn/emmet-vim', {'type': 'opt'})
@@ -38,7 +42,6 @@ call minpac#add('imjas/vim-python-pep8-indent', {'type': 'opt'})
 call minpac#add('hail2u/vim-css3-syntax', {'type': 'opt'})
 call minpac#add('duckpunch/vim-python-indent', {'type': 'opt'})
 call minpac#add('dhruvasagar/vim-table-mode', {'type': 'opt'})
-call minpac#add('dag/vim-fish', {'type': 'opt'})
 call minpac#add('boeckmann/vim-freepascal', {'type': 'opt'})
 
 "

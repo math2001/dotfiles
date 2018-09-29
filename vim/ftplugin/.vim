@@ -1,1 +1,1 @@
-
+packadd vim-fish

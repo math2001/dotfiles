@@ -1,4 +1,3 @@
-packadd vim-fish
 packadd ale
 
 function! BuildFish()
