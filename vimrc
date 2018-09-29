@@ -71,11 +71,17 @@ set splitbelow splitright
 set hidden noswapfile 
 set colorcolumn=80
 
+" see github.com/vim/vim/issues/24
+" Reduces the timeout needed when pressing escape and then shift+o
+set ttimeoutlen=100
+
 augroup global
     au!
+	" automatically source the vimrc when we save
     au BufWritePost *vimrc* :source %
+	" automatically source the tmux.conf file when we save
     au BufWritePost *tmux.conf* :silent! !tmux source %
-	" get back to the position we were at when we closed the file
+	" get back to the position we were at when we closed same file the file
 	au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 				\| exe "normal! g'\"" | endif
 augroup END
@@ -84,19 +90,23 @@ augroup END
 " Custom mappings
 "
 
+" don't open the command-line window (use q/ or q? instead)
+nnoremap q: :q
+
 " duplicate lines bellow, keeping track of the cursor position
 nnoremap <leader>d mqyyp`qj
 
-" open in a split pane/new tab depending on the size. It opens in the current
-" buffer is it is empty
+" open in a split pane/new tab depending on the size of the current buffer. It
+" opens in the current buffer is it is empty
 function! SmartOpen(path)
-	" the width of the current window
-	 if expand("%") == "" && &modified == 0
-		 execute "edit ".a:path
-	 elseif winwidth(win_getid()) > 160
-		 execute "vsplit ".a:path
-	 else
-		 execute "tabe ".a:path
+	" the buffer is empty
+	if expand("%") == "" && &modified == 0
+		execute "edit ".a:path
+	elseif winwidth(win_getid()) > 160
+		" we can fit 2 * 80
+		execute "vsplit ".a:path
+	else
+		execute "tabe ".a:path
 	endif
 endfunction
 
