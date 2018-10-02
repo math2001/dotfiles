@@ -1,5 +1,5 @@
 [user]
-    email = australie.p@gmail.com
+	email = australie.p@gmail.com
     name = Mathieu PATUREL
 [core]
     hooksPath=~/dotfiles/git-hooks
@@ -18,7 +18,7 @@
     append = commit --amend --no-edit
     up = push origin HEAD --quiet
     ignore=!echo>>.gitignore
-    hub=!xdg-open https://github.com/$(git remote get-url origin | grep -o -E \"\\w+\\/\\w+(.git)?$\")
+	hub=!xdg-open https://github.com/$(git remote get-url origin | grep -P \"(?<=\\/|\\:)[^\\/]+\\/[^\\/]+\\$\" -o)
 [push]
     default = simple
 [color]

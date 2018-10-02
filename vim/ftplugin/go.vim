@@ -15,3 +15,7 @@ setlocal nowrap
 abbrev <buffer> wr w http.ResponseWriter, r *http.Request
 
 let b:ale_sign_column_always = 1
+
+if expand("%") =~ "_test.go"
+	nnoremap <buffer> <leader>b :make! test<cr>
+endif

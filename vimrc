@@ -27,6 +27,7 @@ call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('jiangmiao/auto-pairs')
 call minpac#add('tpope/vim-endwise')
 call minpac#add('dag/vim-fish')
+call minpac#add('lifepillar/pgsql.vim')
 
 let g:AutoPairsCenterLine = 0
 let g:AutoPairsMultilineClose = 0
@@ -35,8 +36,9 @@ set runtimepath+=~/.fzf
 call minpac#add('junegunn/fzf.vim')
 
 source ~/dotfiles/vim/fzf-jump-def.vim
-nnoremap <C-P> :Files<CR>
+nnoremap <C-P> :Files<cr>
 
+call minpac#add('junegunn/vim-emoji', {'type': 'opt'})
 call minpac#add('w0rp/ale', {'type': 'opt'})
 
 " disable the errors lists.
@@ -46,7 +48,7 @@ let g:ale_list_window_size = 0
 " just lint on save
 let g:ale_lint_on_text_changed = 0
 
-nmap <leader>a :ALENextWrap<CR>
+nmap <leader>a :ALENextWrap<cr>
 
 call minpac#add('pangloss/vim-javascript', {'type': 'opt'})
 call minpac#add('mzlogin/vim-markdown-toc', {'type': 'opt'})
@@ -80,8 +82,14 @@ set notitle
 set hlsearch incsearch
 set splitbelow splitright
 
-set hidden noswapfile 
+set hidden noswapfile
 set colorcolumn=80
+
+set scrolloff=2
+
+set list listchars=tab:\│\ ,nbsp:.,trail:·,eol:¬
+
+set autowrite
 
 " see github.com/vim/vim/issues/24
 " Reduces the timeout needed when pressing escape and then shift+o
@@ -106,14 +114,18 @@ augroup END
 " Custom mappings
 "
 
+" highlight the current word. hlsearch needs to be enabled
+nnoremap <leader>w #*
+nnoremap <leader>W :nohlsearch<cr>
+
 " don't open the command-line window (use q/ or q? instead)
 nnoremap q: :q
 
-nnoremap <leader>b :make<CR>
+nnoremap <leader>b :make<cr>
 
 " duplicate lines bellow, keeping track of the cursor position
 nnoremap <leader>d mq"zyy"zp`qj
-vnoremap <leader>d mq"zy'>"zp`qj
+vnoremap <leader>d mq"zy'>"zp`qj'>j
 
 " open in a split pane/new tab depending on the size of the current buffer. It
 " opens in the current buffer is it is empty
@@ -129,33 +141,44 @@ function! SmartOpen(path)
 	endif
 endfunction
 
-nnoremap <leader>ev :call SmartOpen('~/dotfiles/vimrc')<CR>
-nnoremap <leader>et :call SmartOpen('~/dotfiles/tmux.conf')<CR>
+nnoremap <leader>ev :call SmartOpen('~/dotfiles/vimrc')<cr>
+nnoremap <leader>et :call SmartOpen('~/dotfiles/tmux.conf')<cr>
 
 nnoremap L $
 vnoremap L $
+onoremap L $
 nnoremap H ^
 vnoremap H ^
+onoremap H ^
+
+" Ignore the build output, please, oh fucking please don't take me to
+" non-existing files.
+cabbrev make make!
 
 " set nohlsearch when going into insert mode.
 " Thanks: https://vi.stackexchange.com/a/10415
 for s:c in ['a', 'A', '<Insert>', 'i', 'I', 'gI', 'gi', 'o', 'O']
-    exe 'nnoremap ' . s:c . ' :nohlsearch<CR>' . s:c
+    exe 'nnoremap ' . s:c . ' :nohlsearch<cr>' . s:c
 endfor
 
 "
 " Custom commands/functions
 "
-
-command! ProfileMe :profile start porfile.log 
-			\ <bar> profile func * 
+command! ProfileMe :profile start profile.log
+			\ <bar> profile func *
 			\ <bar> profile file *
 command! ProfileStop :profile pause
-
 
 command! -nargs=? FTEdit execute "tabe ~/.vim/ftplugin/" .
 						\ ("<args>" == "" ? &filetype : "<args>") . ".vim"
 command! FTSource execute "source ~/.vim/ftplugin/".&filetype.".vim"
+
+function! <SID>insertdate()
+	let @z = system("date +'%A %d %B %Y' | tr -d '\n'")
+	execute 'normal! "zp'
+endfunction
+
+command! Date call s:insertdate()
 
 function! <SID>strip_whitespace()
 	let l = line(".")
@@ -173,4 +196,5 @@ augroup global
 	" get back to the position we were at when we closed same file the file
 	au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
 				\| exe "normal! g'\"" | endif
+	au BufWritePre * call s:strip_whitespace()
 augroup END
