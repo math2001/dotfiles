@@ -1,9 +1,8 @@
 set -Ux EDITOR vim
 set -Ux FZF_DEFAULT_COMMAND 'fd --type f'
-set -Ux GO111MODULE on
 
 # a much better color than the old grey thing (at least for my colors)
-set fish_color_autosuggestion brblack 
+set fish_color_autosuggestion brblack
 
 set -gx PATH ~/.local/bin/ ~/go/bin ~/.gem/ruby/2.5.0/bin $PATH
 
@@ -32,6 +31,8 @@ abbr -a gl 'git log --oneline --decorate --graph --all'
 abbr -a todo 'vim ~/todo.md'
 abbr -a h heroku
 abbr -a g grep
+
+abbr -a grip 'grip --quiet . 0.0.0.0:9997'
 
 abbr -a e 'vim ~/.config/fish/config.fish'
 abbr -a s 'source ~/.config/fish/config.fish'

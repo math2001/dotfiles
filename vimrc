@@ -114,14 +114,20 @@ augroup END
 " Custom mappings
 "
 
+" don't jump to the first error
+nnoremap <leader>b :make!<cr>
+"
+" Ignore the build output, please, oh fucking please don't take me to
+" non-existing files.
+cabbrev make make!
+
+
 " highlight the current word. hlsearch needs to be enabled
 nnoremap <leader>w #*
 nnoremap <leader>W :nohlsearch<cr>
 
 " don't open the command-line window (use q/ or q? instead)
 nnoremap q: :q
-
-nnoremap <leader>b :make<cr>
 
 " duplicate lines bellow, keeping track of the cursor position
 nnoremap <leader>d mq"zyy"zp`qj
@@ -150,10 +156,6 @@ onoremap L $
 nnoremap H ^
 vnoremap H ^
 onoremap H ^
-
-" Ignore the build output, please, oh fucking please don't take me to
-" non-existing files.
-cabbrev make make!
 
 " set nohlsearch when going into insert mode.
 " Thanks: https://vi.stackexchange.com/a/10415

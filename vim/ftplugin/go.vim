@@ -3,6 +3,7 @@ packadd ale
 nnoremap <buffer> M :call FzfJumpDef('go')<CR>
 nnoremap <buffer> K :GoDoc<CR>
 set nospell
+
 if expand('%:t') == 'scratchpad.go'
     nnoremap <buffer> <leader>b :!env GO111MODULE=off go run %<CR>
 else

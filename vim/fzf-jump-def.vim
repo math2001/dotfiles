@@ -11,9 +11,9 @@ function! s:fzf_action()
 		return g:fzf_action
 	else
 		return {
-		\ 'ctrl-v': 'tab split',
+		\ 'ctrl-t': 'tab split',
 		\ 'ctrl-x': 'split',
-		\ 'ctrl-t': 'vsplit'}
+		\ 'ctrl-v': 'vsplit'}
 	endif
 endfunction
 
