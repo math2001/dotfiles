@@ -28,6 +28,9 @@ call minpac#add('jiangmiao/auto-pairs')
 call minpac#add('tpope/vim-endwise')
 call minpac#add('dag/vim-fish')
 call minpac#add('lifepillar/pgsql.vim')
+call minpac#add('junegunn/goyo.vim')
+nnoremap <leader>g :Goyo<cr>
+let g:goyo_width = 81
 
 let g:AutoPairsCenterLine = 0
 let g:AutoPairsMultilineClose = 0
@@ -71,9 +74,9 @@ set backspace=indent,eol,start
 set wildmenu confirm
 
 " indent stuff (4 spaces)
-set tabstop=4 shiftwidth=4
+set tabstop=4 shiftwidth=4 expandtab
 " indent after a if for example
-set smartindent
+set smartindent autoindent
 
 " if it's all lower case, ignore case
 set ignorecase smartcase
@@ -157,6 +160,8 @@ nnoremap H ^
 vnoremap H ^
 onoremap H ^
 
+nnoremap z. mzz.`z
+
 " set nohlsearch when going into insert mode.
 " Thanks: https://vi.stackexchange.com/a/10415
 for s:c in ['a', 'A', '<Insert>', 'i', 'I', 'gI', 'gi', 'o', 'O']
@@ -180,7 +185,15 @@ function! <SID>insertdate()
 	execute 'normal! "zp'
 endfunction
 
+function! <SID>deletefile(name)
+    if input("Permanently delete (y/N) ") == "y"
+        call delete(a:name)
+        q
+    endif
+endfunction
+
 command! Date call s:insertdate()
+command! Delete call s:deletefile(expand("%"))
 
 function! <SID>strip_whitespace()
 	let l = line(".")
@@ -188,6 +201,8 @@ function! <SID>strip_whitespace()
     %s/\s\+$//e
     call cursor(l, c)
 endfunction
+
+highlight NonText ctermfg=Black
 
 augroup global
     au!

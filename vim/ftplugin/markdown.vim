@@ -2,7 +2,7 @@ packadd vim-emoji
 setlocal completefunc=emoji#complete
 
 setlocal formatoptions-=a
-setlocal linebreak textwidth=80
+setlocal linebreak textwidth=79
 if !exists("b:did_ftplugin")
 	setlocal statusline+=\ \|\ %{wordcount()['words']}\ words
 	let b:did_ftplugin = 1
