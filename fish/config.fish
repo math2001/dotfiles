@@ -1,5 +1,6 @@
 set -Ux EDITOR vim
 set -Ux FZF_DEFAULT_COMMAND 'fd --type f'
+set -Ux PYENV_ROOT "$HOME/.local/share/pyenv"
 
 # a much better color than the old grey thing (at least for my colors)
 set fish_color_autosuggestion brblack

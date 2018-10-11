@@ -38,7 +38,14 @@ let g:AutoPairsMultilineClose = 0
 set runtimepath+=~/.fzf
 call minpac#add('junegunn/fzf.vim')
 
-source ~/dotfiles/vim/fzf-jump-def.vim
+" source ~/dotfiles/vim/fzf-jump-def.vim
+function! FzfJumpDef(lang) abort
+    if a:lang == 'go'
+        execute "normal! :Ag ^func \<cr>"
+    else
+        echom "Lang" a:lang "unknown."
+    endif
+endfunction
 nnoremap <C-P> :Files<cr>
 
 call minpac#add('junegunn/vim-emoji', {'type': 'opt'})
@@ -56,9 +63,9 @@ nmap <leader>a :ALENextWrap<cr>
 call minpac#add('pangloss/vim-javascript', {'type': 'opt'})
 call minpac#add('mzlogin/vim-markdown-toc', {'type': 'opt'})
 call minpac#add('mattn/emmet-vim', {'type': 'opt'})
-call minpac#add('imjas/vim-python-pep8-indent', {'type': 'opt'})
+" call minpac#add('imjas/vim-python-pep8-indent', {'type': 'opt'})
 call minpac#add('hail2u/vim-css3-syntax', {'type': 'opt'})
-call minpac#add('duckpunch/vim-python-indent', {'type': 'opt'})
+call minpac#add('duckpunch/vim-python-indent')
 call minpac#add('dhruvasagar/vim-table-mode', {'type': 'opt'})
 call minpac#add('boeckmann/vim-freepascal', {'type': 'opt'})
 

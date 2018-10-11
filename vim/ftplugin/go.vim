@@ -1,7 +1,7 @@
 packadd ale
 
-nnoremap <buffer> M :call FzfJumpDef('go')<CR>
-nnoremap <buffer> K :GoDoc<CR>
+nnoremap <buffer> M :Ag ^func <CR>
+nnoremap <buffer> K :!go doc<Space>
 set nospell
 
 if expand('%:t') == 'scratchpad.go'

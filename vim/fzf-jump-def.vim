@@ -1,3 +1,5 @@
+
+finish
 " jump to function definition
 " see https://math2001.github.io/post/vim-jump-to-function-definition
 let g:fzf_default_action = {
