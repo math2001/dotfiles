@@ -13,6 +13,7 @@ alias ls "ls -NF --color=auto --group-directories-first"
 alias gittips 'gittips ~/.cache/git-tips.json'
 
 abbr -a password 'date +%s | sha256sum | base64 | head -c 32 | xclip -selection clipboard'
+abbr mkdir 'mkdir -p'
 
 alias fullbat "upower -i /org/freedesktop/UPower/devices/battery_BAT1"
 alias bat "fullbat | command grep 'percentage\|state\|time to'"

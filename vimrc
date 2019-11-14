@@ -1,7 +1,9 @@
 " sane defaults
 set nocompatible
 filetype plugin indent on
+syntax on
 let mapleader=","
+"
 "
 " Add plugins
 "
@@ -73,8 +75,7 @@ call minpac#add('boeckmann/vim-freepascal', {'type': 'opt'})
 " global settings
 "
 
-colorscheme darkbase
-syntax on
+silent! colorscheme darkbase
 
 set number
 set backspace=indent,eol,start
@@ -108,17 +109,6 @@ set ttimeoutlen=100
 " Hint: use gf (go to file), c-o and c-i to browse
 set laststatus=2
 source ~/dotfiles/vim/statusline.vim
-
-augroup global
-    au!
-	" automatically source the vimrc when we save
-    au BufWritePost *vimrc* :source %
-	" automatically source the tmux.conf file when we save
-    au BufWritePost *tmux.conf* :silent! !tmux source %
-	" get back to the position we were at when we closed same file the file
-	au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-				\| exe "normal! g'\"" | endif
-augroup END
 
 "
 " Custom mappings
@@ -218,7 +208,8 @@ augroup global
 	" automatically source the tmux.conf file when we save
     au BufWritePost *tmux.conf* :silent! !tmux source %
 	" get back to the position we were at when we closed same file the file
-	au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+	au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") &&
+                \ expand("%:r") != "COMMIT_EDITMSG"
 				\| exe "normal! g'\"" | endif
 	au BufWritePre * call s:strip_whitespace()
 augroup END
