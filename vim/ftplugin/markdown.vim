@@ -1,4 +1,6 @@
 packadd vim-emoji
+packadd vim-table-mode
+silent TableModeToggle
 setlocal completefunc=emoji#complete
 
 setlocal formatoptions-=a

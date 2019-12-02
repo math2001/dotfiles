@@ -5,7 +5,7 @@ set -Ux PYENV_ROOT "$HOME/.local/share/pyenv"
 # a much better color than the old grey thing (at least for my colors)
 set fish_color_autosuggestion brblack
 
-set -gx PATH ~/.local/bin/ ~/go/bin ~/.gem/ruby/2.5.0/bin $PATH
+set -gx PATH ~/go/bin ~/.gem/ruby/2.5.0/bin $PATH
 
 alias curl "curl -L"
 alias ncurl "curl --proxy 'proxy.det.nsw.edu.au:8080' --proxy-ntlm --proxy-user 'mathieu.paturel'"
@@ -26,6 +26,7 @@ abbr -a path 'echo $PATH | tr " " "\n" '
 
 # git abbreviations
 abbr -a gs 'git status --short'
+abbr -a gd 'git diff'
 abbr -a gc 'git commit'
 abbr -a gca 'git commit -a'
 abbr -a gl 'git log --oneline --decorate --graph --all'

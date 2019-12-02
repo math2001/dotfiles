@@ -47,8 +47,8 @@ hi TabLineSel       ctermbg=black       ctermfg=green       cterm=NONE
 
 hi Cursor           ctermbg=NONE        ctermfg=NONE        cterm=NONE
 hi CursorColumn     ctermbg=darkgray    ctermfg=NONE        cterm=NONE
-hi CursorLineNr     ctermbg=black       ctermfg=cyan        cterm=NONE
-hi CursorLine       ctermbg=darkgrey    ctermfg=NONE        cterm=NONE
+hi CursorLineNr     ctermbg=black       ctermfg=grey        cterm=NONE
+hi CursorLine       ctermbg=black       ctermfg=NONE        cterm=NONE
 
 hi helpLeadBlank    ctermbg=NONE        ctermfg=NONE        cterm=NONE
 hi helpNormal       ctermbg=NONE        ctermfg=NONE        cterm=NONE

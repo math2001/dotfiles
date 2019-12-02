@@ -2,7 +2,7 @@
 set nocompatible
 filetype plugin indent on
 syntax on
-let mapleader=","
+let mapleader=" "
 "
 "
 " Add plugins
@@ -16,15 +16,20 @@ command! PackClean call minpac#clean()
 call minpac#init()
 call minpac#add('k-takata/minpac', {'type': 'opt'})
 call minpac#add('tpope/vim-commentary')
+" stable preview windows, see
+" https://stackoverflow.com/questions/30583831/vim-do-not-move-window-content-when-opening-preview-quickfix
 
 nmap <leader>c gcc
 vmap <leader>c gc
 
 call minpac#add('danro/rename.vim')
 call minpac#add('tpope/vim-surround')
-call minpac#add('fatih/vim-go')
-let g:go_fmt_command = "goimports"
-let g:go_fmt_fail_silently = 1
+" call minpac#add('fatih/vim-go')
+
+" let g:go_fmt_command = "goimports"
+" let g:go_fmt_fail_silently = 1
+" let g:go_auto_type_info = 1
+" let g:go_list_height = 0
 call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('jiangmiao/auto-pairs')
 call minpac#add('tpope/vim-endwise')
@@ -37,7 +42,7 @@ let g:goyo_width = 81
 let g:AutoPairsCenterLine = 0
 let g:AutoPairsMultilineClose = 0
 
-set runtimepath+=~/.fzf
+set runtimepath+=~/.local/lib/fzf
 call minpac#add('junegunn/fzf.vim')
 
 " source ~/dotfiles/vim/fzf-jump-def.vim
@@ -51,14 +56,21 @@ endfunction
 nnoremap <C-P> :Files<cr>
 
 call minpac#add('junegunn/vim-emoji', {'type': 'opt'})
+
 call minpac#add('w0rp/ale', {'type': 'opt'})
 
 " disable the errors lists.
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
-let g:ale_list_window_size = 0
+let g:ale_list_window_size = 5
 " just lint on save
-let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_completion_enabled = 1
+let g:ale_fix_on_save = 1
+let g:ale_set_highlights = 0
+let g:ale_sign_column_always = 1
+let g:ale_list_vertical = 1
+
 
 nmap <leader>a :ALENextWrap<cr>
 
@@ -75,7 +87,7 @@ call minpac#add('boeckmann/vim-freepascal', {'type': 'opt'})
 " global settings
 "
 
-silent! colorscheme darkbase
+colorscheme darkbase
 
 set number
 set backspace=indent,eol,start
@@ -102,6 +114,9 @@ set list listchars=tab:\│\ ,nbsp:.,trail:·,eol:¬
 
 set autowrite
 
+set noeol
+set nofixendofline
+
 " see github.com/vim/vim/issues/24
 " Reduces the timeout needed when pressing escape and then shift+o
 set ttimeoutlen=100
@@ -120,6 +135,7 @@ nnoremap <leader>b :make!<cr>
 " Ignore the build output, please, oh fucking please don't take me to
 " non-existing files.
 cabbrev make make!
+cabbrev ag Ag
 
 
 " highlight the current word. hlsearch needs to be enabled
@@ -157,6 +173,11 @@ nnoremap H ^
 vnoremap H ^
 onoremap H ^
 
+nnoremap j gj
+vnoremap j gj
+nnoremap k gk
+vnoremap k gk
+
 nnoremap z. mzz.`z
 
 " set nohlsearch when going into insert mode.
@@ -168,6 +189,11 @@ endfor
 "
 " Custom commands/functions
 "
+
+command! Size echo line2byte(line('$') + 1)
+
+command! GoLint set makeprg=golint | make | set makeprg=make
+
 command! ProfileMe :profile start profile.log
 			\ <bar> profile func *
 			\ <bar> profile file *
@@ -209,7 +235,7 @@ augroup global
     au BufWritePost *tmux.conf* :silent! !tmux source %
 	" get back to the position we were at when we closed same file the file
 	au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") &&
-                \ expand("%:r") != "COMMIT_EDITMSG"
+                \ expand("%:t") != "COMMIT_EDITMSG"
 				\| exe "normal! g'\"" | endif
 	au BufWritePre * call s:strip_whitespace()
 augroup END

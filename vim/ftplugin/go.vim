@@ -1,7 +1,6 @@
-packadd ale
 
 nnoremap <buffer> M :Ag ^func <CR>
-nnoremap <buffer> K :!go doc<Space>
+nnoremap <buffer> K :ALEHover<CR>
 set nospell
 
 if expand('%:t') == 'scratchpad.go'
@@ -20,3 +19,7 @@ let b:ale_sign_column_always = 1
 if expand("%") =~ "_test.go"
 	nnoremap <buffer> <leader>b :make! test<cr>
 endif
+
+let b:ale_fixers = ['goimports']
+let b:ale_linters = ['gopls']
+packadd ale

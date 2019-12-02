@@ -10,14 +10,18 @@ SETUVAR _fish_abbr_e:vim\x20\x7e/\x2econfig/fish/config\x2efish
 SETUVAR _fish_abbr_g:grep
 SETUVAR _fish_abbr_gc:git\x20commit
 SETUVAR _fish_abbr_gca:git\x20commit\x20\x2da
+SETUVAR _fish_abbr_gd:git\x20diff
 SETUVAR _fish_abbr_gl:git\x20log\x20\x2d\x2doneline\x20\x2d\x2ddecorate\x20\x2d\x2dgraph\x20\x2d\x2dall
 SETUVAR _fish_abbr_grip:grip\x20\x2d\x2dquiet\x20\x2e\x200\x2e0\x2e0\x2e0\x3a9997
 SETUVAR _fish_abbr_gs:git\x20status\x20\x2d\x2dshort
 SETUVAR _fish_abbr_h:heroku
 SETUVAR _fish_abbr_ip:ip\x20\x2dc
+SETUVAR _fish_abbr_m:make
 SETUVAR _fish_abbr_mkdir:mkdir\x20\x2dp
 SETUVAR _fish_abbr_password:date\x20\x2b\x25s\x20\x7c\x20sha256sum\x20\x7c\x20base64\x20\x7c\x20head\x20\x2dc\x2032\x20\x7c\x20xclip\x20\x2dselection\x20clipboard
 SETUVAR _fish_abbr_path:echo\x20\x24PATH\x20\x7c\x20tr\x20\x22\x20\x22\x20\x22\x5cn\x22\x20
+SETUVAR _fish_abbr_pip:pip3
+SETUVAR _fish_abbr_python:python3
 SETUVAR _fish_abbr_s:source\x20\x7e/\x2econfig/fish/config\x2efish
 SETUVAR _fish_abbr_todo:vim\x20\x7e/todo\x2emd
 SETUVAR fish_color_cancel:\x2dr
@@ -46,3 +50,4 @@ SETUVAR fish_pager_color_completion:\x1d
 SETUVAR fish_pager_color_description:B3A06D\x1eyellow
 SETUVAR fish_pager_color_prefix:white\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
+SETUVAR fish_user_paths:/home/math2001/\x2elocal/lib/fzf/bin
