@@ -1,1 +1,0 @@
-/home/math2001/.local/lib/fzf/shell/key-bindings.fish

@@ -1,1 +1,0 @@
-/home/math2001/.config/fisherman/z/functions/zclean.awk
