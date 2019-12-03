@@ -1,4 +1,5 @@
 set -Ux EDITOR vim
+set -Ux PS_FORMAT 'pid,state,tname,time,command'
 set -Ux FZF_DEFAULT_COMMAND 'fd --type f'
 set -Ux PYENV_ROOT "$HOME/.local/share/pyenv"
 
@@ -23,6 +24,8 @@ alias types 'cat ~/.local/angular-commit-types'
 
 abbr -a ip 'ip -c'
 abbr -a path 'echo $PATH | tr " " "\n" '
+abbr -a df 'df -h'
+abbr -a du 'du -h'
 
 # git abbreviations
 abbr -a gs 'git status --short'
