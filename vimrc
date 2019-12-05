@@ -42,8 +42,12 @@ let g:goyo_width = 81
 let g:AutoPairsCenterLine = 0
 let g:AutoPairsMultilineClose = 0
 
-set runtimepath+=~/.local/lib/fzf
+" set runtimepath+=~/.local/lib/fzf
+
 call minpac#add('junegunn/fzf.vim')
+" FIXME: this should be in a local config file, not something that is shared
+" across systems
+source /usr/share/doc/fzf/examples/fzf.vim
 
 " source ~/dotfiles/vim/fzf-jump-def.vim
 function! FzfJumpDef(lang) abort

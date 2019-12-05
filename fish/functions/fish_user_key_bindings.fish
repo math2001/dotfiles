@@ -1,6 +1,1 @@
-function fish_user_key_bindings
-    bind \es __fish_paginate
-end
-
-
-fzf_key_bindings
+/usr/share/doc/fzf/examples/fish_user_key_bindings.fish
