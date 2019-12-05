@@ -1,4 +1,9 @@
 function fish_right_prompt -d "Write out the right prompt"
+    if set -q SSH_CONNECTION
+        set_color --bold brmagenta
+        echo "SSH "
+        set_color normal
+    end
     if test "$PIPENV_ACTIVE" = "1"
         set_color yellow -o
         echo PIP
