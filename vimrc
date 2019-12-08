@@ -75,8 +75,11 @@ let g:ale_set_highlights = 0
 let g:ale_sign_column_always = 1
 let g:ale_list_vertical = 1
 
+inoremap <expr> <tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <s-tab> pumvisible() ? "\<C-P>" : "\<esc>a"
 
 nmap <leader>a :ALENextWrap<cr>
+nmap <leader>A :ALEPreviousWrap<cr>
 
 call minpac#add('pangloss/vim-javascript', {'type': 'opt'})
 call minpac#add('mzlogin/vim-markdown-toc', {'type': 'opt'})
@@ -111,6 +114,8 @@ set splitbelow splitright
 
 set hidden noswapfile
 set colorcolumn=80
+
+set completeopt+=noselect
 
 set scrolloff=2
 
