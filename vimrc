@@ -36,6 +36,7 @@ call minpac#add('tpope/vim-endwise')
 call minpac#add('dag/vim-fish')
 call minpac#add('lifepillar/pgsql.vim')
 call minpac#add('junegunn/goyo.vim')
+call minpac#add('leafgarland/typescript-vim')
 nnoremap <leader>g :Goyo<cr>
 let g:goyo_width = 81
 
@@ -75,8 +76,13 @@ let g:ale_set_highlights = 0
 let g:ale_sign_column_always = 1
 let g:ale_list_vertical = 1
 
+let g:ale_linters_ignore = {'typescript': ['tslint']}
+
+
+" let g:ale_typescript_standard_exectutable
+
 inoremap <expr> <tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <s-tab> pumvisible() ? "\<C-P>" : "\<esc>a"
+inoremap <expr> <s-tab> pumvisible() ? "\<C-P>" : "\<s-tab>"
 
 nmap <leader>a :ALENextWrap<cr>
 nmap <leader>A :ALEPreviousWrap<cr>
@@ -89,6 +95,7 @@ call minpac#add('hail2u/vim-css3-syntax', {'type': 'opt'})
 call minpac#add('duckpunch/vim-python-indent')
 call minpac#add('dhruvasagar/vim-table-mode', {'type': 'opt'})
 call minpac#add('boeckmann/vim-freepascal', {'type': 'opt'})
+call minpac#add('plasticboy/vim-markdown', {'type': 'opt'})
 
 "
 " global settings
@@ -133,6 +140,10 @@ set ttimeoutlen=100
 " Hint: use gf (go to file), c-o and c-i to browse
 set laststatus=2
 source ~/dotfiles/vim/statusline.vim
+
+" don't insert comment prefix on enter or o
+set formatoptions-=ro
+
 
 "
 " Custom mappings
@@ -208,9 +219,9 @@ command! ProfileMe :profile start profile.log
 			\ <bar> profile file *
 command! ProfileStop :profile pause
 
-command! -nargs=? FTEdit execute "tabe ~/.vim/ftplugin/" .
+command! -nargs=? FTEdit execute "tabe ~/.vim/after/ftplugin/" .
 						\ ("<args>" == "" ? &filetype : "<args>") . ".vim"
-command! FTSource execute "source ~/.vim/ftplugin/".&filetype.".vim"
+command! FTSource execute "source ~/.vim/after/ftplugin/".&filetype.".vim"
 
 function! <SID>insertdate()
 	let @z = system("date +'%A %d %B %Y' | tr -d '\n'")
