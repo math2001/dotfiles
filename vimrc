@@ -8,6 +8,13 @@ let mapleader=" "
 " Add plugins
 "
 
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
+inoremap <expr> <cr>    pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
+inoremap {<cr> {<cr>}<esc>O
+inoremap [<cr> [<cr>]<esc>O
+
 packadd minpac
 
 command! PackUpdate call minpac#update()
@@ -16,27 +23,22 @@ command! PackClean call minpac#clean()
 call minpac#init()
 call minpac#add('k-takata/minpac', {'type': 'opt'})
 call minpac#add('tpope/vim-commentary')
-" stable preview windows, see
-" https://stackoverflow.com/questions/30583831/vim-do-not-move-window-content-when-opening-preview-quickfix
 
 nmap <leader>c gcc
 vmap <leader>c gc
 
-call minpac#add('danro/rename.vim')
 call minpac#add('tpope/vim-surround')
-" call minpac#add('fatih/vim-go')
-
-" let g:go_fmt_command = "goimports"
-" let g:go_fmt_fail_silently = 1
-" let g:go_auto_type_info = 1
-" let g:go_list_height = 0
 call minpac#add('christoomey/vim-tmux-navigator')
-call minpac#add('jiangmiao/auto-pairs')
-call minpac#add('tpope/vim-endwise')
-call minpac#add('dag/vim-fish')
-call minpac#add('lifepillar/pgsql.vim')
+call minpac#add('danro/rename.vim')
+
+" call minpac#add('jiangmiao/auto-pairs')
+" call minpac#add('tpope/vim-endwise')
+" call minpac#add('dag/vim-fish')
+" call minpac#add('lifepillar/pgsql.vim')
 call minpac#add('junegunn/goyo.vim')
 call minpac#add('leafgarland/typescript-vim')
+
+
 nnoremap <leader>g :Goyo<cr>
 let g:goyo_width = 81
 
@@ -60,42 +62,24 @@ function! FzfJumpDef(lang) abort
 endfunction
 nnoremap <C-P> :Files<cr>
 
-call minpac#add('junegunn/vim-emoji', {'type': 'opt'})
+call minpac#add('prabirshrestha/async.vim')
+call minpac#add('prabirshrestha/asyncomplete.vim')
+let g:asyncomplete_min_chars = 3
+call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
+call minpac#add('prabirshrestha/vim-lsp')
+call minpac#add('mattn/vim-lsp-settings')
 
-call minpac#add('w0rp/ale', {'type': 'opt'})
+nnoremap K :LspHover<cr>
+let g:lsp_diagnostics_echo_cursor = 1
 
-" disable the errors lists.
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 0
-let g:ale_list_window_size = 5
-" just lint on save
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_completion_enabled = 1
-let g:ale_fix_on_save = 1
-let g:ale_set_highlights = 0
-let g:ale_sign_column_always = 1
-let g:ale_list_vertical = 1
-
-let g:ale_linters_ignore = {'typescript': ['tslint']}
-
-
-" let g:ale_typescript_standard_exectutable
-
-inoremap <expr> <tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <s-tab> pumvisible() ? "\<C-P>" : "\<s-tab>"
-
-nmap <leader>a :ALENextWrap<cr>
-nmap <leader>A :ALEPreviousWrap<cr>
-
-call minpac#add('pangloss/vim-javascript', {'type': 'opt'})
-call minpac#add('mzlogin/vim-markdown-toc', {'type': 'opt'})
-call minpac#add('mattn/emmet-vim', {'type': 'opt'})
-" call minpac#add('imjas/vim-python-pep8-indent', {'type': 'opt'})
-call minpac#add('hail2u/vim-css3-syntax', {'type': 'opt'})
-call minpac#add('duckpunch/vim-python-indent')
-call minpac#add('dhruvasagar/vim-table-mode', {'type': 'opt'})
-call minpac#add('boeckmann/vim-freepascal', {'type': 'opt'})
-call minpac#add('plasticboy/vim-markdown', {'type': 'opt'})
+" call minpac#add('pangloss/vim-javascript', {'type': 'opt'})
+" call minpac#add('mzlogin/vim-markdown-toc', {'type': 'opt'})
+" call minpac#add('mattn/emmet-vim', {'type': 'opt'})
+" call minpac#add('hail2u/vim-css3-syntax', {'type': 'opt'})
+" call minpac#add('duckpunch/vim-python-indent')
+" call minpac#add('dhruvasagar/vim-table-mode', {'type': 'opt'})
+" call minpac#add('boeckmann/vim-freepascal', {'type': 'opt'})
+" call minpac#add('plasticboy/vim-markdown', {'type': 'opt'})
 
 "
 " global settings

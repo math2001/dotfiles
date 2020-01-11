@@ -43,6 +43,12 @@ abbr -a grip 'grip --quiet . 0.0.0.0:9997'
 abbr -a e 'vim ~/.config/fish/config.fish'
 abbr -a s 'source ~/.config/fish/config.fish'
 
+abbr -a activate 'source .venv/bin/activate.fish'
+abbr -a a 'source .venv/bin/activate.fish'
+
+abbr -a pysc 'python -i -c "import numpy as np; import pandas as pd;"'
+# abbr vim '# use sublime text'
+
 # if status is-interactive; and not string match '*tmux*' $TERM > /dev/null
     # tmux
     # echo "Probably want to exit now"
@@ -50,4 +56,8 @@ abbr -a s 'source ~/.config/fish/config.fish'
 
 function export_last_command --on-event fish_preexec
     set -g last_command $argv
+end
+
+if ! set -q TMUX
+    exec tmux
 end

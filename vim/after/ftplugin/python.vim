@@ -10,4 +10,9 @@ nnoremap <buffer> <leader>r :call BuildPython(1)<CR>
 nnoremap <buffer> M :BLines def <CR>
 setlocal colorcolumn=81
 iabbrev <buffer> yeild yield
-" ALEDisable
+
+let b:ale_linters = ['mypy']
+let b:ale_fixers = ['black']
+packadd ale
+
+nnoremap <leader>p oimport pdb;pdb.set_trace()<esc>

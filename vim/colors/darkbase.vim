@@ -35,7 +35,7 @@ hi PmenuSbar        ctermbg=gray        ctermfg=NONE        cterm=NONE
 hi PmenuSel         ctermbg=darkcyan    ctermfg=black       cterm=NONE
 hi PmenuThumb       ctermbg=darkcyan    ctermfg=NONE        cterm=NONE
 
-hi ErrorMsg         ctermbg=darkred     ctermfg=black       cterm=NONE
+hi ErrorMsg         ctermbg=darkred     ctermfg=white       cterm=NONE
 hi ModeMsg          ctermbg=darkgreen   ctermfg=black       cterm=NONE
 hi MoreMsg          ctermbg=NONE        ctermfg=darkcyan    cterm=NONE
 hi Question         ctermbg=NONE        ctermfg=green       cterm=NONE
