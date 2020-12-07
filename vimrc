@@ -22,7 +22,7 @@ command! PackClean call minpac#clean()
 
 call minpac#init()
 call minpac#add('k-takata/minpac', {'type': 'opt'})
-call minpac#add('tpope/vim-commentary')
+" call minpac#add('tpope/vim-commentary')
 
 nmap <leader>c gcc
 vmap <leader>c gc
@@ -33,10 +33,10 @@ call minpac#add('danro/rename.vim')
 
 " call minpac#add('jiangmiao/auto-pairs')
 " call minpac#add('tpope/vim-endwise')
-" call minpac#add('dag/vim-fish')
+call minpac#add('dag/vim-fish')
 " call minpac#add('lifepillar/pgsql.vim')
 call minpac#add('junegunn/goyo.vim')
-call minpac#add('leafgarland/typescript-vim')
+" call minpac#add('leafgarland/typescript-vim')
 
 
 nnoremap <leader>g :Goyo<cr>
@@ -62,12 +62,12 @@ function! FzfJumpDef(lang) abort
 endfunction
 nnoremap <C-P> :Files<cr>
 
-call minpac#add('prabirshrestha/async.vim')
-call minpac#add('prabirshrestha/asyncomplete.vim')
+" call minpac#add('prabirshrestha/async.vim')
+" call minpac#add('prabirshrestha/asyncomplete.vim')
 let g:asyncomplete_min_chars = 3
-call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
-call minpac#add('prabirshrestha/vim-lsp')
-call minpac#add('mattn/vim-lsp-settings')
+" call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
+" call minpac#add('prabirshrestha/vim-lsp')
+" call minpac#add('mattn/vim-lsp-settings')
 
 nnoremap K :LspHover<cr>
 let g:lsp_diagnostics_echo_cursor = 1

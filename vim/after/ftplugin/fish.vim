@@ -5,7 +5,7 @@ function! BuildFish()
 endfunction
 
 nnoremap <leader>b :call BuildFish()<CR>
-ALEDisable
+" ALEDisable
 
 set formatoptions-=ron1
 syntax on

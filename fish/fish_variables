@@ -2,34 +2,57 @@
 # VERSION: 3.0
 SETUVAR --export EDITOR:vim
 SETUVAR --export FZF_DEFAULT_COMMAND:fd\x20\x2d\x2dtype\x20f
+SETUVAR FZF_DEFAULT_OPTS:\x2d\x2dheight\x2040\x25
+SETUVAR FZF_DISABLE_KEYBINDINGS:0
+SETUVAR FZF_LEGACY_KEYBINDINGS:1
+SETUVAR FZF_PREVIEW_DIR_CMD:ls
+SETUVAR FZF_PREVIEW_FILE_CMD:head\x20\x2dn\x2010
+SETUVAR FZF_TMUX_HEIGHT:40\x25
+SETUVAR --export HOSTNAME:inspirux
+SETUVAR --export MANWIDTH:80
+SETUVAR --export MATHWIDTH:80
 SETUVAR --export PS_FORMAT:pid\x2cstate\x2ctname\x2ctime\x2ccommand
 SETUVAR --export PYENV_ROOT:/home/math2001/\x2elocal/share/pyenv
+SETUVAR ZO_CMD:zo
+SETUVAR Z_CMD:z
+SETUVAR Z_DATA:/home/math2001/\x2elocal/share/z/data
+SETUVAR Z_DATA_DIR:/home/math2001/\x2elocal/share/z
+SETUVAR Z_EXCLUDE:\x5e/home/math2001\x24
 SETUVAR __fish_init_2_39_8:\x1d
 SETUVAR __fish_init_2_3_0:\x1d
 SETUVAR __fish_init_3_x:\x1d
+SETUVAR __fish_initialized:3100
 SETUVAR _fish_abbr_a:source\x20\x2evenv/bin/activate\x2efish
 SETUVAR _fish_abbr_activate:source\x20\x2evenv/bin/activate\x2efish
+SETUVAR _fish_abbr_cp:cp\x20\x2dn
+SETUVAR _fish_abbr_dedent:xclip\x20\x2dselection\x20clipboard\x20\x2do\x20\x7c\x20python\x20\x2dc\x20\x22import\x20textwrap\x2csys\x3b\x20print\x28textwrap\x2ededent\x28sys\x2estdin\x2eread\x28\x29\x29\x29\x22\x20\x7c\x20xclip\x20\x2dselection\x20clipboard\x20\x2di
 SETUVAR _fish_abbr_df:df\x20\x2dh
 SETUVAR _fish_abbr_du:du\x20\x2dh
 SETUVAR _fish_abbr_e:vim\x20\x7e/\x2econfig/fish/config\x2efish
 SETUVAR _fish_abbr_g:grep
+SETUVAR _fish_abbr_gal:git\x20log\x20\x2d\x2doneline\x20\x2d\x2ddecorate\x20\x2d\x2dgraph\x20\x2d\x2dall
 SETUVAR _fish_abbr_gc:git\x20commit
 SETUVAR _fish_abbr_gca:git\x20commit\x20\x2da
+SETUVAR _fish_abbr_gcc:gcc\x20\x2dWall\x20\x2dWextra\x20\x2dWerror
 SETUVAR _fish_abbr_gd:git\x20diff
-SETUVAR _fish_abbr_gl:git\x20log\x20\x2d\x2doneline\x20\x2d\x2ddecorate\x20\x2d\x2dgraph\x20\x2d\x2dall
+SETUVAR _fish_abbr_gl:git\x20log\x20\x2d\x2doneline\x20\x2d10
 SETUVAR _fish_abbr_grip:grip\x20\x2d\x2dquiet\x20\x2e\x200\x2e0\x2e0\x2e0\x3a9997
 SETUVAR _fish_abbr_gs:git\x20status\x20\x2d\x2dshort
 SETUVAR _fish_abbr_h:heroku
+SETUVAR _fish_abbr_i:ipython
 SETUVAR _fish_abbr_ip:ip\x20\x2dc
+SETUVAR _fish_abbr_j:json_pp
 SETUVAR _fish_abbr_m:make
 SETUVAR _fish_abbr_mkdir:mkdir\x20\x2dp
+SETUVAR _fish_abbr_mv:mv\x20\x2dn
 SETUVAR _fish_abbr_password:date\x20\x2b\x25s\x20\x7c\x20sha256sum\x20\x7c\x20base64\x20\x7c\x20head\x20\x2dc\x2032\x20\x7c\x20xclip\x20\x2dselection\x20clipboard
 SETUVAR _fish_abbr_path:echo\x20\x24PATH\x20\x7c\x20tr\x20\x22\x20\x22\x20\x22\x5cn\x22\x20
 SETUVAR _fish_abbr_pip:pip3
 SETUVAR _fish_abbr_pysc:python\x20\x2di\x20\x2dc\x20\x22import\x20numpy\x20as\x20np\x3b\x20import\x20pandas\x20as\x20pd\x3b\x22
-SETUVAR _fish_abbr_python:python3
 SETUVAR _fish_abbr_s:source\x20\x7e/\x2econfig/fish/config\x2efish
 SETUVAR _fish_abbr_todo:vim\x20\x7e/todo\x2emd
+SETUVAR _fish_abbr_unindent:dedent
+SETUVAR _fish_abbr_unsw:ssh\x20z5312157\x40cse\x2eunsw\x2eedu\x2eau
 SETUVAR fish_color_cancel:\x2dr
 SETUVAR fish_color_command:005fd7
 SETUVAR fish_color_comment:990000
@@ -40,6 +63,7 @@ SETUVAR fish_color_error:ff0000
 SETUVAR fish_color_escape:00a6b2
 SETUVAR fish_color_history_current:\x2d\x2dbold
 SETUVAR fish_color_host:normal
+SETUVAR fish_color_host_remote:yellow
 SETUVAR fish_color_match:\x2d\x2dbackground\x3dbrblue
 SETUVAR fish_color_normal:normal
 SETUVAR fish_color_operator:00a6b2
@@ -48,6 +72,7 @@ SETUVAR fish_color_quote:999900
 SETUVAR fish_color_redirection:00afff
 SETUVAR fish_color_search_match:bryellow\x1e\x2d\x2dbackground\x3dbrblack
 SETUVAR fish_color_selection:white\x1e\x2d\x2dbold\x1e\x2d\x2dbackground\x3dbrblack
+SETUVAR fish_color_status:red
 SETUVAR fish_color_user:brgreen
 SETUVAR fish_color_valid_path:\x2d\x2dunderline
 SETUVAR fish_greeting:Welcome\x20to\x20fish\x2c\x20the\x20friendly\x20interactive\x20shell\x0aType\x20\x60help\x60\x20for\x20instructions\x20on\x20how\x20to\x20use\x20fish
@@ -57,3 +82,4 @@ SETUVAR fish_pager_color_description:B3A06D\x1eyellow
 SETUVAR fish_pager_color_prefix:white\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
 SETUVAR fish_user_paths:/home/math2001/\x2elocal/lib/fzf/bin
+SETUVAR fisher_dependency_count:z\x1efzf
