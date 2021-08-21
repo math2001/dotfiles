@@ -38,7 +38,6 @@ alias pip 'echo -e "Do you really want to run pip for python 2.7? Use\n\n    com
 abbr mkdir 'mkdir -p'
 abbr mv 'mv -n'
 abbr cp 'cp -n'
-abbr unsw "ssh z5312157@cse.unsw.edu.au"
 
 alias fullbat "upower -i /org/freedesktop/UPower/devices/battery_BAT1"
 alias bat "fullbat | command grep 'percentage\|state\|time to'"
@@ -81,6 +80,12 @@ abbr -a gcc 'gcc -Wall -Wextra -Werror'
 abbr -a dedent 'xclip -selection clipboard -o | python -c "import textwrap,sys; print(textwrap.dedent(sys.stdin.read()))" | xclip -selection clipboard -i'
 abbr -a unindent dedent
 
+abbr -a books 'vim ~/Ebooks/books'
+
+abbr -a unsw 'ssh z5312157@cse.unsw.edu.au'
+abbr -a gp 'git pull origin HEAD --ff-only'
+
+abbr -a duh 'du -h -d 1 . | sort -hr'
 
 function export_last_command --on-event fish_preexec
     set -g last_command $argv
@@ -92,4 +97,6 @@ end
     # exec tmux
 # end
 
-tmux set-option destroy-unattached
+if ! test -z "$TMUX"
+    tmux set-option destroy-unattached
+end

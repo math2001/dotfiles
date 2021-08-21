@@ -1,5 +1,5 @@
 function gitignore
     for arg in $argv
-        echo $arg >> .gitignore
+        echo $arg >> (git rev-parse --show-toplevel)/.gitignore
     end
 end
