@@ -1,1 +1,3 @@
-/usr/share/doc/fzf/examples/fish_user_key_bindings.fish
+function fish_user_key_bindings
+  fzf_key_bindings
+end

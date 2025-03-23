@@ -37,7 +37,11 @@ function ef --description 'Simply edit a function'
             echo Aborted.
             return
         end
-        echo -e function $argv[1]\n\nend > $path
+        echo '# Function arguments: $argv' > $path
+        echo '# first argument: $argv[1]' >> $path
+        echo 'see argparse' >> $path
+        echo '' >> $path
+        echo -e function $argv[1]\n\nend >> $path
     end
     # open the editor
 	eval $EDITOR $path

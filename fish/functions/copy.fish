@@ -1,3 +1,5 @@
 function copy
-	xclip -selection clipboard $argv
+    set_color red
+    echo "Use \$ clip in"
+    set_color normal
 end

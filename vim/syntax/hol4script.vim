@@ -1,0 +1,1 @@
+/home/math2001/.programs/HOL/tools/vim/hol4script.vim

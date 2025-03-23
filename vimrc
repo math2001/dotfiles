@@ -15,6 +15,8 @@ inoremap <expr> <cr>    pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
 inoremap {<cr> {<cr>}<esc>O
 inoremap [<cr> [<cr>]<esc>O
 
+cnoremap <C-A> <home>
+
 packadd minpac
 
 command! PackUpdate call minpac#update()
@@ -22,7 +24,7 @@ command! PackClean call minpac#clean()
 
 call minpac#init()
 call minpac#add('k-takata/minpac', {'type': 'opt'})
-" call minpac#add('tpope/vim-commentary')
+call minpac#add('tpope/vim-commentary')
 
 nmap <leader>c gcc
 vmap <leader>c gc
@@ -30,6 +32,12 @@ vmap <leader>c gc
 call minpac#add('tpope/vim-surround')
 call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('danro/rename.vim')
+call minpac#add('tpope/vim-fugitive')
+call minpac#add('idris-hackers/idris-vim')
+" call minpac#add('prabirshrestha/vim-lsp')
+" call minpac#add('mattn/vim-lsp-settings')
+" call minpac#add('prabirshrestha/asyncomplete.vim')
+" call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
 
 " call minpac#add('jiangmiao/auto-pairs')
 " call minpac#add('tpope/vim-endwise')
@@ -50,7 +58,8 @@ let g:AutoPairsMultilineClose = 0
 call minpac#add('junegunn/fzf.vim')
 " FIXME: this should be in a local config file, not something that is shared
 " across systems
-source /usr/share/doc/fzf/examples/fzf.vim
+" source /usr/share/doc/fzf/examples/fzf.vim
+source ~/.fzf/plugin/fzf.vim
 
 " source ~/dotfiles/vim/fzf-jump-def.vim
 function! FzfJumpDef(lang) abort
@@ -85,7 +94,7 @@ let g:lsp_diagnostics_echo_cursor = 1
 " global settings
 "
 
-colorscheme darkbase
+colorscheme default
 
 set number
 set backspace=indent,eol,start
@@ -104,13 +113,15 @@ set hlsearch incsearch
 set splitbelow splitright
 
 set hidden noswapfile
-set colorcolumn=80
+set colorcolumn=73
+set textwidth=72
 
 set completeopt+=noselect
 
 set scrolloff=2
 
-set list listchars=tab:\│\ ,nbsp:.,trail:·,eol:¬
+" set list listchars=tab:\│\ ,nbsp:.,trail:·,eol:¬
+set list listchars=tab:\ \ \│,nbsp:.,trail:·
 
 set autowrite
 
@@ -167,8 +178,23 @@ function! SmartOpen(path)
 	endif
 endfunction
 
+function! SwitchCppToH()
+    let l:ext = "foo"
+    if expand("%:e") == "cpp"
+        let l:ext = "h"
+    elseif expand("%:e") == "h"
+        let l:ext = "cpp"
+    else
+        echom "need to be in a .h and .cpp file"
+        return
+    endif
+    execute "edit ".expand("%:r").".".l:ext
+endfunction
+
 nnoremap <leader>ev :call SmartOpen('~/dotfiles/vimrc')<cr>
 nnoremap <leader>et :call SmartOpen('~/dotfiles/tmux.conf')<cr>
+nnoremap <leader>h :call SwitchCppToH()<cr>
+
 
 nnoremap L $
 vnoremap L $
@@ -243,3 +269,17 @@ augroup global
 				\| exe "normal! g'\"" | endif
 	au BufWritePre * call s:strip_whitespace()
 augroup END
+
+augroup sml
+  " au BufRead,BufNewFile *.sml let maplocalleader = "h" | source /home/math2001/.programs/HOL/tools/vim/hol.vim
+  au BufRead,BufNewFile *.sml let maplocalleader = "'" | source /home/math2001/.programs/HOL/tools/vim/hol.vim
+  au BufRead,BufNewFile *?Script.sml setlocal filetype=hol4script
+  " recognise pre-munger files as latex source
+  au BufRead,BufNewFile *.htex setlocal filetype=htex syntax=tex
+  "Uncomment the line below to automatically load Unicode
+  au BufRead,BufNewFile *?Script.sml source /home/math2001/.programs/HOL/tools/vim/holabs.vim
+  "Uncomment the line below to fold proofs
+  au BufRead,BufNewFile *?Script.sml setlocal foldmethod=syntax foldnestmax=1
+augroup END
+
+command! Syn echo synIDattr(synID(line("."), col("."), 1), "name")

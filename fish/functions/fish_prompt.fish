@@ -6,7 +6,7 @@ function fish_prompt --description 'Write out the prompt'
 
 	set_color normal
     # display the number of background jobs
-	set -l nbjobs (jobs | wc -l)
+	set -l nbjobs (jobs -g | wc -l)
 	if test $nbjobs -ne 0
         set_color brblack
         echo -n -s $nbjobs ' '
